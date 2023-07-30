@@ -74,4 +74,60 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register };
+const login = async (req, res) => {
+  const { username, email, password } = req.body;
+  if (!password || (!email && !username)) {
+    return res.status(400).send({
+      message: "All fields are required",
+    });
+  }
+
+  try {
+    if (username) {
+      var user = await userModel.findOne({ username: username });
+      if (!user) {
+        return res.status(404).send({
+          message: "User doesn't found",
+        });
+      }
+    } else if (email) {
+      user = await userModel.findOne({ email: email });
+      if (!user) {
+        return res.status(404).send({
+          message: "User doesn't found",
+        });
+      }
+    }
+
+    let result = await bcrypt.compare(password, user.password);
+    if (result === true) {
+      try {
+        const token = await jwt.sign({ data: user }, process.env.SECRET_TOKEN);
+        res
+          .status(200)
+          .cookie("token", token, {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+          })
+          .send({
+            message: "Login successful",
+          });
+      } catch (error) {
+        res.status(500).send({
+          message: "Jwt Error",
+          error: error,
+        });
+      }
+    } else {
+      res.status(404).send({
+        message: "Wrong password",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+module.exports = { register, login };
