@@ -130,4 +130,12 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const userProfile = async (req, res) => {
+  const { username, email } = req.user.data;
+  res.status(200).send({
+    Username: username,
+    Email: email,
+  });
+};
+
+module.exports = { register, login, userProfile };
