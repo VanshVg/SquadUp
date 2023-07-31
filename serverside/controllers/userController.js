@@ -138,4 +138,15 @@ const userProfile = async (req, res) => {
   });
 };
 
-module.exports = { register, login, userProfile };
+const logout = async (req, res) => {
+  res
+    .status(200)
+    .cookie("token", "", {
+      expires: new Date(Date.now()),
+    })
+    .send({
+      message: "Logout Successful",
+    });
+};
+
+module.exports = { register, login, userProfile, logout };
