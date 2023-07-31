@@ -130,14 +130,6 @@ const login = async (req, res) => {
   }
 };
 
-const userProfile = async (req, res) => {
-  const { username, email } = req.user.data;
-  res.status(200).send({
-    Username: username,
-    Email: email,
-  });
-};
-
 const logout = async (req, res) => {
   res
     .status(200)
@@ -149,4 +141,72 @@ const logout = async (req, res) => {
     });
 };
 
-module.exports = { register, login, userProfile, logout };
+const userProfile = async (req, res) => {
+  const { username, email } = req.user.data;
+  res.status(200).send({
+    Username: username,
+    Email: email,
+  });
+};
+
+const updateProfile = async (req, res) => {
+  const { username, email } = req.user.data;
+  const { newUserName, newEmail } = req.body;
+  if (!newUserName && !newEmail) {
+    return res.status(400).send({
+      message: "Atleast one field is required",
+    });
+  }
+  try {
+    if (newUserName) {
+      let userData = await userModel.findOne({ username: newUserName });
+      if (userData) {
+        return res.status(400).send({
+          message: "Username has already been taken",
+        });
+      }
+    }
+    if (newEmail) {
+      let userData = await userModel.findOne({ email: newEmail });
+      if (userData) {
+        return res.status(400).send({
+          message: "User with this email already exists",
+        });
+      }
+    }
+    if (newUserName) {
+      await userModel.updateOne(
+        { username: username },
+        { $set: { username: newUserName } }
+      );
+      var newUserData = await userModel.findOne({ username: newUserName });
+    }
+    if (newEmail) {
+      await userModel.updateOne(
+        { email: email },
+        { $set: { email: newEmail } }
+      );
+      newUserData = await userModel.findOne({ email: newEmail });
+    }
+    const token = await jwt.sign(
+      { data: newUserData },
+      process.env.SECRET_TOKEN
+    );
+    res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000,
+      })
+      .send({
+        message: "User data updated successfully",
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+module.exports = { register, login, logout, userProfile, updateProfile };
