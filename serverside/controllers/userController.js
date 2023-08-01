@@ -209,4 +209,32 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, userProfile, updateProfile };
+const deleteAccount = async (req, res) => {
+  const { username } = req.user.data;
+  try {
+    await userModel.deleteOne({ username: username });
+    res
+      .status(200)
+      .cookie("token", "", {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 1000,
+      })
+      .send({
+        message: "User deleted successfully",
+      });
+  } catch (error) {
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  logout,
+  userProfile,
+  updateProfile,
+  deleteAccount,
+};
