@@ -248,6 +248,37 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const { username } = req.user.data;
+  if (!oldPassword || !newPassword) {
+    return res.status(400).send({
+      message: "All fields are required",
+    });
+  }
+  try {
+    const user = await userModel.findOne({ username: username });
+    let result = await bcrypt.compare(oldPassword, user.password);
+    if (result === true) {
+      const hash = await bcrypt.hash(newPassword, 10);
+      await userModel.updateOne(
+        { username: username },
+        { $set: { password: hash } }
+      );
+      return res.status(200).send({
+        message: "Password updated successfully",
+      });
+    }
+    return res.status(400).send({
+      message: "Wrong password",
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -255,4 +286,5 @@ module.exports = {
   userProfile,
   updateProfile,
   deleteAccount,
+  updatePassword,
 };
