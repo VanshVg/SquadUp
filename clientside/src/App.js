@@ -1,9 +1,10 @@
-import "./App.css";
+import Registration from "./Pages/registation";
+// import Registration from "./Pages/Registration.js";
 
 function App() {
   return (
     <div className="App">
-      <h1>Task Flow</h1>
+      <Registration/>
     </div>
   );
 }
