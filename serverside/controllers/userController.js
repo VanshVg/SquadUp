@@ -37,7 +37,12 @@ const register = async (req, res) => {
           } else {
             try {
               jwt.sign(
-                { data: results },
+                {
+                  data: {
+                    username: username,
+                    email: email,
+                  },
+                },
                 process.env.SECRET_TOKEN,
                 (error, token) => {
                   if (error) {
@@ -102,7 +107,15 @@ const login = async (req, res) => {
     let result = await bcrypt.compare(password, user.password);
     if (result === true) {
       try {
-        const token = await jwt.sign({ data: user }, process.env.SECRET_TOKEN);
+        const token = await jwt.sign(
+          {
+            data: {
+              username: user.username,
+              email: user.email,
+            },
+          },
+          process.env.SECRET_TOKEN
+        );
         res
           .status(200)
           .cookie("token", token, {
@@ -189,7 +202,12 @@ const updateProfile = async (req, res) => {
       newUserData = await userModel.findOne({ email: newEmail });
     }
     const token = await jwt.sign(
-      { data: newUserData },
+      {
+        data: {
+          username: newUserData.username,
+          email: newUserData.email,
+        },
+      },
       process.env.SECRET_TOKEN
     );
     res
