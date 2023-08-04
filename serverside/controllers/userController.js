@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
+const randomstring = require("randomstring");
+require("dotenv").config();
 
 const userModel = require("../models/userModel");
 
@@ -72,7 +75,7 @@ const register = async (req, res) => {
       }
     } catch (error) {
       res.status(500).send({
-        message: "Internal Server Error",
+        message: "Error while registering",
         error: error,
       });
     }
@@ -138,7 +141,8 @@ const login = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send({
-      message: "Internal Server Error",
+      message: "Error while logging",
+      error: error,
     });
   }
 };
@@ -222,7 +226,8 @@ const updateProfile = async (req, res) => {
       });
   } catch (error) {
     res.status(500).send({
-      message: "Internal Server Error",
+      message: "Error while updating the profile",
+      error: error,
     });
   }
 };
@@ -243,7 +248,8 @@ const deleteAccount = async (req, res) => {
       });
   } catch (error) {
     res.status(500).send({
-      message: "Internal Server Error",
+      message: "Error while deleting user",
+      error: error,
     });
   }
 };
@@ -274,7 +280,69 @@ const updatePassword = async (req, res) => {
     });
   } catch (error) {
     res.status(500).send({
-      message: "Internal Server Error",
+      message: "Error while updating password",
+      error: error,
+    });
+  }
+};
+
+const forgotPasswordMail = async (email, username, resetPasswordToken) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.TASKFLOW_EMAIL,
+        pass: process.env.TASKFLOW_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.TASKFLOW_EMAIL,
+      to: email,
+      subject: "Task Flow Password Reset",
+      html:
+        "<p>Dear " +
+        username +
+        ",</p>" +
+        "<p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>" +
+        "<p>To reset your password, please click on the following link:</p>" +
+        '<p><a href="http://localhost:3001/api/users/reset-password?token=' +
+        resetPasswordToken +
+        '">Reset Password</a></p>' +
+        "<p>If the link above doesn't work, copy and paste the following URL into your browser:</p>" +
+        "<p>http://localhost:3001/api/users/reset-password?token=" +
+        resetPasswordToken +
+        "</p>" +
+        "<p>Thank you,</p>" +
+        "<p> Task Flow Team</p>",
+    };
+    let info = await transporter.sendMail(mailOptions);
+    console.log("Mail has been sent:", info.response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  const { email, username } = req.user.data;
+  try {
+    let user = await userModel.findOne({ email: email });
+    const resetPasswordToken = randomstring.generate();
+    await userModel.updateOne(
+      { email: email },
+      { $set: { resetPasswordToken: resetPasswordToken } }
+    );
+    forgotPasswordMail(email, username, resetPasswordToken);
+    res.status(200).send({
+      message: "Please check your email inbox",
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: "Error while processing forgot password request",
+      error: error,
     });
   }
 };
@@ -287,4 +355,5 @@ module.exports = {
   updateProfile,
   deleteAccount,
   updatePassword,
+  forgotPassword,
 };

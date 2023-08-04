@@ -12,5 +12,6 @@ router.post("/logout", isAuthenticated, userController.logout);
 router.put("/updateProfile", isAuthenticated, userController.updateProfile);
 router.delete("/deleteAccount", isAuthenticated, userController.deleteAccount);
 router.put("/updatePassword", isAuthenticated, userController.updatePassword);
+router.post("/forgotPassword", isAuthenticated, userController.forgotPassword);
 
 module.exports = router;
