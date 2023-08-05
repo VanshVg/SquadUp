@@ -321,6 +321,10 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
     };
     let info = await transporter.sendMail(mailOptions);
     console.log("Mail has been sent:", info.response);
+    await userModel.updateOne(
+      { username: username },
+      { $unset: { resetPasswordToken: 1 } }
+    );
   } catch (error) {
     console.log(error);
   }
