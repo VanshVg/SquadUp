@@ -13,5 +13,6 @@ router.put("/updateProfile", isAuthenticated, userController.updateProfile);
 router.delete("/deleteAccount", isAuthenticated, userController.deleteAccount);
 router.put("/updatePassword", isAuthenticated, userController.updatePassword);
 router.post("/forgotPassword", isAuthenticated, userController.forgotPassword);
+router.post("/verifyPassword", isAuthenticated, userController.verifyPassword);
 
 module.exports = router;

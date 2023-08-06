@@ -9,7 +9,7 @@ const userModel = require("../models/userModel");
 const register = async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
-    res.status(400).send({
+    res.status(400).json({
       message: "All fields are required",
     });
   } else {
@@ -17,12 +17,12 @@ const register = async (req, res) => {
       const userName = await userModel.findOne({ username: username });
       const userEmail = await userModel.findOne({ email: email });
       if (userName) {
-        res.status(400).send({
+        res.status(401).json({
           message: "Username has already been taken",
         });
       } else {
         if (userEmail) {
-          res.status(400).send({
+          res.status(401).json({
             message: "User with this email already exists",
           });
         } else {
@@ -34,7 +34,7 @@ const register = async (req, res) => {
           });
           let results = await data.save();
           if (!results) {
-            res.status(500).send({
+            res.status(500).json({
               message: "User registration failed",
             });
           } else {
@@ -58,14 +58,14 @@ const register = async (req, res) => {
                         secure: true,
                         maxAge: 60 * 60 * 1000,
                       })
-                      .send({
+                      .json({
                         message: "User registered successfully",
                       });
                   }
                 }
               );
             } catch (error) {
-              res.status(500).send({
+              res.status(500).json({
                 message: "Jwt token error in registration",
                 error: error,
               });
@@ -74,7 +74,7 @@ const register = async (req, res) => {
         }
       }
     } catch (error) {
-      res.status(500).send({
+      res.status(500).json({
         message: "Error while registering",
         error: error,
       });
@@ -85,7 +85,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
-    return res.status(400).send({
+    return res.status(400).json({
       message: "All fields are required",
     });
   }
@@ -94,14 +94,14 @@ const login = async (req, res) => {
     if (username) {
       var user = await userModel.findOne({ username: username });
       if (!user) {
-        return res.status(404).send({
+        return res.status(404).json({
           message: "User doesn't found",
         });
       }
     } else if (email) {
       user = await userModel.findOne({ email: email });
       if (!user) {
-        return res.status(404).send({
+        return res.status(404).json({
           message: "User doesn't found",
         });
       }
@@ -125,22 +125,22 @@ const login = async (req, res) => {
             httpOnly: true,
             maxAge: 60 * 60 * 1000,
           })
-          .send({
+          .json({
             message: "Login successful",
           });
       } catch (error) {
-        res.status(500).send({
+        res.status(500).json({
           message: "Jwt Error",
           error: error,
         });
       }
     } else {
-      res.status(404).send({
+      res.status(404).json({
         message: "Wrong password",
       });
     }
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Error while logging",
       error: error,
     });
@@ -153,14 +153,14 @@ const logout = async (req, res) => {
     .cookie("token", "", {
       expires: new Date(Date.now()),
     })
-    .send({
+    .json({
       message: "Logout Successful",
     });
 };
 
 const userProfile = async (req, res) => {
   const { username, email } = req.user.data;
-  res.status(200).send({
+  res.status(200).json({
     Username: username,
     Email: email,
   });
@@ -170,7 +170,7 @@ const updateProfile = async (req, res) => {
   const { username, email } = req.user.data;
   const { newUserName, newEmail } = req.body;
   if (!newUserName && !newEmail) {
-    return res.status(400).send({
+    return res.status(400).json({
       message: "Atleast one field is required",
     });
   }
@@ -178,7 +178,7 @@ const updateProfile = async (req, res) => {
     if (newUserName) {
       let userData = await userModel.findOne({ username: newUserName });
       if (userData) {
-        return res.status(400).send({
+        return res.status(401).json({
           message: "Username has already been taken",
         });
       }
@@ -186,7 +186,7 @@ const updateProfile = async (req, res) => {
     if (newEmail) {
       let userData = await userModel.findOne({ email: newEmail });
       if (userData) {
-        return res.status(400).send({
+        return res.status(401).json({
           message: "User with this email already exists",
         });
       }
@@ -221,11 +221,11 @@ const updateProfile = async (req, res) => {
         secure: true,
         maxAge: 60 * 60 * 1000,
       })
-      .send({
+      .json({
         message: "User data updated successfully",
       });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Error while updating the profile",
       error: error,
     });
@@ -243,11 +243,11 @@ const deleteAccount = async (req, res) => {
         secure: true,
         maxAge: 60 * 60 * 1000,
       })
-      .send({
+      .json({
         message: "User deleted successfully",
       });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Error while deleting user",
       error: error,
     });
@@ -258,7 +258,7 @@ const updatePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const { username } = req.user.data;
   if (!oldPassword || !newPassword) {
-    return res.status(400).send({
+    return res.status(400).json({
       message: "All fields are required",
     });
   }
@@ -271,15 +271,15 @@ const updatePassword = async (req, res) => {
         { username: username },
         { $set: { password: hash } }
       );
-      return res.status(200).send({
+      return res.status(200).json({
         message: "Password updated successfully",
       });
     }
-    return res.status(400).send({
+    return res.status(401).json({
       message: "Wrong password",
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Error while updating password",
       error: error,
     });
@@ -340,13 +340,39 @@ const forgotPassword = async (req, res) => {
       { $set: { resetPasswordToken: resetPasswordToken } }
     );
     forgotPasswordMail(email, username, resetPasswordToken);
-    res.status(200).send({
+    res.status(200).json({
       message: "Please check your email inbox",
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       message: "Error while processing forgot password request",
       error: error,
+    });
+  }
+};
+
+const verifyPassword = async (req, res) => {
+  const { oldPassword } = req.body;
+  const { username } = req.user.data;
+  if (!oldPassword) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
+  }
+  try {
+    let user = await userModel.findOne({ username: username });
+    let result = await bcrypt.compare(oldPassword, user.password);
+    if (result === true) {
+      return res.status(200).json({
+        message: "Password is correct",
+      });
+    }
+    res.status(401).json({
+      message: "Password is incorrect",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while verifying the password",
     });
   }
 };
@@ -360,4 +386,5 @@ module.exports = {
   deleteAccount,
   updatePassword,
   forgotPassword,
+  verifyPassword,
 };
