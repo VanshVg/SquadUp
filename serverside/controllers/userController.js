@@ -17,12 +17,12 @@ const register = async (req, res) => {
       const userName = await userModel.findOne({ username: username });
       const userEmail = await userModel.findOne({ email: email });
       if (userName) {
-        res.status(401).json({
+        res.status(409).json({
           message: "Username has already been taken",
         });
       } else {
         if (userEmail) {
-          res.status(401).json({
+          res.status(409).json({
             message: "User with this email already exists",
           });
         } else {
@@ -178,7 +178,7 @@ const updateProfile = async (req, res) => {
     if (newUserName) {
       let userData = await userModel.findOne({ username: newUserName });
       if (userData) {
-        return res.status(401).json({
+        return res.status(409).json({
           message: "Username has already been taken",
         });
       }
@@ -186,7 +186,7 @@ const updateProfile = async (req, res) => {
     if (newEmail) {
       let userData = await userModel.findOne({ email: newEmail });
       if (userData) {
-        return res.status(401).json({
+        return res.status(409).json({
           message: "User with this email already exists",
         });
       }
@@ -373,6 +373,31 @@ const verifyPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while verifying the password",
+      error: error,
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { newPassword } = req.body;
+  const { username } = req.user.data;
+  if (!newPassword) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
+  }
+  try {
+    const hash = await bcrypt.hash(newPassword, 10);
+    await userModel.updateOne(
+      { username: username },
+      { $set: { password: hash } }
+    );
+    res.status(200).json({
+      message: "Password has been changed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while reseting a password",
     });
   }
 };
@@ -387,4 +412,5 @@ module.exports = {
   updatePassword,
   forgotPassword,
   verifyPassword,
+  resetPassword,
 };
