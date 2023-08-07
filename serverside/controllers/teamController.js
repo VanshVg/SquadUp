@@ -40,4 +40,26 @@ const createTeam = async (req, res) => {
   }
 };
 
-module.exports = { createTeam };
+const myTeams = async (req, res) => {
+  const { username } = req.user.data;
+  try {
+    const user = await userModel.findOne({ username: username });
+    const teams = await teamModel.find({
+      _id: { $in: user.teams.map((team) => team.team) },
+    });
+    if (teams.length === 0) {
+      return res.status(404).json({
+        message: "User isn't part of any team",
+      });
+    }
+    res.status(200).json({
+      teams,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while showing all teams",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams };
