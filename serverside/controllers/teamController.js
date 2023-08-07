@@ -62,4 +62,37 @@ const myTeams = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams };
+const teamDetail = async (req, res) => {
+  const { teamCode } = req.params;
+  try {
+    let team = await teamModel
+      .findOne({ teamCode: teamCode })
+      .populate("members.user", "username");
+
+    if (!team) {
+      return res.status(404).json({
+        message: "Team doesn't exist",
+      });
+    }
+
+    const membersWithUsername = team.members.map((member) => {
+      return {
+        user: member.user.username,
+        role: member.role,
+      };
+    });
+
+    res.status(200).json({
+      name: team.name,
+      description: team.description,
+      members: membersWithUsername,
+      tasks: team.tasks,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while getting team details",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams, teamDetail };

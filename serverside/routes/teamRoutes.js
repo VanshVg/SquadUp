@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.post("/create", isAuthenticated, teamController.createTeam);
 router.get("/myTeams", isAuthenticated, teamController.myTeams);
+router.get("/team/:teamCode", isAuthenticated, teamController.teamDetail);
 
 module.exports = router;
