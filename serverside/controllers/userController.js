@@ -91,20 +91,17 @@ const login = async (req, res) => {
   }
 
   try {
+    let user;
     if (username) {
-      var user = await userModel.findOne({ username: username });
-      if (!user) {
-        return res.status(404).json({
-          message: "User doesn't found",
-        });
-      }
+      user = await userModel.findOne({ username: username });
     } else if (email) {
       user = await userModel.findOne({ email: email });
-      if (!user) {
-        return res.status(404).json({
-          message: "User doesn't found",
-        });
-      }
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User doesn't found",
+      });
     }
 
     let result = await bcrypt.compare(password, user.password);
@@ -123,6 +120,7 @@ const login = async (req, res) => {
           .status(200)
           .cookie("token", token, {
             httpOnly: true,
+            secure: true,
             maxAge: 60 * 60 * 1000,
           })
           .json({
@@ -151,6 +149,8 @@ const logout = async (req, res) => {
   res
     .status(200)
     .cookie("token", "", {
+      httpOnly: true,
+      secure: true,
       expires: new Date(Date.now()),
     })
     .json({
@@ -174,8 +174,15 @@ const updateProfile = async (req, res) => {
       message: "Atleast one field is required",
     });
   }
+
   try {
     if (newUserName) {
+      if (newUserName === username) {
+        return res.status(400).send({
+          message:
+            "Please choose different username from your current username",
+        });
+      }
       let userData = await userModel.findOne({ username: newUserName });
       if (userData) {
         return res.status(409).json({
@@ -184,6 +191,11 @@ const updateProfile = async (req, res) => {
       }
     }
     if (newEmail) {
+      if (newEmail === email) {
+        return res.status(400).send({
+          message: "Please choose different email from your current email",
+        });
+      }
       let userData = await userModel.findOne({ email: newEmail });
       if (userData) {
         return res.status(409).json({
@@ -254,38 +266,6 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-const updatePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
-  const { username } = req.user.data;
-  if (!oldPassword || !newPassword) {
-    return res.status(400).json({
-      message: "All fields are required",
-    });
-  }
-  try {
-    const user = await userModel.findOne({ username: username });
-    let result = await bcrypt.compare(oldPassword, user.password);
-    if (result === true) {
-      const hash = await bcrypt.hash(newPassword, 10);
-      await userModel.updateOne(
-        { username: username },
-        { $set: { password: hash } }
-      );
-      return res.status(200).json({
-        message: "Password updated successfully",
-      });
-    }
-    return res.status(401).json({
-      message: "Wrong password",
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error while updating password",
-      error: error,
-    });
-  }
-};
-
 const forgotPasswordMail = async (email, username, resetPasswordToken) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -302,7 +282,7 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
     const mailOptions = {
       from: process.env.TASKFLOW_EMAIL,
       to: email,
-      subject: "Task Flow Password Reset",
+      subject: "Team Up Password Reset",
       html:
         "<p>Dear " +
         username +
@@ -317,7 +297,7 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
         resetPasswordToken +
         "</p>" +
         "<p>Thank you,</p>" +
-        "<p> Task Flow Team</p>",
+        "<p> Team Up Team</p>",
     };
     let info = await transporter.sendMail(mailOptions);
     console.log("Mail has been sent:", info.response);
@@ -339,10 +319,16 @@ const forgotPassword = async (req, res) => {
       { email: email },
       { $set: { resetPasswordToken: resetPasswordToken } }
     );
-    forgotPasswordMail(email, username, resetPasswordToken);
-    res.status(200).json({
-      message: "Please check your email inbox",
-    });
+    try {
+      await forgotPasswordMail(email, username, resetPasswordToken);
+      res.status(200).json({
+        message: "Please check your email inbox",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: "Failed to send password reset email",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: "Error while processing forgot password request",
@@ -409,7 +395,6 @@ module.exports = {
   userProfile,
   updateProfile,
   deleteAccount,
-  updatePassword,
   forgotPassword,
   verifyPassword,
   resetPassword,

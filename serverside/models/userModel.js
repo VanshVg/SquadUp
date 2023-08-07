@@ -13,8 +13,25 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  teams: [
+    {
+      team: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "teams",
+      },
+      role: {
+        type: String,
+        enum: ["member", "admin"],
+        default: "member",
+      },
+    },
+  ],
   resetPasswordToken: {
     type: String,
+  },
+  created_at: {
+    type: Date,
+    default: Date.now,
   },
 });
 
