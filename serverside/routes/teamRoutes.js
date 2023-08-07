@@ -8,5 +8,6 @@ const router = express.Router();
 router.post("/create", isAuthenticated, teamController.createTeam);
 router.get("/myTeams", isAuthenticated, teamController.myTeams);
 router.get("/team/:teamCode", isAuthenticated, teamController.teamDetail);
+router.put("/updateTeam/:teamCode", isAuthenticated, teamController.updateTeam);
 
 module.exports = router;

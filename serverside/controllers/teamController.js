@@ -95,4 +95,67 @@ const teamDetail = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams, teamDetail };
+const updateTeam = async (req, res) => {
+  const { name, description } = req.body;
+  const { username } = req.user.data;
+  const { teamCode } = req.params;
+  let isAdmin = false;
+  try {
+    let user = await userModel
+      .findOne({ username: username })
+      .populate("teams.team", "teamCode");
+
+    for (const team of user.teams) {
+      if (teamCode === team.team.teamCode && team.role === "admin") {
+        isAdmin = true;
+        break;
+      }
+    }
+
+    if (isAdmin) {
+      if (!name && !description) {
+        return res.status(400).json({
+          message: "Atleast one field is required",
+        });
+      }
+
+      let team = await teamModel.findOne({ teamCode: teamCode });
+
+      const updateData = {};
+
+      if (name) {
+        if (name === team.name) {
+          return res.status(400).json({
+            message: "Choose different team name from current team name",
+          });
+        }
+        updateData.name = name;
+      }
+      if (description) {
+        if (description === team.description) {
+          return res.status(400).json({
+            message:
+              "Choose different team description from current team description",
+          });
+        }
+        updateData.description = description;
+      }
+
+      await teamModel.updateOne({ teamCode: teamCode }, { $set: updateData });
+
+      return res.status(200).json({
+        message: "Team data updated successfully",
+      });
+    }
+
+    res.status(401).json({
+      message: "You are not authorised to make changes",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while updating team",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams, teamDetail, updateTeam };
