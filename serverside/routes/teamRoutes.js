@@ -9,5 +9,6 @@ router.post("/create", isAuthenticated, teamController.createTeam);
 router.get("/myTeams", isAuthenticated, teamController.myTeams);
 router.get("/team/:teamCode", isAuthenticated, teamController.teamDetail);
 router.put("/updateTeam/:teamCode", isAuthenticated, teamController.updateTeam);
+router.delete("/deleteTeam/:teamCode", isAuthenticated, teamController.deleteTeam);
 
 module.exports = router;

@@ -121,6 +121,12 @@ const updateTeam = async (req, res) => {
 
       let team = await teamModel.findOne({ teamCode: teamCode });
 
+      if (!team) {
+        return res.status(404).json({
+          message: "Team doesn't exist",
+        });
+      }
+
       const updateData = {};
 
       if (name) {
@@ -158,4 +164,54 @@ const updateTeam = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams, teamDetail, updateTeam };
+const deleteTeam = async (req, res) => {
+  const { username } = req.user.data;
+  const { teamCode } = req.params;
+  let isAdmin = false;
+  try {
+    let user = await userModel
+      .findOne({ username: username })
+      .populate("teams.team", "teamCode");
+
+    for (const team of user.teams) {
+      if (teamCode === team.team.teamCode && team.role === "admin") {
+        isAdmin = true;
+        break;
+      }
+    }
+
+    if (isAdmin) {
+      const team = await teamModel.findOne({ teamCode: teamCode });
+      if (!team) {
+        return res.status(404).json({
+          message: "Team doesn't exist",
+        });
+      }
+
+      for (const member of team.members) {
+        const memberUser = await userModel.findOne({ _id: member.user });
+        if (memberUser) {
+          memberUser.teams = memberUser.teams.filter(
+            (teamItem) => teamItem.team.toString() !== team._id.toString()
+          );
+          await memberUser.save();
+        }
+      }
+
+      await teamModel.deleteOne({ teamCode: teamCode });
+
+      return res.status(200).json({
+        message: "Team deleted successfully",
+      });
+    }
+    res.status(401).json({
+      message: "You're not authorised to delete a team",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while deleting team",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam };
