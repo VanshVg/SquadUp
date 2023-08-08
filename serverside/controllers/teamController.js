@@ -2,6 +2,7 @@ const randomstring = require("randomstring");
 
 const teamModel = require("../models/teamModel");
 const userModel = require("../models/userModel");
+const { json } = require("express");
 
 const createTeam = async (req, res) => {
   const { name, description } = req.body;
@@ -65,9 +66,7 @@ const myTeams = async (req, res) => {
 const teamDetail = async (req, res) => {
   const { teamCode } = req.params;
   try {
-    let team = await teamModel
-      .findOne({ teamCode: teamCode })
-      .populate("members.user", "username");
+    let team = await teamModel.findOne({ teamCode: teamCode }).populate("members.user", "username");
 
     if (!team) {
       return res.status(404).json({
@@ -101,9 +100,7 @@ const updateTeam = async (req, res) => {
   const { teamCode } = req.params;
   let isAdmin = false;
   try {
-    let user = await userModel
-      .findOne({ username: username })
-      .populate("teams.team", "teamCode");
+    let user = await userModel.findOne({ username: username }).populate("teams.team", "teamCode");
 
     for (const team of user.teams) {
       if (teamCode === team.team.teamCode && team.role === "admin") {
@@ -140,8 +137,7 @@ const updateTeam = async (req, res) => {
       if (description) {
         if (description === team.description) {
           return res.status(400).json({
-            message:
-              "Choose different team description from current team description",
+            message: "Choose different team description from current team description",
           });
         }
         updateData.description = description;
@@ -169,9 +165,7 @@ const deleteTeam = async (req, res) => {
   const { teamCode } = req.params;
   let isAdmin = false;
   try {
-    let user = await userModel
-      .findOne({ username: username })
-      .populate("teams.team", "teamCode");
+    let user = await userModel.findOne({ username: username }).populate("teams.team", "teamCode");
 
     for (const team of user.teams) {
       if (teamCode === team.team.teamCode && team.role === "admin") {
@@ -214,4 +208,45 @@ const deleteTeam = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam };
+const joinTeam = async (req, res) => {
+  const { teamCode } = req.body;
+  const { username } = req.user.data;
+  if (!teamCode) {
+    return res.status(400).json({
+      message: "All fields are required",
+    });
+  }
+  try {
+    let user = await userModel.findOne({ username: username });
+    let team = await teamModel.findOne({ teamCode: teamCode });
+    if (!team) {
+      return res.status(404).json({
+        message: "Team doesn't exist",
+      });
+    }
+    for (const teamItem of user.teams) {
+      if (teamItem.team.toString() === team._id.toString()) {
+        return res.status(409).json({
+          message: "You are already part of this team",
+        });
+      }
+    }
+    await userModel.updateOne(
+      { username: username },
+      { $push: { teams: { team: team._id, role: "member" } } }
+    );
+    await teamModel.updateOne(
+      { teamCode: teamCode },
+      { $push: { members: { user: user._id, role: "member" } } }
+    );
+    res.status(200).json({
+      message: "You are part of this team now",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while joining a team",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam, joinTeam };
