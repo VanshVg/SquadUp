@@ -280,4 +280,30 @@ const leaveTeam = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam, joinTeam, leaveTeam };
+const showAllMembers = async (req, res) => {
+  const { teamCode } = req.params;
+  try {
+    const team = await teamModel
+      .findOne({ teamCode: teamCode })
+      .populate("members.user", "username");
+    res.status(200).json({
+      data: team.members,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while showing all members",
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  createTeam,
+  myTeams,
+  teamDetail,
+  updateTeam,
+  deleteTeam,
+  joinTeam,
+  leaveTeam,
+  showAllMembers,
+};
