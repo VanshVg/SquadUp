@@ -37,6 +37,7 @@ const createTeam = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while creating a team",
+      error: error,
     });
   }
 };
@@ -59,6 +60,7 @@ const myTeams = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while showing all teams",
+      error: error,
     });
   }
 };
@@ -90,6 +92,7 @@ const teamDetail = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while getting team details",
+      error: error,
     });
   }
 };
@@ -156,6 +159,7 @@ const updateTeam = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while updating team",
+      error: error,
     });
   }
 };
@@ -204,6 +208,7 @@ const deleteTeam = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while deleting team",
+      error: error,
     });
   }
 };
@@ -245,6 +250,7 @@ const joinTeam = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while joining a team",
+      error: error,
     });
   }
 };
@@ -269,6 +275,7 @@ const leaveTeam = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       message: "Error while leaving a team",
+      error: error,
     });
   }
 };

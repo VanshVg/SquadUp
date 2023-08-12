@@ -179,8 +179,7 @@ const updateProfile = async (req, res) => {
     if (newUserName) {
       if (newUserName === username) {
         return res.status(400).send({
-          message:
-            "Please choose different username from your current username",
+          message: "Please choose different username from your current username",
         });
       }
       let userData = await userModel.findOne({ username: newUserName });
@@ -204,17 +203,11 @@ const updateProfile = async (req, res) => {
       }
     }
     if (newUserName) {
-      await userModel.updateOne(
-        { username: username },
-        { $set: { username: newUserName } }
-      );
+      await userModel.updateOne({ username: username }, { $set: { username: newUserName } });
       var newUserData = await userModel.findOne({ username: newUserName });
     }
     if (newEmail) {
-      await userModel.updateOne(
-        { email: email },
-        { $set: { email: newEmail } }
-      );
+      await userModel.updateOne({ email: email }, { $set: { email: newEmail } });
       newUserData = await userModel.findOne({ email: newEmail });
     }
     const token = await jwt.sign(
@@ -301,10 +294,7 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
     };
     let info = await transporter.sendMail(mailOptions);
     console.log("Mail has been sent:", info.response);
-    await userModel.updateOne(
-      { username: username },
-      { $unset: { resetPasswordToken: 1 } }
-    );
+    await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
   } catch (error) {
     console.log(error);
   }
@@ -327,6 +317,7 @@ const forgotPassword = async (req, res) => {
     } catch (error) {
       return res.status(500).json({
         message: "Failed to send password reset email",
+        error: error,
       });
     }
   } catch (error) {
@@ -374,16 +365,14 @@ const resetPassword = async (req, res) => {
   }
   try {
     const hash = await bcrypt.hash(newPassword, 10);
-    await userModel.updateOne(
-      { username: username },
-      { $set: { password: hash } }
-    );
+    await userModel.updateOne({ username: username }, { $set: { password: hash } });
     res.status(200).json({
       message: "Password has been changed successfully",
     });
   } catch (error) {
     res.status(500).json({
       message: "Error while reseting a password",
+      error: error,
     });
   }
 };
