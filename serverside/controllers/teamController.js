@@ -185,9 +185,9 @@ const deleteTeam = async (req, res) => {
       for (const member of team.members) {
         const memberUser = await userModel.findOne({ _id: member.user });
         if (memberUser) {
-          memberUser.teams = memberUser.teams.filter(
-            (teamItem) => teamItem.team.toString() !== team._id.toString()
-          );
+          memberUser.teams = memberUser.teams.filter((teamItem) => {
+            return teamItem.team.toString() !== team._id.toString();
+          });
           await memberUser.save();
         }
       }
@@ -249,4 +249,28 @@ const joinTeam = async (req, res) => {
   }
 };
 
-module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam, joinTeam };
+const leaveTeam = async (req, res) => {
+  const { username } = req.user.data;
+  const { teamCode } = req.params;
+  try {
+    const team = await teamModel.findOne({ teamCode: teamCode });
+    const user = await userModel.findOne({ username: username });
+    team.members = team.members.filter((memberItem) => {
+      return memberItem.user.toString() !== user._id.toString();
+    });
+    await team.save();
+    user.teams = user.teams.filter((teamItem) => {
+      return teamItem.team.toString() !== team._id.toString();
+    });
+    await user.save();
+    res.status(200).json({
+      message: "Left the team successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while leaving a team",
+    });
+  }
+};
+
+module.exports = { createTeam, myTeams, teamDetail, updateTeam, deleteTeam, joinTeam, leaveTeam };

@@ -11,5 +11,6 @@ router.get("/team/:teamCode", isAuthenticated, teamController.teamDetail);
 router.put("/updateTeam/:teamCode", isAuthenticated, teamController.updateTeam);
 router.delete("/deleteTeam/:teamCode", isAuthenticated, teamController.deleteTeam);
 router.post("/joinTeam", isAuthenticated, teamController.joinTeam);
+router.post("/leaveTeam/:teamCode", isAuthenticated, teamController.leaveTeam);
 
 module.exports = router;
