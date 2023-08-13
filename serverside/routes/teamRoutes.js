@@ -13,5 +13,6 @@ router.delete("/deleteTeam/:teamCode", isAuthenticated, teamController.deleteTea
 router.post("/joinTeam", isAuthenticated, teamController.joinTeam);
 router.post("/leaveTeam/:teamCode", isAuthenticated, teamController.leaveTeam);
 router.get("/:teamCode/members", isAuthenticated, teamController.showAllMembers);
+router.delete("/:teamCode/removeMember/:userId", isAuthenticated, teamController.removeMember);
 
 module.exports = router;

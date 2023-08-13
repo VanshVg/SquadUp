@@ -178,32 +178,32 @@ const deleteTeam = async (req, res) => {
       }
     }
 
-    if (isAdmin) {
-      const team = await teamModel.findOne({ teamCode: teamCode });
-      if (!team) {
-        return res.status(404).json({
-          message: "Team doesn't exist",
-        });
-      }
-
-      for (const member of team.members) {
-        const memberUser = await userModel.findOne({ _id: member.user });
-        if (memberUser) {
-          memberUser.teams = memberUser.teams.filter((teamItem) => {
-            return teamItem.team.toString() !== team._id.toString();
-          });
-          await memberUser.save();
-        }
-      }
-
-      await teamModel.deleteOne({ teamCode: teamCode });
-
-      return res.status(200).json({
-        message: "Team deleted successfully",
+    if (!isAdmin) {
+      return res.status(401).json({
+        message: "You're not authorised to delete a team",
       });
     }
-    res.status(401).json({
-      message: "You're not authorised to delete a team",
+    const team = await teamModel.findOne({ teamCode: teamCode });
+    if (!team) {
+      return res.status(404).json({
+        message: "Team doesn't exist",
+      });
+    }
+
+    for (const member of team.members) {
+      const memberUser = await userModel.findOne({ _id: member.user });
+      if (memberUser) {
+        memberUser.teams = memberUser.teams.filter((teamItem) => {
+          return teamItem.team.toString() !== team._id.toString();
+        });
+        await memberUser.save();
+      }
+    }
+
+    await teamModel.deleteOne({ teamCode: teamCode });
+
+    return res.status(200).json({
+      message: "Team deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
@@ -297,6 +297,45 @@ const showAllMembers = async (req, res) => {
   }
 };
 
+const removeMember = async (req, res) => {
+  const { username } = req.user.data;
+  const { teamCode, userId } = req.params;
+  let isAdmin = false;
+  try {
+    let admin = await userModel.findOne({ username: username }).populate("teams.team", "teamCode");
+    for (const team of admin.teams) {
+      if (team.team.teamCode === teamCode && team.role === "admin") {
+        isAdmin = true;
+        break;
+      }
+    }
+    if (!isAdmin) {
+      return res.status(401).json({
+        message: "You're not authorised to remove a member from a team",
+      });
+    }
+
+    let team = await teamModel.findOne({ teamCode: teamCode });
+    team.members = team.members.filter((memberItem) => {
+      return memberItem.user.toString() !== userId.toString();
+    });
+    await team.save();
+    let user = await userModel.findOne({ _id: userId });
+    user.teams = user.teams.filter((teamItem) => {
+      return teamItem.team.toString() !== team._id.toString();
+    });
+    await user.save();
+    res.status(200).json({
+      message: "User removed successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error while removing the user",
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createTeam,
   myTeams,
@@ -306,4 +345,5 @@ module.exports = {
   joinTeam,
   leaveTeam,
   showAllMembers,
+  removeMember,
 };
