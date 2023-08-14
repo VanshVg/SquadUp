@@ -5,6 +5,7 @@ const randomstring = require("randomstring");
 require("dotenv").config();
 
 const userModel = require("../models/userModel");
+const { generateJwtToken } = require("../utils/authUtils");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;
@@ -39,31 +40,17 @@ const register = async (req, res) => {
             });
           } else {
             try {
-              jwt.sign(
-                {
-                  data: {
-                    username: username,
-                    email: email,
-                  },
-                },
-                process.env.SECRET_TOKEN,
-                (error, token) => {
-                  if (error) {
-                    throw error;
-                  } else {
-                    res
-                      .status(200)
-                      .cookie("token", token, {
-                        httpOnly: true,
-                        secure: true,
-                        maxAge: 60 * 60 * 1000,
-                      })
-                      .json({
-                        message: "User registered successfully",
-                      });
-                  }
-                }
-              );
+              let token = await generateJwtToken(username, email);
+              res
+                .status(200)
+                .cookie("token", token, {
+                  httpOnly: true,
+                  secure: true,
+                  maxAge: 60 * 60 * 1000,
+                })
+                .json({
+                  message: "User registered successfully",
+                });
             } catch (error) {
               res.status(500).json({
                 message: "Jwt token error in registration",
@@ -107,15 +94,7 @@ const login = async (req, res) => {
     let result = await bcrypt.compare(password, user.password);
     if (result === true) {
       try {
-        const token = await jwt.sign(
-          {
-            data: {
-              username: user.username,
-              email: user.email,
-            },
-          },
-          process.env.SECRET_TOKEN
-        );
+        let token = await generateJwtToken(username, email);
         res
           .status(200)
           .cookie("token", token, {
@@ -210,15 +189,7 @@ const updateProfile = async (req, res) => {
       await userModel.updateOne({ email: email }, { $set: { email: newEmail } });
       newUserData = await userModel.findOne({ email: newEmail });
     }
-    const token = await jwt.sign(
-      {
-        data: {
-          username: newUserData.username,
-          email: newUserData.email,
-        },
-      },
-      process.env.SECRET_TOKEN
-    );
+    const token = generateJwtToken(newUserData.username, newUserData.email);
     res
       .status(200)
       .cookie("token", token, {
