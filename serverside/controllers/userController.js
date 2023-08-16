@@ -7,6 +7,8 @@ require("dotenv").config();
 const userModel = require("../models/userModel");
 const { generateJwtToken } = require("../utils/authUtils");
 
+var cookieAge = 30 * 24 * 60 * 60 * 1000;
+
 const register = async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
@@ -46,7 +48,7 @@ const register = async (req, res) => {
                 .cookie("token", token, {
                   httpOnly: true,
                   secure: true,
-                  maxAge: 60 * 60 * 1000,
+                  maxAge: cookieAge,
                 })
                 .json({
                   message: "User registered successfully",
@@ -100,7 +102,7 @@ const login = async (req, res) => {
           .cookie("token", token, {
             httpOnly: true,
             secure: true,
-            maxAge: 60 * 60 * 1000,
+            maxAge: cookieAge,
           })
           .json({
             message: "Login successful",
@@ -195,7 +197,7 @@ const updateProfile = async (req, res) => {
       .cookie("token", token, {
         httpOnly: true,
         secure: true,
-        maxAge: 60 * 60 * 1000,
+        maxAge: cookieAge,
       })
       .json({
         message: "User data updated successfully",
@@ -217,7 +219,7 @@ const deleteAccount = async (req, res) => {
       .cookie("token", "", {
         httpOnly: true,
         secure: true,
-        maxAge: 60 * 60 * 1000,
+        maxAge: cookieAge,
       })
       .json({
         message: "User deleted successfully",
