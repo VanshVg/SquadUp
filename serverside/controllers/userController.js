@@ -10,8 +10,8 @@ const { generateJwtToken } = require("../utils/authUtils");
 var cookieAge = 30 * 24 * 60 * 60 * 1000;
 
 const register = async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { firstname, lastname, username, email, password } = req.body;
+  if (!firstname || !lastname || !username || !email || !password) {
     res.status(400).json({
       message: "All fields are required",
     });
@@ -31,6 +31,8 @@ const register = async (req, res) => {
         } else {
           const hash = await bcrypt.hash(password, 10);
           const data = new userModel({
+            firstname: firstname,
+            lastname: lastname,
             username: username,
             email: email,
             password: hash,
