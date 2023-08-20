@@ -17,7 +17,7 @@ const register = async (req, res) => {
     });
   } else {
     try {
-      const userName = await userModel.findOne({ username: username });
+      const userName = await userModel.findOne({ username: { $regex: new RegExp(username, "i") } });
       const userEmail = await userModel.findOne({ email: email });
       if (userName) {
         res.status(409).json({
@@ -44,7 +44,7 @@ const register = async (req, res) => {
             });
           } else {
             try {
-              let token = await generateJwtToken(username, email);
+              let token = await generateJwtToken(firstname, lastname, username, email);
               res
                 .status(200)
                 .cookie("token", token, {
@@ -84,7 +84,7 @@ const login = async (req, res) => {
   try {
     let user;
     if (username) {
-      user = await userModel.findOne({ username: username });
+      user = await userModel.findOne({ username: { $regex: new RegExp(username, "i") } });
     } else if (email) {
       user = await userModel.findOne({ email: email });
     }
@@ -98,7 +98,12 @@ const login = async (req, res) => {
     let result = await bcrypt.compare(password, user.password);
     if (result === true) {
       try {
-        let token = await generateJwtToken(username, email);
+        let token = await generateJwtToken(
+          user.firstname,
+          user.lastname,
+          user.username,
+          user.email
+        );
         res
           .status(200)
           .cookie("token", token, {
@@ -142,8 +147,11 @@ const logout = async (req, res) => {
 };
 
 const userProfile = async (req, res) => {
-  const { username, email } = req.user.data;
+  console.log(req.user.data);
+  const { firstname, lastname, username, email } = req.user.data;
   res.status(200).json({
+    firstname: firstname,
+    lastname: lastname,
     Username: username,
     Email: email,
   });
@@ -160,7 +168,7 @@ const updateProfile = async (req, res) => {
 
   try {
     if (newUserName) {
-      if (newUserName === username) {
+      if (newUserName.toLowerCase() === username.toLowerCase()) {
         return res.status(400).send({
           message: "Please choose different username from your current username",
         });
@@ -193,7 +201,12 @@ const updateProfile = async (req, res) => {
       await userModel.updateOne({ email: email }, { $set: { email: newEmail } });
       newUserData = await userModel.findOne({ email: newEmail });
     }
-    const token = generateJwtToken(newUserData.username, newUserData.email);
+    const token = await generateJwtToken(
+      newUserData.firstname,
+      newUserData.lastname,
+      newUserData.username,
+      newUserData.email
+    );
     res
       .status(200)
       .cookie("token", token, {
@@ -221,7 +234,7 @@ const deleteAccount = async (req, res) => {
       .cookie("token", "", {
         httpOnly: true,
         secure: true,
-        maxAge: cookieAge,
+        maxAge: new Date(Date.now()),
       })
       .json({
         message: "User deleted successfully",
@@ -234,7 +247,7 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-const forgotPasswordMail = async (email, username, resetPasswordToken) => {
+const forgotPasswordMail = async (firstname, lastname, email, username, resetPasswordToken) => {
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -253,7 +266,9 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
       subject: "Team Up Password Reset",
       html:
         "<p>Dear " +
-        username +
+        firstname +
+        " " +
+        lastname +
         ",</p>" +
         "<p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>" +
         "<p>To reset your password, please click on the following link:</p>" +
@@ -276,16 +291,15 @@ const forgotPasswordMail = async (email, username, resetPasswordToken) => {
 };
 
 const forgotPassword = async (req, res) => {
-  const { email, username } = req.user.data;
+  const { firstname, lastname, email, username } = req.user.data;
   try {
-    let user = await userModel.findOne({ email: email });
     const resetPasswordToken = randomstring.generate();
     await userModel.updateOne(
       { email: email },
       { $set: { resetPasswordToken: resetPasswordToken } }
     );
     try {
-      await forgotPasswordMail(email, username, resetPasswordToken);
+      await forgotPasswordMail(firstname, lastname, email, username, resetPasswordToken);
       res.status(200).json({
         message: "Please check your email inbox",
       });

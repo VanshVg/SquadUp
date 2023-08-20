@@ -19,11 +19,13 @@ const checkAdmin = async (username, teamCode) => {
   return false;
 };
 
-const generateJwtToken = async (username, email) => {
+const generateJwtToken = async (firstname, lastname, username, email) => {
   try {
     return await jwt.sign(
       {
         data: {
+          firstname: firstname,
+          lastname: lastname,
           username: username,
           email: email,
         },
