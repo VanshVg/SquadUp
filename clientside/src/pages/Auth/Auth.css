@@ -77,3 +77,25 @@ button:hover {
 .login-link a:hover {
   text-decoration: underline;
 }
+
+.password-input {
+  position: relative;
+}
+
+.password-input input {
+  padding-right: 57.5%; /* Adjust the padding to accommodate the icon */
+}
+
+.password-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Adjust the icon size as needed */
+.password-icon svg {
+  width: 18px;
+  height: 18px;
+}
