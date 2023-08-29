@@ -83,7 +83,7 @@ button:hover {
 }
 
 .password-input input {
-  padding-right: 57.5%; /* Adjust the padding to accommodate the icon */
+  padding-right: 57.5%;
 }
 
 .password-icon {
@@ -94,7 +94,6 @@ button:hover {
   cursor: pointer;
 }
 
-/* Adjust the icon size as needed */
 .password-icon svg {
   width: 18px;
   height: 18px;
