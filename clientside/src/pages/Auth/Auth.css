@@ -1,16 +1,13 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #afdcec;
-  font-family: Arial, sans-serif;
-}
-
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  background-color: #afdcec;
+  font-family: Arial, sans-serif;
 }
 
 .register-form {
@@ -27,17 +24,19 @@ body {
 input {
   margin: 10px 0;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #000;
   border-radius: 4px;
   transition: 0.2s ease;
+  font-size: 13px;
+  background-color: #e8f1ff;
 }
 
 input::placeholder {
-  color: #0c090a;
+  color: #686a6c;
 }
 
 input:valid {
-  border-color: #488ac7;
+  border-color: #1569c7;
 }
 
 .input-group {
