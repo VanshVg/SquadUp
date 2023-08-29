@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Team Up | Registration</title>
+        <title>Team Up | Login</title>
       </Helmet>
       <div className="register-container">
         <form className="register-form">
