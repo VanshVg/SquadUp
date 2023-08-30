@@ -4,7 +4,6 @@ import Helmet from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
-import axios from "axios";
 import registerSchema from "./../../schema/registerSchema";
 import "./Auth.css";
 
@@ -24,11 +23,6 @@ const Register = () => {
   const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
     initialValues: data,
     validationSchema: registerSchema,
-    onSubmit: (values, action) => {
-      axios.post("http://localhost:4000/api/users/register", values).then((resp) => {
-        console.log(resp);
-      });
-    },
   });
 
   const handleInputChange = (e) => {
