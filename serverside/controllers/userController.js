@@ -54,6 +54,7 @@ const register = async (req, res) => {
                 })
                 .json({
                   isLoggedIn: true,
+                  userToken: token,
                   message: "User registered successfully",
                 });
             } catch (error) {
@@ -75,6 +76,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("API CALLED");
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
     return res.status(400).json({
@@ -114,6 +116,7 @@ const login = async (req, res) => {
           })
           .json({
             isLoggedIn: true,
+            userToken: token,
             message: "Login successful",
           });
       } catch (error) {

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
-import registerSchema from "./../../schema/registerSchema";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import registerSchema from "../../schema/registerSchema";
+import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import "./Auth.css";
 
 const Register = () => {
@@ -20,9 +24,28 @@ const Register = () => {
     confirmpassword: "",
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
     initialValues: data,
     validationSchema: registerSchema,
+    onSubmit: (values, action) => {
+      axios.post("http://localhost:4000/api/users/register", values).then((resp) => {
+        if (resp.data.isLoggedIn) {
+          dispatch(login(true, resp.data.userToken));
+          dispatch(setIsLoggedIn(true));
+          dispatch(setUserToken(resp.data.userToken));
+          Cookies.set("isLoggedIn", true, { expires: 31 });
+          Cookies.set("userToken", resp.data.userToken);
+        }
+
+        if (resp.status === 200) {
+          navigate("/");
+          action.resetForm();
+        }
+      });
+    },
   });
 
   const handleInputChange = (e) => {

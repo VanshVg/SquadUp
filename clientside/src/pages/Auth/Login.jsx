@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
-import loginSchema from "../../schema/loginSchema";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import loginSchema from "./../../schema/loginSchema";
+import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import "./Auth.css";
 
 const Login = () => {
@@ -17,10 +21,29 @@ const Login = () => {
     password: "",
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { values, errors, handleBlur, handleChange, handleSubmit, touched, setTouched } = useFormik(
     {
       initialValues: data,
-      validationSchema: loginSchema,
+      validationSchema: () => loginSchema(loginType),
+      onSubmit: (values, action) => {
+        axios.post("http://localhost:4000/api/users/login", values).then((resp) => {
+          if (resp.data.isLoggedIn) {
+            dispatch(login(true, resp.data.userToken));
+            dispatch(setIsLoggedIn(true));
+            dispatch(setUserToken(resp.data.userToken));
+            Cookies.set("isLoggedIn", true, { expires: 31 });
+            Cookies.set("userToken", resp.data.userToken);
+          }
+
+          if (resp.status === 200) {
+            navigate("/");
+            action.resetForm();
+          }
+        });
+      },
     }
   );
 
@@ -42,10 +65,18 @@ const Login = () => {
         value: type === "username" ? "" : values.username,
       },
     });
+
     handleChange({
       target: {
         name: "email",
         value: type === "email" ? "" : values.email,
+      },
+    });
+
+    handleChange({
+      target: {
+        name: "password",
+        value: "",
       },
     });
   };
@@ -82,7 +113,8 @@ const Login = () => {
               onBlur={handleBlur}
             />
           )}
-          {errors.username && touched.username ? (
+
+          {loginType === "username" && errors.username && touched.username ? (
             <p
               style={{
                 color: "red",
@@ -94,7 +126,8 @@ const Login = () => {
               {errors.username}
             </p>
           ) : null}
-          {errors.email && touched.email ? (
+
+          {loginType === "email" && errors.email && touched.email ? (
             <p
               style={{
                 color: "red",
@@ -113,14 +146,31 @@ const Login = () => {
               name="password"
               placeholder="Enter Password"
               required
+              value={values.password}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
             />
+            {errors.password && touched.password ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {errors.password}
+              </p>
+            ) : null}
             <FontAwesomeIcon
               icon={passwordVisible ? faEye : faEyeSlash}
               onClick={togglePasswordVisibility}
               className="password-icon"
             />
           </div>
-          <button type="submit">Login</button>
+          {loginType === "username" || loginType === "email" ? (
+            <button type="submit">Login</button>
+          ) : null}
           {loginType === "username" ? (
             <p className="login-link">
               or Continue with <Link onClick={() => handleLoginType("email")}>Email Id</Link>
