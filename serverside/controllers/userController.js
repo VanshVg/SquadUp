@@ -53,6 +53,7 @@ const register = async (req, res) => {
                   maxAge: cookieAge,
                 })
                 .json({
+                  isLoggedIn: true,
                   message: "User registered successfully",
                 });
             } catch (error) {
@@ -112,6 +113,7 @@ const login = async (req, res) => {
             maxAge: cookieAge,
           })
           .json({
+            isLoggedIn: true,
             message: "Login successful",
           });
       } catch (error) {
@@ -142,12 +144,12 @@ const logout = async (req, res) => {
       expires: new Date(Date.now()),
     })
     .json({
+      isLoggedIn: false,
       message: "Logout Successful",
     });
 };
 
 const userProfile = async (req, res) => {
-  console.log(req.user.data);
   const { firstname, lastname, username, email } = req.user.data;
   res.status(200).json({
     firstname: firstname,
