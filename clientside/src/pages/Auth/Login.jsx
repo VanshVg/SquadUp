@@ -35,6 +35,19 @@ const Login = () => {
   const handleLoginType = (type) => {
     setLoginType(type);
     setTouched({});
+
+    handleChange({
+      target: {
+        name: "username",
+        value: type === "username" ? "" : values.username,
+      },
+    });
+    handleChange({
+      target: {
+        name: "email",
+        value: type === "email" ? "" : values.email,
+      },
+    });
   };
 
   return (
@@ -43,7 +56,7 @@ const Login = () => {
         <title>Team Up | Login</title>
       </Helmet>
       <div className="register-container">
-        <form className="register-form">
+        <form className="register-form" onSubmit={handleSubmit}>
           <h1 className="register-heading" align="center">
             Welcome Back!
           </h1>
