@@ -14,6 +14,7 @@ import "./Auth.css";
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginType, setLoginType] = useState("username");
+  const [loginError, setLoginError] = useState({});
 
   const data = {
     username: "",
@@ -29,26 +30,52 @@ const Login = () => {
       initialValues: data,
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
-        axios.post("http://localhost:4000/api/users/login", values).then((resp) => {
-          if (resp.data.isLoggedIn) {
-            dispatch(login(true, resp.data.userToken));
-            dispatch(setIsLoggedIn(true));
-            dispatch(setUserToken(resp.data.userToken));
-            Cookies.set("isLoggedIn", true, { expires: 31 });
-            Cookies.set("userToken", resp.data.userToken);
-          }
+        axios
+          .post("http://localhost:4000/api/users/login", values)
+          .then((resp) => {
+            if (resp.data.isLoggedIn) {
+              dispatch(login(true, resp.data.userToken));
+              dispatch(setIsLoggedIn(true));
+              dispatch(setUserToken(resp.data.userToken));
+              Cookies.set("isLoggedIn", true, { expires: 31 });
+              Cookies.set("userToken", resp.data.userToken);
+            }
 
-          if (resp.status === 200) {
-            navigate("/");
-            action.resetForm();
-          }
-        });
+            if (resp.status === 200) {
+              navigate("/");
+              action.resetForm();
+            }
+          })
+          .catch((error) => {
+            const { status, data } = error.response;
+
+            if (status === 404) {
+              if (data.type === "not_found") {
+                setLoginError({
+                  type: "not_found",
+                  message: "User not found!",
+                });
+              }
+              if (data.type === "password") {
+                setLoginError({
+                  type: "password",
+                  message: "Password is incorrect!",
+                });
+              }
+            } else if (status === 500) {
+              setLoginError({
+                type: "unknown",
+                message: "Some unknown error occured! Please try again later.",
+              });
+            }
+          });
       },
     }
   );
 
   const handleInputChange = (e) => {
     handleChange(e);
+    setLoginError({});
   };
 
   const togglePasswordVisibility = () => {
@@ -58,6 +85,7 @@ const Login = () => {
   const handleLoginType = (type) => {
     setLoginType(type);
     setTouched({});
+    setLoginError({});
 
     handleChange({
       target: {
@@ -140,6 +168,19 @@ const Login = () => {
             </p>
           ) : null}
 
+          {loginError.type === "not_found" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {loginError.message}
+            </p>
+          ) : null}
+
           <div className="password-input">
             <input
               type={passwordVisible ? "text" : "password"}
@@ -150,6 +191,7 @@ const Login = () => {
               onChange={handleInputChange}
               onBlur={handleBlur}
             />
+
             {errors.password && touched.password ? (
               <p
                 style={{
@@ -162,12 +204,40 @@ const Login = () => {
                 {errors.password}
               </p>
             ) : null}
+
+            {loginError.type === "password" ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {loginError.message}
+              </p>
+            ) : null}
+
             <FontAwesomeIcon
               icon={passwordVisible ? faEye : faEyeSlash}
               onClick={togglePasswordVisibility}
               className="password-icon"
             />
           </div>
+
+          {loginError.type === "unknown" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {loginError.message}
+            </p>
+          ) : null}
+
           {loginType === "username" || loginType === "email" ? (
             <button type="submit">Login</button>
           ) : null}

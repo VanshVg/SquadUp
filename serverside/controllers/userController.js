@@ -84,7 +84,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("API CALLED");
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
     return res.status(400).json({
@@ -96,15 +95,17 @@ const login = async (req, res) => {
   try {
     let user;
     if (username) {
-      user = await userModel.findOne({ username: { $regex: new RegExp(username, "i") } });
+      user = await userModel.findOne({
+        username: { $regex: new RegExp(`^${username}$`, "i") },
+      });
     } else if (email) {
       user = await userModel.findOne({ email: email });
     }
 
     if (!user) {
       return res.status(404).json({
-        type: "email",
-        message: "User doesn't found",
+        type: "not_found",
+        message: "User not found",
       });
     }
 

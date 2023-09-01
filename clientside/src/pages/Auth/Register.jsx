@@ -50,23 +50,24 @@ const Register = () => {
         })
         .catch((error) => {
           const { status, data } = error.response;
+
           if (status === 409) {
             if (data.type === "username") {
               setRegisterError({
                 type: "username",
-                message: "Username has already been taken",
+                message: "Username has already been taken!",
               });
             }
             if (data.type === "email") {
               setRegisterError({
                 type: "email",
-                message: "User with this email already exists",
+                message: "User with this email already exists!",
               });
             }
           } else if (status === 500) {
             setRegisterError({
               type: "unknown",
-              message: "Some unknown Error occured",
+              message: "Some unknown error occured! Please try again later.",
             });
           }
         });
