@@ -37,7 +37,7 @@ input::placeholder {
 }
 
 input:valid {
-  border-color: #1569c7;
+  border-color: #2b60de;
 }
 
 .input-group {
@@ -52,7 +52,7 @@ input:valid {
 button {
   margin-top: 10px;
   padding: 10px;
-  background-color: #1569c7;
+  background-color: #2b60de;
   color: white;
   border: none;
   border-radius: 4px;
@@ -71,7 +71,7 @@ button:hover {
 }
 
 .login-link a {
-  color: #007bff;
+  color: #2b60de;
   text-decoration: none;
 }
 
