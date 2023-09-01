@@ -14,6 +14,7 @@ import "./Auth.css";
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [registerError, setRegisterError] = useState({});
 
   const data = {
     firstname: "",
@@ -31,24 +32,49 @@ const Register = () => {
     initialValues: data,
     validationSchema: registerSchema,
     onSubmit: (values, action) => {
-      axios.post("http://localhost:4000/api/users/register", values).then((resp) => {
-        if (resp.data.isLoggedIn) {
-          dispatch(login(true, resp.data.userToken));
-          dispatch(setIsLoggedIn(true));
-          dispatch(setUserToken(resp.data.userToken));
-          Cookies.set("isLoggedIn", true, { expires: 31 });
-          Cookies.set("userToken", resp.data.userToken);
-        }
+      axios
+        .post("http://localhost:4000/api/users/register", values)
+        .then((resp) => {
+          if (resp.data.isLoggedIn) {
+            dispatch(login(true, resp.data.userToken));
+            dispatch(setIsLoggedIn(true));
+            dispatch(setUserToken(resp.data.userToken));
+            Cookies.set("isLoggedIn", true, { expires: 31 });
+            Cookies.set("userToken", resp.data.userToken);
+          }
 
-        if (resp.status === 200) {
-          navigate("/");
-          action.resetForm();
-        }
-      });
+          if (resp.status === 200) {
+            navigate("/");
+            action.resetForm();
+          }
+        })
+        .catch((error) => {
+          const { status, data } = error.response;
+          if (status === 409) {
+            if (data.type === "username") {
+              setRegisterError({
+                type: "username",
+                message: "Username has already been taken",
+              });
+            }
+            if (data.type === "email") {
+              setRegisterError({
+                type: "email",
+                message: "User with this email already exists",
+              });
+            }
+          } else if (status === 500) {
+            setRegisterError({
+              type: "unknown",
+              message: "Some unknown Error occured",
+            });
+          }
+        });
     },
   });
 
   const handleInputChange = (e) => {
+    setRegisterError({});
     handleChange(e);
   };
 
@@ -123,6 +149,7 @@ const Register = () => {
             onChange={handleInputChange}
             onBlur={handleBlur}
           />
+
           {errors.username && touched.username ? (
             <p
               style={{
@@ -135,6 +162,20 @@ const Register = () => {
               {errors.username}
             </p>
           ) : null}
+
+          {registerError.type === "username" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {registerError.message}
+            </p>
+          ) : null}
+
           <input
             type="email"
             name="email"
@@ -144,6 +185,7 @@ const Register = () => {
             onChange={handleInputChange}
             onBlur={handleBlur}
           />
+
           {errors.email && touched.email ? (
             <p
               style={{
@@ -156,6 +198,20 @@ const Register = () => {
               {errors.email}
             </p>
           ) : null}
+
+          {registerError.type === "email" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {registerError.message}
+            </p>
+          ) : null}
+
           <div className="password-input">
             <input
               type={passwordVisible ? "text" : "password"}
@@ -166,6 +222,7 @@ const Register = () => {
               onChange={handleInputChange}
               onBlur={handleBlur}
             />
+
             {errors.password && touched.password ? (
               <p
                 style={{
@@ -178,6 +235,7 @@ const Register = () => {
                 {errors.password}
               </p>
             ) : null}
+
             <FontAwesomeIcon
               icon={passwordVisible ? faEye : faEyeSlash}
               onClick={togglePasswordVisibility}
@@ -194,6 +252,7 @@ const Register = () => {
               onChange={handleInputChange}
               onBlur={handleBlur}
             />
+
             {errors.confirmpassword && touched.confirmpassword ? (
               <p
                 style={{
@@ -206,12 +265,27 @@ const Register = () => {
                 {errors.confirmpassword}
               </p>
             ) : null}
+
             <FontAwesomeIcon
               icon={confirmPasswordVisible ? faEye : faEyeSlash}
               onClick={toggleConfirmPasswordVisibility}
               className="password-icon"
             />
           </div>
+
+          {registerError.type === "unknown" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {registerError.message}
+            </p>
+          ) : null}
+
           <button type="submit">Sign Up</button>
         </form>
         <p className="login-link">

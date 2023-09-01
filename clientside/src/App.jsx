@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Register from "./pages/Auth/Register";
-import Login from "./pages/Auth/Login";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
 import Home from "./pages/Home";
 
 const App = () => {

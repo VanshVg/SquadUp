@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import loginSchema from "./../../schema/loginSchema";
+import loginSchema from "../../schema/loginSchema";
 import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import "./Auth.css";
 

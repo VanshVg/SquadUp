@@ -13,19 +13,24 @@ const register = async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
   if (!firstname || !lastname || !username || !email || !password) {
     res.status(400).json({
+      type: "fields",
       message: "All fields are required",
     });
   } else {
     try {
-      const userName = await userModel.findOne({ username: { $regex: new RegExp(username, "i") } });
+      const userName = await userModel.findOne({
+        username: { $regex: new RegExp(`^${username}$`, "i") },
+      });
       const userEmail = await userModel.findOne({ email: email });
       if (userName) {
         res.status(409).json({
+          type: "username",
           message: "Username has already been taken",
         });
       } else {
         if (userEmail) {
           res.status(409).json({
+            type: "email",
             message: "User with this email already exists",
           });
         } else {
@@ -40,6 +45,7 @@ const register = async (req, res) => {
           let results = await data.save();
           if (!results) {
             res.status(500).json({
+              type: "unknown",
               message: "User registration failed",
             });
           } else {
@@ -59,6 +65,7 @@ const register = async (req, res) => {
                 });
             } catch (error) {
               res.status(500).json({
+                type: "jwt",
                 message: "Jwt token error in registration",
                 error: error,
               });
@@ -68,6 +75,7 @@ const register = async (req, res) => {
       }
     } catch (error) {
       res.status(500).json({
+        type: "unknown",
         message: "Error while registering",
         error: error,
       });
@@ -80,6 +88,7 @@ const login = async (req, res) => {
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
     return res.status(400).json({
+      type: "field",
       message: "All fields are required",
     });
   }
@@ -94,6 +103,7 @@ const login = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
+        type: "email",
         message: "User doesn't found",
       });
     }
@@ -121,17 +131,20 @@ const login = async (req, res) => {
           });
       } catch (error) {
         res.status(500).json({
+          type: "jwt",
           message: "Jwt Error",
           error: error,
         });
       }
     } else {
       res.status(404).json({
+        type: "password",
         message: "Wrong password",
       });
     }
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while logging",
       error: error,
     });
@@ -167,6 +180,7 @@ const updateProfile = async (req, res) => {
   const { newUserName, newEmail } = req.body;
   if (!newUserName && !newEmail) {
     return res.status(400).json({
+      type: "field",
       message: "Atleast one field is required",
     });
   }
@@ -175,12 +189,14 @@ const updateProfile = async (req, res) => {
     if (newUserName) {
       if (newUserName.toLowerCase() === username.toLowerCase()) {
         return res.status(400).send({
+          type: "username",
           message: "Please choose different username from your current username",
         });
       }
       let userData = await userModel.findOne({ username: newUserName });
       if (userData) {
         return res.status(409).json({
+          type: "username",
           message: "Username has already been taken",
         });
       }
@@ -188,12 +204,14 @@ const updateProfile = async (req, res) => {
     if (newEmail) {
       if (newEmail === email) {
         return res.status(400).send({
+          type: "email",
           message: "Please choose different email from your current email",
         });
       }
       let userData = await userModel.findOne({ email: newEmail });
       if (userData) {
         return res.status(409).json({
+          type: "email",
           message: "User with this email already exists",
         });
       }
@@ -224,6 +242,7 @@ const updateProfile = async (req, res) => {
       });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while updating the profile",
       error: error,
     });
@@ -246,6 +265,7 @@ const deleteAccount = async (req, res) => {
       });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while deleting user",
       error: error,
     });
@@ -310,12 +330,14 @@ const forgotPassword = async (req, res) => {
       });
     } catch (error) {
       return res.status(500).json({
+        type: "unknown",
         message: "Failed to send password reset email",
         error: error,
       });
     }
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while processing forgot password request",
       error: error,
     });
@@ -327,6 +349,7 @@ const verifyPassword = async (req, res) => {
   const { username } = req.user.data;
   if (!oldPassword) {
     return res.status(400).json({
+      type: "field",
       message: "All fields are required",
     });
   }
@@ -339,10 +362,12 @@ const verifyPassword = async (req, res) => {
       });
     }
     res.status(401).json({
+      type: "password",
       message: "Password is incorrect",
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while verifying the password",
       error: error,
     });
@@ -354,6 +379,7 @@ const resetPassword = async (req, res) => {
   const { username } = req.user.data;
   if (!newPassword) {
     return res.status(400).json({
+      type: "field",
       message: "All fields are required",
     });
   }
@@ -365,6 +391,7 @@ const resetPassword = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while reseting a password",
       error: error,
     });
