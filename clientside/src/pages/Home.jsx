@@ -1,11 +1,16 @@
 import React from "react";
-import "./Home.css";
+import Helmet from "react-helmet";
 import Navbar from "./../components/navbar/Navbar";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import "./Home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <>
+      <Helmet>
+        <title>Team Up | Home</title>
+      </Helmet>
       <Navbar />
       <div className="homepage-container">
         <div className="slogan">
@@ -19,12 +24,19 @@ const Home = () => {
         </div>
       </div>
       <div className="home-buttons">
-        <button className="github-button">
-          <div className="github-button-content">
-            <GitHubIcon />
-            <span>Team Up Github</span>
-          </div>
-        </button>
+        <Link
+          to="https://github.com/VanshVg/TeamUp"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="custom-link"
+        >
+          <button className="github-button">
+            <div className="github-button-content">
+              <GitHubIcon />
+              <span>Team Up Github</span>
+            </div>
+          </button>
+        </Link>
       </div>
     </>
   );

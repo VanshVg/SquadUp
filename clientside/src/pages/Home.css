@@ -61,3 +61,13 @@
   background-color: white;
   color: black;
 }
+
+.custom-link {
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.custom-link:hover {
+  color: #007bff;
+}
