@@ -53,10 +53,11 @@ const register = async (req, res) => {
               let token = await generateJwtToken(firstname, lastname, username, email);
               res
                 .status(200)
-                .cookie("token", token, {
+                .cookie("userToken", token, {
                   httpOnly: true,
-                  secure: true,
                   maxAge: cookieAge,
+                  sameSite: "none",
+                  secure: true,
                 })
                 .json({
                   isLoggedIn: true,
@@ -120,10 +121,11 @@ const login = async (req, res) => {
         );
         res
           .status(200)
-          .cookie("token", token, {
+          .cookie("userToken", token, {
             httpOnly: true,
-            secure: true,
             maxAge: cookieAge,
+            sameSite: "none",
+            secure: true,
           })
           .json({
             isLoggedIn: true,
@@ -157,8 +159,9 @@ const logout = async (req, res) => {
     .status(200)
     .cookie("token", "", {
       httpOnly: true,
-      secure: true,
       expires: new Date(Date.now()),
+      sameSite: "none",
+      secure: true,
     })
     .json({
       isLoggedIn: false,
@@ -281,13 +284,13 @@ const forgotPasswordMail = async (firstname, lastname, email, username, resetPas
       secure: false,
       requireTLS: true,
       auth: {
-        user: process.env.TASKFLOW_EMAIL,
-        pass: process.env.TASKFLOW_PASS,
+        user: process.env.TEAMUP,
+        pass: process.env.TEAMUP,
       },
     });
 
     const mailOptions = {
-      from: process.env.TASKFLOW_EMAIL,
+      from: process.env.TEAMUP,
       to: email,
       subject: "Team Up Password Reset",
       html:

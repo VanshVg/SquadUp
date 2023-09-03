@@ -1,10 +1,19 @@
 import React from "react";
 import "./Navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+  console.log(Cookies.get("isLoggedIn"));
+  console.log(Cookies.get("userToken"));
+
+  let isLoggedIn = Cookies.get("isLoggedIn");
 
   const handleSignInButton = () => {
     navigate("/auth/login");
@@ -16,6 +25,20 @@ const Navbar = () => {
 
   const handleDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const handleLogout = () => {
+    axios
+      .post("http://localhost:4000/api/users/logout", {}, { withCredentials: true })
+      .then((resp) => {
+        dispatch(setIsLoggedIn(false));
+        dispatch(setUserToken(null));
+        Cookies.remove("isLoggedIn");
+        Cookies.set("userToken", "", { expires: new Date(0), path: "/" });
+        navigate("/");
+        console.log(Cookies.get("isLoggedIn"));
+        console.log(Cookies.get("userToken"));
+      });
   };
 
   const handleHome = () => {
@@ -42,12 +65,6 @@ const Navbar = () => {
             Home
           </li>
           <li
-            className={`navbar-option ${location.pathname === "/dashboard" ? "active" : ""}`}
-            onClick={handleDashboard}
-          >
-            Dashboard
-          </li>
-          <li
             className={`navbar-option ${location.pathname === "/aboutUs" ? "active" : ""}`}
             onClick={handleAboutUs}
           >
@@ -56,12 +73,25 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-right">
-        <button className="sign-up-button" onClick={handleSignUpButton}>
-          Sign Up
-        </button>
-        <button className="sign-in-button" onClick={handleSignInButton}>
-          Sign In
-        </button>
+        {isLoggedIn === "true" ? (
+          <>
+            <button className="sign-up-button" onClick={handleDashboard}>
+              My Dashboard
+            </button>
+            <button className="sign-in-button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="sign-up-button" onClick={handleSignUpButton}>
+              Sign Up
+            </button>
+            <button className="sign-in-button" onClick={handleSignInButton}>
+              Sign In
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );

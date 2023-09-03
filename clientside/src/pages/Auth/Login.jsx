@@ -31,14 +31,17 @@ const Login = () => {
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
         axios
-          .post("http://localhost:4000/api/users/login", values)
+          .post("http://localhost:4000/api/users/login", values, {
+            withCredentials: true,
+            credentials: "include",
+          })
           .then((resp) => {
             if (resp.data.isLoggedIn) {
               dispatch(login(true, resp.data.userToken));
               dispatch(setIsLoggedIn(true));
               dispatch(setUserToken(resp.data.userToken));
               Cookies.set("isLoggedIn", true, { expires: 31 });
-              Cookies.set("userToken", resp.data.userToken);
+              Cookies.set("userToken", resp.data.userToken, { expires: 31 });
             }
 
             if (resp.status === 200) {
@@ -47,6 +50,7 @@ const Login = () => {
             }
           })
           .catch((error) => {
+            console.log(error);
             const { status, data } = error.response;
 
             if (status === 404) {
