@@ -10,8 +10,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-  console.log(Cookies.get("isLoggedIn"));
-  console.log(Cookies.get("userToken"));
 
   let isLoggedIn = Cookies.get("isLoggedIn");
 
@@ -33,11 +31,9 @@ const Navbar = () => {
       .then((resp) => {
         dispatch(setIsLoggedIn(false));
         dispatch(setUserToken(null));
+        Cookies.remove("userToken");
         Cookies.remove("isLoggedIn");
-        Cookies.set("userToken", "", { expires: new Date(0), path: "/" });
         navigate("/");
-        console.log(Cookies.get("isLoggedIn"));
-        console.log(Cookies.get("userToken"));
       });
   };
 

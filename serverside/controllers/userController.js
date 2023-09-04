@@ -157,7 +157,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   res
     .status(200)
-    .cookie("token", "", {
+    .cookie("userToken", "", {
       httpOnly: true,
       expires: new Date(Date.now()),
       sameSite: "none",
@@ -236,7 +236,7 @@ const updateProfile = async (req, res) => {
     );
     res
       .status(200)
-      .cookie("token", token, {
+      .cookie("userToken", token, {
         httpOnly: true,
         secure: true,
         maxAge: cookieAge,
@@ -259,7 +259,7 @@ const deleteAccount = async (req, res) => {
     await userModel.deleteOne({ username: username });
     res
       .status(200)
-      .cookie("token", "", {
+      .cookie("userToken", "", {
         httpOnly: true,
         secure: true,
         maxAge: new Date(Date.now()),
