@@ -71,10 +71,10 @@ const Navbar = () => {
       <div className="navbar-right">
         {isLoggedIn === "true" ? (
           <>
-            <button className="sign-up-button" onClick={handleDashboard}>
+            <button className="dashboard-button" onClick={handleDashboard}>
               My Dashboard
             </button>
-            <button className="sign-in-button" onClick={handleLogout}>
+            <button className="logout-button" onClick={handleLogout}>
               Logout
             </button>
           </>

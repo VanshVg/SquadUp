@@ -84,3 +84,32 @@
   background-color: white;
   color: black;
 }
+
+.dashboard-button {
+  background-color: white;
+  color: #2b60de;
+  border: 1px solid #2b60de;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.dashboard-button:hover {
+  color: white;
+}
+
+.logout-button {
+  background-color: #2b60de;
+  color: white;
+  border: 1px solid #2b60de;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 30px;
+}
+
+.logout-button:hover {
+  background-color: white;
+  color: #2b60de;
+}
