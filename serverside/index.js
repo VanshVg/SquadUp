@@ -10,15 +10,6 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
-console.log(
-  "CORS Configuration:",
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["POST", "GET", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],

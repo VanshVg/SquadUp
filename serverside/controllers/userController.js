@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const userModel = require("../models/userModel");
 const { generateJwtToken } = require("../utils/authUtils");
+const blackListModel = require("../models/blackListModel");
 
 var cookieAge = 30 * 24 * 60 * 60 * 1000;
 
@@ -155,18 +156,40 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res
-    .status(200)
-    .cookie("userToken", "", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-      sameSite: "none",
-      secure: true,
-    })
-    .json({
-      isLoggedIn: false,
-      message: "Logout Successful",
+  const { userToken } = req.cookies;
+
+  try {
+    let userTokenBlackList = await blackListModel.findOne({ type: "userToken" });
+    if (!userTokenBlackList) {
+      let data = new blackListModel({
+        type: "userToken",
+        userToken: [],
+      });
+      userTokenBlackList = data;
+    }
+
+    userTokenBlackList.blackList.push(userToken);
+    await userTokenBlackList.save();
+
+    res
+      .status(200)
+      .cookie("userToken", "", {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+        sameSite: "none",
+        secure: true,
+      })
+      .json({
+        isLoggedIn: false,
+        message: "Logout Successful",
+      });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while logging Out",
+      error: error,
     });
+  }
 };
 
 const userProfile = async (req, res) => {
