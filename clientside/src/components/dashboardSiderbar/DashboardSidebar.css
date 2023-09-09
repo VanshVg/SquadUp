@@ -1,0 +1,32 @@
+.dashboard-sidebar {
+  margin-top: 0px;
+  justify-content: space-between;
+  width: 40px;
+  background-color: white;
+  padding: 20px;
+  height: 685px;
+  border-right: 1px solid #28183b;
+}
+
+.sidebar-item {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 30px;
+}
+
+.sidebar-item-icon {
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.sidebar-item:hover {
+  background-color: #b6b6b4;
+}
+
+.sidebar-item-text {
+  margin-top: 3px;
+  margin-left: 10px;
+}

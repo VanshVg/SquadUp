@@ -1,0 +1,50 @@
+.dashboard-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #28183b;
+  padding: 10px 20px;
+  border-bottom: 1px solid #28183b;
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.dashboard-navbar-middle {
+  text-align: center;
+  font-size: 18px;
+}
+
+.team-up-logo {
+  font-size: 36px;
+  font-weight: bold;
+  color: #2b60de;
+}
+
+.team-up-logo:hover {
+  cursor: pointer;
+}
+
+.dashboard-navbar-right {
+  display: flex;
+  text-align: right;
+}
+
+.profile-icon {
+  margin-right: 5px;
+}
+
+.profile-text {
+  margin-right: 20px;
+  font-size: 20px;
+}
+
+.dashboard-navbar-right:hover {
+  cursor: pointer;
+}
+
+.sidebar-icon {
+  cursor: pointer;
+  margin-left: 10px;
+}
