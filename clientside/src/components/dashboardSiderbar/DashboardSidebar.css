@@ -14,12 +14,26 @@
   cursor: pointer;
   transition: 0.4s ease;
   border-radius: 20px;
-  height: 30px;
+  height: 40px;
+}
+
+.sidebar-item-active {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+  background-color: #b6b6b4;
 }
 
 .sidebar-item-icon {
-  margin-top: 3px;
-  margin-left: 10px;
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.sidebar-item-active {
+  background-color: #b6b6b4;
 }
 
 .sidebar-item:hover {
@@ -27,6 +41,6 @@
 }
 
 .sidebar-item-text {
-  margin-top: 3px;
+  margin-top: 8px;
   margin-left: 10px;
 }

@@ -22,7 +22,7 @@ const Navbar = () => {
   };
 
   const handleDashboard = () => {
-    navigate("/dashboard");
+    navigate("/dashboard/home");
   };
 
   const handleLogout = () => {

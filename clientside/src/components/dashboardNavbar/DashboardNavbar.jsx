@@ -2,14 +2,17 @@ import React from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 import "./DashboardNavbar.css";
+import { useDispatch } from "react-redux";
+import { toggleSidebar } from "../../redux/actions/sidebarActions";
 
-const DashboardNavbar = (props) => {
-  const { toggleSidebar } = props;
+const DashboardNavbar = () => {
+  const dispatch = useDispatch();
+
   return (
     <div>
       <div className="dashboard-navbar">
         <div className="dashboard-navbar-left">
-          <div className="sidebar-icon" onClick={toggleSidebar}>
+          <div className="sidebar-icon" onClick={() => dispatch(toggleSidebar())}>
             <DensitySmallIcon />
           </div>
         </div>
