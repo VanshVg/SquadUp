@@ -3,8 +3,8 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const cors = require("cors");
 
-const apiRouter = require("../routes/apiRouter");
-require("../config/db");
+const apiRouter = require("./routes/apiRouter");
+require("./config/db");
 
 const app = express();
 
