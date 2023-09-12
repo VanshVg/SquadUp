@@ -10,6 +10,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+console.log(process.env.FRONTEND_URL);
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
@@ -20,7 +21,7 @@ app.use(
 
 app.use("/api", apiRouter);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 app.listen(port, () => {
   console.log(`Server is listening on ${port}`);
