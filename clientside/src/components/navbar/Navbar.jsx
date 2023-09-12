@@ -27,7 +27,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     axios
-      .post("http://localhost:4000/api/users/logout", {}, { withCredentials: true })
+      .post("https://team-up-apis.onrender.com/api/users/logout", {}, { withCredentials: true })
       .then((resp) => {
         dispatch(setIsLoggedIn(false));
         dispatch(setUserToken(null));

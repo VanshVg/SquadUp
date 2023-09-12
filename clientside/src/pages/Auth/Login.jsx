@@ -31,7 +31,7 @@ const Login = () => {
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
         axios
-          .post("http://localhost:4000/api/users/login", values, {
+          .post("https://team-up-apis.onrender.com/api/users/login", values, {
             withCredentials: true,
             credentials: "include",
           })

@@ -33,7 +33,7 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit: (values, action) => {
       axios
-        .post("http://localhost:4000/api/users/register", values)
+        .post("https://team-up-apis.onrender.com/api/users/register", values)
         .then((resp) => {
           if (resp.data.isLoggedIn) {
             dispatch(login(true, resp.data.userToken));
