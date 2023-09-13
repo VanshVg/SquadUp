@@ -3,6 +3,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AddIcon from "@mui/icons-material/Add";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import Tooltip from "@mui/material/Tooltip";
 import "./DashboardSidebar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -80,46 +81,56 @@ const DashboardSidebar = () => {
         </div>
       ) : (
         <div className="dashboard-sidebar">
-          <div
-            className={`${
-              location.pathname === "/dashboard/home" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleHome}
-          >
-            <div className="sidebar-item-icon">
-              <HomeIcon />
+          <Tooltip title="Dashboard Home">
+            <div
+              className={`${
+                location.pathname === "/dashboard/home" ? "sidebar-item-active" : "sidebar-item"
+              }`}
+              onClick={handleHome}
+            >
+              <div className="sidebar-item-icon">
+                <HomeIcon />
+              </div>
             </div>
-          </div>
-          <div
-            className={`${
-              location.pathname === "/dashboard/MyTeams" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleMyTeams}
-          >
-            <div className="sidebar-item-icon">
-              <GroupsIcon />
+          </Tooltip>
+          <Tooltip title="My Teams">
+            <div
+              className={`${
+                location.pathname === "/dashboard/MyTeams" ? "sidebar-item-active" : "sidebar-item"
+              }`}
+              onClick={handleMyTeams}
+            >
+              <div className="sidebar-item-icon">
+                <GroupsIcon />
+              </div>
             </div>
-          </div>
-          <div
-            className={`${
-              location.pathname === "/dashboard/CreateTeam" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleCreateTeam}
-          >
-            <div className="sidebar-item-icon">
-              <AddIcon />
+          </Tooltip>
+          <Tooltip title="Create a team">
+            <div
+              className={`${
+                location.pathname === "/dashboard/CreateTeam"
+                  ? "sidebar-item-active"
+                  : "sidebar-item"
+              }`}
+              onClick={handleCreateTeam}
+            >
+              <div className="sidebar-item-icon">
+                <AddIcon />
+              </div>
             </div>
-          </div>
-          <div
-            className={`${
-              location.pathname === "/dashboard/JoinTeam" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleJoinTeam}
-          >
-            <div className="sidebar-item-icon">
-              <GroupAddIcon />
+          </Tooltip>
+          <Tooltip title="Join a team">
+            <div
+              className={`${
+                location.pathname === "/dashboard/JoinTeam" ? "sidebar-item-active" : "sidebar-item"
+              }`}
+              onClick={handleJoinTeam}
+            >
+              <div className="sidebar-item-icon">
+                <GroupAddIcon />
+              </div>
             </div>
-          </div>
+          </Tooltip>
         </div>
       )}
     </div>
