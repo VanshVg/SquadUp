@@ -1,0 +1,49 @@
+.custom-modal {
+  margin-top: 300px;
+  max-width: 400px;
+  height: 200px;
+  margin-left: 37%;
+  background-color: #2b60de;
+  border: 2px solid #28183b;
+}
+
+.modal-text {
+  font-size: 20px;
+  padding-top: 40px;
+  margin-left: 15%;
+  color: white;
+}
+
+.modal-buttons {
+  margin-left: 33%;
+}
+
+.modal-yes-button {
+  font-size: 15px;
+  margin-right: 10px;
+  width: 70px;
+  background-color: white;
+  color: #28183b;
+  border: 1px solid #28183b;
+}
+
+.modal-yes-button:hover {
+  background-color: red;
+  color: white;
+  border: 1px solid red;
+}
+
+.modal-no-button {
+  font-size: 15px;
+  margin-right: 10px;
+  width: 70px;
+  background-color: white;
+  color: #28183b;
+  border: 1px solid #28183b;
+}
+
+.modal-no-button:hover {
+  background-color: green;
+  color: white;
+  border: 1px solid green;
+}

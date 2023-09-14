@@ -1,15 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Navbar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
+import Logoutmodal from "../modals/logoutModal/LogoutModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
+
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   let isLoggedIn = Cookies.get("isLoggedIn");
 
@@ -26,15 +25,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    axios
-      .post("http://localhost:4000/api/users/logout", {}, { withCredentials: true })
-      .then((resp) => {
-        dispatch(setIsLoggedIn(false));
-        dispatch(setUserToken(null));
-        Cookies.remove("userToken");
-        Cookies.remove("isLoggedIn");
-        navigate("/");
-      });
+    setIsLogoutOpen(true);
   };
 
   const handleHome = () => {
@@ -89,6 +80,7 @@ const Navbar = () => {
           </>
         )}
       </div>
+      <Logoutmodal isOpen={isLogoutOpen} onRequestClose={() => setIsLogoutOpen(false)} />
     </nav>
   );
 };

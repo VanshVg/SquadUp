@@ -10,6 +10,10 @@ const DashboardNavbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const handleHome = () => {
+    navigate("/");
+  };
+
   const handleProfile = () => {
     navigate("/profile");
   };
@@ -23,15 +27,15 @@ const DashboardNavbar = () => {
           </div>
         </div>
         <div className="dashboard-navbar-middle">
-          <div className="team-up-logo">Team Up</div>
+          <div className="team-up-logo" onClick={handleHome}>
+            Team Up
+          </div>
         </div>
-        <div className="dashboard-navbar-right">
+        <div className="dashboard-navbar-right " onClick={handleProfile}>
           <div className="profile-icon">
             <AccountCircleIcon />
           </div>
-          <div className="profile-text" onClick={handleProfile}>
-            Profile
-          </div>
+          <div className="profile-text">Profile</div>
         </div>
       </div>
     </div>

@@ -105,8 +105,6 @@ const Login = () => {
       },
     });
 
-    console.log(values);
-
     handleChange({
       target: {
         name: "password",
