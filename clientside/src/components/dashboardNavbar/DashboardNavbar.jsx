@@ -4,9 +4,15 @@ import DensitySmallIcon from "@mui/icons-material/DensitySmall";
 import "./DashboardNavbar.css";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../../redux/actions/sidebarActions";
+import { useNavigate } from "react-router-dom";
 
 const DashboardNavbar = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleProfile = () => {
+    navigate("/profile");
+  };
 
   return (
     <div>
@@ -23,7 +29,9 @@ const DashboardNavbar = () => {
           <div className="profile-icon">
             <AccountCircleIcon />
           </div>
-          <div className="profile-text">Profile</div>
+          <div className="profile-text" onClick={handleProfile}>
+            Profile
+          </div>
         </div>
       </div>
     </div>
