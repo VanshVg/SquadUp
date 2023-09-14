@@ -94,16 +94,18 @@ const Login = () => {
     handleChange({
       target: {
         name: "username",
-        value: type === "username" ? "" : values.username,
+        value: "",
       },
     });
 
     handleChange({
       target: {
         name: "email",
-        value: type === "email" ? "" : values.email,
+        value: "",
       },
     });
+
+    console.log(values);
 
     handleChange({
       target: {
