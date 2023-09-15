@@ -34,6 +34,7 @@ const generateJwtToken = async (firstname, lastname, username, email) => {
       process.env.SECRET_TOKEN
     );
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
@@ -78,11 +79,12 @@ const forgotPasswordMail = async (firstname, lastname, email, username, resetPas
     await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 
 const emailVerificationMail = async (firstname, lastname, email, username) => {
-  let otp = Math.floor(Math.random() * (999999 - 100000 + 1) + min);
+  let otp = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -107,18 +109,17 @@ const emailVerificationMail = async (firstname, lastname, email, username) => {
         ",</p>" +
         "<p>Welcome to Team Up. We're glad to have you onboard.</p>" +
         "<p>Your One Time Password (OTP):</p>" +
-        otp +
+        `<b>${otp}</b>` +
         "<p>Please do not share this OTP with anyone else for your own privacy</p>" +
         "</p>" +
         "<p>Thank you,</p>" +
         "<p> Team Up Team</p>",
     };
-    let info = await transporter.sendMail(mailOptions);
-    console.log("Otp has been sent:", info.response);
-    await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
+    await transporter.sendMail(mailOptions);
     return otp;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 };
 

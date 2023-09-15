@@ -12,7 +12,11 @@ const {
 } = require("../utils/authUtils");
 const blackListModel = require("../models/blackListModel");
 
-var cookieAge = 30 * 24 * 60 * 60 * 1000;
+let cookieAge = 30 * 24 * 60 * 60 * 1000;
+let verification = {
+  email: "",
+  otp: "",
+};
 
 const registerValidation = async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
@@ -39,6 +43,11 @@ const registerValidation = async (req, res) => {
           message: "User with this email already exists",
         });
       }
+      verification.otp = await emailVerificationMail(firstname, lastname, email, username);
+      verification.email = email;
+      res.status(200).json({
+        message: "Please check your email inbox for an Otp",
+      });
     } catch (error) {
       res.status(500).json({
         type: "unknown",
@@ -49,8 +58,8 @@ const registerValidation = async (req, res) => {
   }
 };
 
-const register = async (req, resp) => {
-  const { firstname, lastname, email, username, userOTP } = req.body;
+const register = async (req, res) => {
+  const { firstname, lastname, email, username, password, userOTP } = req.body;
   if (!firstname || !lastname || !email || !username || !userOTP) {
     return res.status(400).json({
       type: "field",
@@ -59,50 +68,50 @@ const register = async (req, resp) => {
   }
 
   try {
-    let otp = await emailVerificationMail(firstname, lastname, email, username);
-    if (otp !== userOTP) {
+    if (userOTP != verification.otp || email != verification.email) {
       return res.status(404).json({
         type: "otp",
         message: "Otp is incorrect",
       });
-    } else {
-      const hash = await bcrypt.hash(password, 10);
-      const data = new userModel({
-        firstname: firstname,
-        lastname: lastname,
-        username: username,
-        email: email,
-        password: hash,
+    }
+    verification.otp = "";
+    verification.email = "";
+    const hash = await bcrypt.hash(password, 10);
+    const data = new userModel({
+      firstname: firstname,
+      lastname: lastname,
+      username: username,
+      email: email,
+      password: hash,
+    });
+    let results = await data.save();
+    if (!results) {
+      res.status(500).json({
+        type: "unknown",
+        message: "User registration failed",
       });
-      let results = await data.save();
-      if (!results) {
-        res.status(500).json({
-          type: "unknown",
-          message: "User registration failed",
-        });
-      } else {
-        try {
-          let token = await generateJwtToken(firstname, lastname, username, email);
-          res
-            .status(200)
-            .cookie("userToken", token, {
-              httpOnly: true,
-              maxAge: cookieAge,
-              sameSite: "none",
-              secure: true,
-            })
-            .json({
-              isLoggedIn: true,
-              userToken: token,
-              message: "User registered successfully",
-            });
-        } catch (error) {
-          res.status(500).json({
-            type: "jwt",
-            message: "Jwt token error in registration",
-            error: error,
+    } else {
+      try {
+        let token = await generateJwtToken(firstname, lastname, username, email);
+        res
+          .status(200)
+          .cookie("userToken", token, {
+            httpOnly: true,
+            maxAge: cookieAge,
+            sameSite: "none",
+            secure: true,
+          })
+          .json({
+            isLoggedIn: true,
+            userToken: token,
+            message: "User registered successfully",
           });
-        }
+      } catch (error) {
+        res.status(500).json({
+          type: "jwt",
+          message: "Jwt token error in registration",
+          error: error,
+        });
       }
     }
   } catch (error) {
