@@ -56,7 +56,7 @@
 
 .sign-in-button {
   background-color: white;
-  color: #28183b;
+  color: #2b60de;
   border: 1px solid #2b60de;
   border-radius: 10px;
   cursor: pointer;
@@ -82,7 +82,7 @@
 
 .sign-up-button:hover {
   background-color: white;
-  color: black;
+  color: #2b60de;
 }
 
 .dashboard-button {

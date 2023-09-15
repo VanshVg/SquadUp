@@ -5,12 +5,16 @@ const randomstring = require("randomstring");
 require("dotenv").config();
 
 const userModel = require("../models/userModel");
-const { generateJwtToken } = require("../utils/authUtils");
+const {
+  generateJwtToken,
+  forgotPasswordMail,
+  emailVerificationMail,
+} = require("../utils/authUtils");
 const blackListModel = require("../models/blackListModel");
 
 var cookieAge = 30 * 24 * 60 * 60 * 1000;
 
-const register = async (req, res) => {
+const registerValidation = async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
   if (!firstname || !lastname || !username || !email || !password) {
     res.status(400).json({
@@ -24,56 +28,16 @@ const register = async (req, res) => {
       });
       const userEmail = await userModel.findOne({ email: email });
       if (userName) {
-        res.status(409).json({
+        return res.status(409).json({
           type: "username",
           message: "Username has already been taken",
         });
-      } else {
-        if (userEmail) {
-          res.status(409).json({
-            type: "email",
-            message: "User with this email already exists",
-          });
-        } else {
-          const hash = await bcrypt.hash(password, 10);
-          const data = new userModel({
-            firstname: firstname,
-            lastname: lastname,
-            username: username,
-            email: email,
-            password: hash,
-          });
-          let results = await data.save();
-          if (!results) {
-            res.status(500).json({
-              type: "unknown",
-              message: "User registration failed",
-            });
-          } else {
-            try {
-              let token = await generateJwtToken(firstname, lastname, username, email);
-              res
-                .status(200)
-                .cookie("userToken", token, {
-                  httpOnly: true,
-                  maxAge: cookieAge,
-                  sameSite: "none",
-                  secure: true,
-                })
-                .json({
-                  isLoggedIn: true,
-                  userToken: token,
-                  message: "User registered successfully",
-                });
-            } catch (error) {
-              res.status(500).json({
-                type: "jwt",
-                message: "Jwt token error in registration",
-                error: error,
-              });
-            }
-          }
-        }
+      }
+      if (userEmail) {
+        return res.status(409).json({
+          type: "email",
+          message: "User with this email already exists",
+        });
       }
     } catch (error) {
       res.status(500).json({
@@ -82,6 +46,71 @@ const register = async (req, res) => {
         error: error,
       });
     }
+  }
+};
+
+const register = async (req, resp) => {
+  const { firstname, lastname, email, username, userOTP } = req.body;
+  if (!firstname || !lastname || !email || !username || !userOTP) {
+    return res.status(400).json({
+      type: "field",
+      message: "All fields are required",
+    });
+  }
+
+  try {
+    let otp = await emailVerificationMail(firstname, lastname, email, username);
+    if (otp !== userOTP) {
+      return res.status(404).json({
+        type: "otp",
+        message: "Otp is incorrect",
+      });
+    } else {
+      const hash = await bcrypt.hash(password, 10);
+      const data = new userModel({
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        password: hash,
+      });
+      let results = await data.save();
+      if (!results) {
+        res.status(500).json({
+          type: "unknown",
+          message: "User registration failed",
+        });
+      } else {
+        try {
+          let token = await generateJwtToken(firstname, lastname, username, email);
+          res
+            .status(200)
+            .cookie("userToken", token, {
+              httpOnly: true,
+              maxAge: cookieAge,
+              sameSite: "none",
+              secure: true,
+            })
+            .json({
+              isLoggedIn: true,
+              userToken: token,
+              message: "User registered successfully",
+            });
+        } catch (error) {
+          res.status(500).json({
+            type: "jwt",
+            message: "Jwt token error in registration",
+            error: error,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while registering",
+      error: error,
+    });
   }
 };
 
@@ -299,49 +328,6 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-const forgotPasswordMail = async (firstname, lastname, email, username, resetPasswordToken) => {
-  try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
-      auth: {
-        user: process.env.TEAMUP,
-        pass: process.env.TEAMUP,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.TEAMUP,
-      to: email,
-      subject: "Team Up Password Reset",
-      html:
-        "<p>Dear " +
-        firstname +
-        " " +
-        lastname +
-        ",</p>" +
-        "<p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>" +
-        "<p>To reset your password, please click on the following link:</p>" +
-        '<p><a href="http://localhost:3001/api/users/reset-password?token=' +
-        resetPasswordToken +
-        '">Reset Password</a></p>' +
-        "<p>If the link above doesn't work, copy and paste the following URL into your browser:</p>" +
-        "<p>http://localhost:3001/api/users/reset-password?token=" +
-        resetPasswordToken +
-        "</p>" +
-        "<p>Thank you,</p>" +
-        "<p> Team Up Team</p>",
-    };
-    let info = await transporter.sendMail(mailOptions);
-    console.log("Mail has been sent:", info.response);
-    await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 const forgotPassword = async (req, res) => {
   const { firstname, lastname, email, username } = req.user.data;
   try {
@@ -426,6 +412,7 @@ const resetPassword = async (req, res) => {
 };
 
 module.exports = {
+  registerValidation,
   register,
   login,
   logout,
