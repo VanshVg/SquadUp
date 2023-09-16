@@ -15,7 +15,7 @@ const EmailVerification = () => {
 
   const [otpError, setOtpError] = useState({});
 
-  const { firstname, lastname, username, email, password, verificationID } = location.state;
+  const { firstname, lastname, username, email, password, verificationID } = location.state || {};
 
   const data = {
     firstname: firstname,
@@ -37,7 +37,6 @@ const EmailVerification = () => {
       axios
         .post("http://localhost:4000/api/users/register", values)
         .then((resp) => {
-          console.log(resp);
           if (resp.data.isLoggedIn) {
             dispatch(login(true, resp.data.userToken));
             dispatch(setIsLoggedIn(true));
@@ -67,6 +66,10 @@ const EmailVerification = () => {
 
   const handleInputChange = (e) => {
     handleChange(e);
+  };
+
+  const handleSendAgain = () => {
+    axios.post("http://localhost:4000/api/users/sendOtp", data);
   };
 
   return (
@@ -108,7 +111,7 @@ const EmailVerification = () => {
           ) : null}
           <button type="submit">Continue</button>
           <p className="otp-link">
-            Didn't Recieve an OTP? <Link>Send Again</Link>
+            Didn't Recieve an OTP? <Link onClick={handleSendAgain}>Send Again</Link>
           </p>
         </form>
       </div>
