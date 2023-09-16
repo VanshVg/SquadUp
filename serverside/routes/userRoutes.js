@@ -6,6 +6,7 @@ const isAuthenticated = require("../middlewares/auth");
 const router = express.Router();
 
 router.post("/registerValidation", userController.registerValidation);
+router.post("/sendOtp", userController.sendOtp);
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.get("/profile", isAuthenticated, userController.userProfile);

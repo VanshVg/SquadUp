@@ -1,10 +1,9 @@
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
 require("dotenv").config();
 
 const userModel = require("../models/userModel");
+const emailVerificationModel = require("../models/emailVerificationModel");
 const {
   generateJwtToken,
   forgotPasswordMail,
@@ -13,10 +12,6 @@ const {
 const blackListModel = require("../models/blackListModel");
 
 let cookieAge = 30 * 24 * 60 * 60 * 1000;
-let verification = {
-  email: "",
-  otp: "",
-};
 
 const registerValidation = async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
@@ -43,11 +38,6 @@ const registerValidation = async (req, res) => {
           message: "User with this email already exists",
         });
       }
-      verification.otp = await emailVerificationMail(firstname, lastname, email, username);
-      verification.email = email;
-      res.status(200).json({
-        message: "Please check your email inbox for an Otp",
-      });
     } catch (error) {
       res.status(500).json({
         type: "unknown",
@@ -55,6 +45,33 @@ const registerValidation = async (req, res) => {
         error: error,
       });
     }
+  }
+};
+
+const sendOtp = async (req, res) => {
+  const { firstname, lastname, username, email, verificationID } = req.body;
+  try {
+    let user = await emailVerificationModel.findOne({ verificationEmail: email });
+    let otp = await emailVerificationMail(firstname, lastname, email, username);
+    if (user) {
+      user.otp = otp;
+      await user.save();
+    } else {
+      let verificationData = new emailVerificationModel({
+        verificationID: verificationID,
+        verificationEmail: email,
+        otp: otp,
+      });
+      await verificationData.save();
+    }
+    res.status(200).json({
+      message: "Please check your email for OTP",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while sending an OTP",
+    });
   }
 };
 
@@ -68,14 +85,17 @@ const register = async (req, res) => {
   }
 
   try {
-    if (userOTP != verification.otp || email != verification.email) {
+    let user = await emailVerificationModel.findOne({ verificationEmail: email });
+
+    if (user.otp != userOTP) {
       return res.status(404).json({
         type: "otp",
         message: "Otp is incorrect",
       });
     }
-    verification.otp = "";
-    verification.email = "";
+
+    await emailVerificationModel.deleteOne({ verificationEmail: email });
+
     const hash = await bcrypt.hash(password, 10);
     const data = new userModel({
       firstname: firstname,
@@ -422,6 +442,7 @@ const resetPassword = async (req, res) => {
 
 module.exports = {
   registerValidation,
+  sendOtp,
   register,
   login,
   logout,
