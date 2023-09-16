@@ -5,10 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import Cookies from "js-cookie";
 import registerSchema from "../../schema/registerSchema";
-import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import "./Auth.css";
 
 const Register = () => {
@@ -25,7 +22,6 @@ const Register = () => {
     confirmpassword: "",
   };
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
@@ -33,18 +29,18 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit: (values, action) => {
       axios
-        .post("http://localhost:4000/api/users/register", values)
+        .post("http://localhost:4000/api/users/registerValidation", values)
         .then((resp) => {
-          if (resp.data.isLoggedIn) {
-            dispatch(login(true, resp.data.userToken));
-            dispatch(setIsLoggedIn(true));
-            dispatch(setUserToken(resp.data.userToken));
-            Cookies.set("isLoggedIn", true, { expires: 31 });
-            Cookies.set("userToken", resp.data.userToken);
-          }
-
           if (resp.status === 200) {
-            navigate("/");
+            navigate("/auth/verification", {
+              state: {
+                firstname: values.firstname,
+                lastname: values.lastname,
+                username: values.username,
+                email: values.email,
+                password: values.password,
+              },
+            });
             action.resetForm();
           }
         })

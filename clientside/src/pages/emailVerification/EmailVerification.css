@@ -1,0 +1,49 @@
+.verification-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  background-color: #afdcec;
+  font-family: Arial, sans-serif;
+}
+
+.verification-form {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #ebf4fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.verification-heading {
+  color: #2b60de;
+}
+
+.otp-input {
+  position: relative;
+}
+
+.otp-input input {
+  padding-right: 57.5%;
+}
+
+.otp-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #333;
+}
+
+.otp-link a {
+  color: #2b60de;
+  text-decoration: none;
+}
+
+.otp-link a:hover {
+  text-decoration: underline;
+}
