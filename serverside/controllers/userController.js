@@ -26,6 +26,7 @@ const registerValidation = async (req, res) => {
         username: { $regex: new RegExp(`^${username}$`, "i") },
       });
       const userEmail = await userModel.findOne({ email: email });
+
       if (userName) {
         return res.status(409).json({
           type: "username",
@@ -38,6 +39,9 @@ const registerValidation = async (req, res) => {
           message: "User with this email already exists",
         });
       }
+      res.status(200).json({
+        message: "User is validated",
+      });
     } catch (error) {
       res.status(500).json({
         type: "unknown",
@@ -50,6 +54,7 @@ const registerValidation = async (req, res) => {
 
 const sendOtp = async (req, res) => {
   const { firstname, lastname, username, email, verificationID } = req.body;
+
   try {
     let user = await emailVerificationModel.findOne({ verificationEmail: email });
     let otp = await emailVerificationMail(firstname, lastname, email, username);

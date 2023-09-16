@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import registerSchema from "../../schema/registerSchema";
 import "./Auth.css";
 
@@ -20,6 +21,7 @@ const Register = () => {
     email: "",
     password: "",
     confirmpassword: "",
+    verificationID: "",
   };
 
   const navigate = useNavigate();
@@ -31,14 +33,16 @@ const Register = () => {
       axios
         .post("http://localhost:4000/api/users/registerValidation", values)
         .then((resp) => {
+          let verificationID = uuidv4();
           if (resp.status === 200) {
-            navigate("/auth/verification", {
+            navigate(`/auth/verification/${verificationID}`, {
               state: {
                 firstname: values.firstname,
                 lastname: values.lastname,
                 username: values.username,
                 email: values.email,
                 password: values.password,
+                verificationID: verificationID,
               },
             });
             action.resetForm();

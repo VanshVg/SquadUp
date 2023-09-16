@@ -26,7 +26,7 @@ const App = () => {
             <Route path="/dashboard/CreateTeam" element={<CreateTeam />}></Route>
             <Route path="/dashboard/joinTeam" element={<JoinTeam />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
-            <Route path="/auth/verification" element={<EmailVerification />}></Route>
+            <Route path="/auth/verification/:id" element={<EmailVerification />}></Route>
           </Routes>
         </>
       </Router>

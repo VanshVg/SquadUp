@@ -50,7 +50,6 @@ const Login = () => {
             }
           })
           .catch((error) => {
-            console.log(error);
             const { status, data } = error.response;
 
             if (status === 404) {
