@@ -10,6 +10,7 @@ import CreateTeam from "./pages/createTeam/CreateTeam";
 import JoinTeam from "./pages/joinTeam/JoinTeam";
 import Profile from "./pages/profile/Profile";
 import EmailVerification from "./pages/emailVerification/EmailVerification";
+import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/dashboard/joinTeam" element={<JoinTeam />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/auth/verification/:id" element={<EmailVerification />}></Route>
+            <Route path="/auth/forgotpassword" element={<ForgotPassword />}></Route>
           </Routes>
         </>
       </Router>

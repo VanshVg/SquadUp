@@ -244,6 +244,7 @@ const Login = () => {
           {loginType === "username" || loginType === "email" ? (
             <button type="submit">Login</button>
           ) : null}
+
           {loginType === "username" ? (
             <p className="login-link">
               or Continue with <Link onClick={() => handleLoginType("email")}>Email Id</Link>
@@ -253,6 +254,9 @@ const Login = () => {
               or Continue with <Link onClick={() => handleLoginType("username")}>Username</Link>
             </p>
           )}
+          <p className="forgotpassword-link">
+            <Link to="/auth/forgotpassword">Forgot Password ?</Link>
+          </p>
         </form>
         <p className="login-link">
           New to the Team Up? <Link to="/auth/register">Create An Account</Link>
