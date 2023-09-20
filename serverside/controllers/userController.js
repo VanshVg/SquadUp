@@ -16,39 +16,40 @@ let cookieAge = 30 * 24 * 60 * 60 * 1000;
 const registerValidation = async (req, res) => {
   const { firstname, lastname, username, email, password } = req.body;
   if (!firstname || !lastname || !username || !email || !password) {
-    res.status(400).json({
+    return res.status(400).json({
       type: "fields",
       message: "All fields are required",
     });
-  } else {
-    try {
-      const userName = await userModel.findOne({
-        username: { $regex: new RegExp(`^${username}$`, "i") },
-      });
-      const userEmail = await userModel.findOne({ email: email });
+  }
 
-      if (userName) {
-        return res.status(409).json({
-          type: "username",
-          message: "Username has already been taken",
-        });
-      }
-      if (userEmail) {
-        return res.status(409).json({
-          type: "email",
-          message: "User with this email already exists",
-        });
-      }
-      res.status(200).json({
-        message: "User is validated",
-      });
-    } catch (error) {
-      res.status(500).json({
-        type: "unknown",
-        message: "Error while registering",
-        error: error,
+  try {
+    const userName = await userModel.findOne({
+      username: { $regex: new RegExp(`^${username}$`, "i") },
+    });
+    const userEmail = await userModel.findOne({ email: email });
+
+    if (userName) {
+      return res.status(409).json({
+        type: "username",
+        message: "Username has already been taken",
       });
     }
+
+    if (userEmail) {
+      return res.status(409).json({
+        type: "email",
+        message: "User with this email already exists",
+      });
+    }
+    res.status(200).json({
+      message: "User is validated",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while registering",
+      error: error,
+    });
   }
 };
 
@@ -58,6 +59,7 @@ const sendOtp = async (req, res) => {
   try {
     let user = await emailVerificationModel.findOne({ verificationEmail: email });
     let otp = await emailVerificationMail(firstname, lastname, email, username);
+
     if (user) {
       user.otp = otp;
       await user.save();
@@ -110,34 +112,35 @@ const register = async (req, res) => {
       password: hash,
     });
     let results = await data.save();
+
     if (!results) {
-      res.status(500).json({
+      return res.status(500).json({
         type: "unknown",
         message: "User registration failed",
       });
-    } else {
-      try {
-        let token = await generateJwtToken(firstname, lastname, username, email);
-        res
-          .status(200)
-          .cookie("userToken", token, {
-            httpOnly: true,
-            maxAge: cookieAge,
-            sameSite: "none",
-            secure: true,
-          })
-          .json({
-            isLoggedIn: true,
-            userToken: token,
-            message: "User registered successfully",
-          });
-      } catch (error) {
-        res.status(500).json({
-          type: "jwt",
-          message: "Jwt token error in registration",
-          error: error,
+    }
+
+    try {
+      let token = await generateJwtToken(firstname, lastname, username, email);
+      res
+        .status(200)
+        .cookie("userToken", token, {
+          httpOnly: true,
+          maxAge: cookieAge,
+          sameSite: "none",
+          secure: true,
+        })
+        .json({
+          isLoggedIn: true,
+          userToken: token,
+          message: "User registered successfully",
         });
-      }
+    } catch (error) {
+      res.status(500).json({
+        type: "jwt",
+        message: "Jwt token error in registration",
+        error: error,
+      });
     }
   } catch (error) {
     res.status(500).json({
@@ -175,6 +178,7 @@ const login = async (req, res) => {
     }
 
     let result = await bcrypt.compare(password, user.password);
+
     if (result === true) {
       try {
         let token = await generateJwtToken(
@@ -283,7 +287,9 @@ const updateProfile = async (req, res) => {
           message: "Please choose different username from your current username",
         });
       }
+
       let userData = await userModel.findOne({ username: newUserName });
+
       if (userData) {
         return res.status(409).json({
           type: "username",
@@ -298,7 +304,9 @@ const updateProfile = async (req, res) => {
           message: "Please choose different email from your current email",
         });
       }
+
       let userData = await userModel.findOne({ email: newEmail });
+
       if (userData) {
         return res.status(409).json({
           type: "email",
@@ -306,14 +314,17 @@ const updateProfile = async (req, res) => {
         });
       }
     }
+
     if (newUserName) {
       await userModel.updateOne({ username: username }, { $set: { username: newUserName } });
       var newUserData = await userModel.findOne({ username: newUserName });
     }
+
     if (newEmail) {
       await userModel.updateOne({ email: email }, { $set: { email: newEmail } });
       newUserData = await userModel.findOne({ email: newEmail });
     }
+
     const token = await generateJwtToken(
       newUserData.firstname,
       newUserData.lastname,
@@ -341,6 +352,7 @@ const updateProfile = async (req, res) => {
 
 const deleteAccount = async (req, res) => {
   const { username } = req.user.data;
+
   try {
     await userModel.deleteOne({ username: username });
     res
@@ -364,12 +376,14 @@ const deleteAccount = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { firstname, lastname, email, username } = req.user.data;
+
   try {
     const resetPasswordToken = randomstring.generate();
     await userModel.updateOne(
       { email: email },
       { $set: { resetPasswordToken: resetPasswordToken } }
     );
+
     try {
       await forgotPasswordMail(firstname, lastname, email, username, resetPasswordToken);
       res.status(200).json({
@@ -391,6 +405,35 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const verifyEmail = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({
+      type: "field",
+      message: "All fields are required",
+    });
+  }
+
+  try {
+    let user = await userModel.findOne({ email: email });
+    if (user) {
+      return res.status(200).json({
+        message: "User with this email id exists",
+      });
+    }
+    res.status(401).json({
+      type: "email",
+      message: "User with this email doesn't exist",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while verifying the email ",
+      error: error,
+    });
+  }
+};
+
 const verifyPassword = async (req, res) => {
   const { oldPassword } = req.body;
   const { username } = req.user.data;
@@ -400,9 +443,11 @@ const verifyPassword = async (req, res) => {
       message: "All fields are required",
     });
   }
+
   try {
     let user = await userModel.findOne({ username: username });
     let result = await bcrypt.compare(oldPassword, user.password);
+
     if (result === true) {
       return res.status(200).json({
         message: "Password is correct",
@@ -430,6 +475,7 @@ const resetPassword = async (req, res) => {
       message: "All fields are required",
     });
   }
+
   try {
     const hash = await bcrypt.hash(newPassword, 10);
     await userModel.updateOne({ username: username }, { $set: { password: hash } });
@@ -455,6 +501,7 @@ module.exports = {
   updateProfile,
   deleteAccount,
   forgotPassword,
+  verifyEmail,
   verifyPassword,
   resetPassword,
 };
