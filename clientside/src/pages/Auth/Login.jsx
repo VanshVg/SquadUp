@@ -220,6 +220,9 @@ const Login = () => {
                 {loginError.message}
               </p>
             ) : null}
+            <p className="forgotpassword-link">
+              <Link to="/auth/forgotpassword">Forgot Password ?</Link>
+            </p>
 
             <FontAwesomeIcon
               icon={passwordVisible ? faEye : faEyeSlash}
@@ -254,9 +257,6 @@ const Login = () => {
               or Continue with <Link onClick={() => handleLoginType("username")}>Username</Link>
             </p>
           )}
-          <p className="forgotpassword-link">
-            <Link to="/auth/forgotpassword">Forgot Password ?</Link>
-          </p>
         </form>
         <p className="login-link">
           New to the Team Up? <Link to="/auth/register">Create An Account</Link>

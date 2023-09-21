@@ -1,7 +1,6 @@
 import React from "react";
 import Helmet from "react-helmet";
 import "./ForgotPassword.css";
-import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   return (
@@ -16,7 +15,7 @@ const ForgotPassword = () => {
           </h1>
           <p>Enter your account's email id to recieve a link to reset your password.</p>
           <div className="email-input">
-            <input type="email" name="email" placeholder="Enter your email id" required />
+            <input type="email" name="email" placeholder="Enter your Email Id" required />
           </div>
           {/* {otpError.type === "otp" ? (
             <p
@@ -31,9 +30,6 @@ const ForgotPassword = () => {
             </p>
           ) : null} */}
           <button type="submit">Continue</button>
-          <p className="email-link">
-            Didn't Recieve an email? <Link>Send Again</Link>
-          </p>
         </form>
       </div>
     </>
