@@ -64,11 +64,11 @@ const forgotPasswordMail = async (firstname, lastname, email, username, resetPas
         ",</p>" +
         "<p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>" +
         "<p>To reset your password, please click on the following link:</p>" +
-        '<p><a href="http://localhost:3001/api/users/reset-password?token=' +
+        '<p><a href="http://localhost:3000/auth/users/reset-password?token=' +
         resetPasswordToken +
         '">Reset Password</a></p>' +
         "<p>If the link above doesn't work, copy and paste the following URL into your browser:</p>" +
-        "<p>http://localhost:3001/api/users/reset-password?token=" +
+        "<p>http://localhost:3000/auth/users/reset-password?token=" +
         resetPasswordToken +
         "</p>" +
         "<p>Thank you,</p>" +
