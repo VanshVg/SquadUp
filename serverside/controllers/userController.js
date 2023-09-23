@@ -152,7 +152,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("Inside Login API");
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
     return res.status(400).json({
