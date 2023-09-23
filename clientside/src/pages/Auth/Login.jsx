@@ -31,7 +31,7 @@ const Login = () => {
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
         axios
-          .post("http://localhost:4000/api/users/login", values, {
+          .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, values, {
             withCredentials: true,
             credentials: "include",
           })

@@ -28,14 +28,14 @@ const EmailVerification = () => {
   };
 
   useEffect(() => {
-    axios.post("http://localhost:4000/api/users/sendOtp", data);
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data);
   }, []);
 
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: data,
     onSubmit: (values, action) => {
       axios
-        .post("http://localhost:4000/api/users/register", values)
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, values)
         .then((resp) => {
           if (resp.data.isLoggedIn) {
             dispatch(login(true, resp.data.userToken));
@@ -69,7 +69,7 @@ const EmailVerification = () => {
   };
 
   const handleSendAgain = () => {
-    axios.post("http://localhost:4000/api/users/sendOtp", data);
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data);
   };
 
   return (

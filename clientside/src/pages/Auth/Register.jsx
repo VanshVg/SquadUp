@@ -31,7 +31,7 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit: (values, action) => {
       axios
-        .post("http://localhost:4000/api/users/registerValidation", values)
+        .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/registerValidation`, values)
         .then((resp) => {
           let verificationID = uuidv4();
           if (resp.status === 200) {

@@ -11,13 +11,15 @@ const Logoutmodal = (props) => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    axios.post("http://localhost:4000/api/users/logout", {}, { withCredentials: true }).then(() => {
-      dispatch(setIsLoggedIn(false));
-      dispatch(setUserToken(null));
-      Cookies.remove("userToken");
-      Cookies.remove("isLoggedIn");
-      onRequestClose();
-    });
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/logout`, {}, { withCredentials: true })
+      .then(() => {
+        dispatch(setIsLoggedIn(false));
+        dispatch(setUserToken(null));
+        Cookies.remove("userToken");
+        Cookies.remove("isLoggedIn");
+        onRequestClose();
+      });
   };
 
   return (
