@@ -11,6 +11,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+console.log(process.env.FRONTEND_URL);
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", process.env.FRONTEND_URL);
   // You can also configure other CORS headers as needed
@@ -19,13 +21,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["POST", "GET", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [process.env.FRONTEND_URL],
+//     methods: ["POST", "GET", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
 
 app.use("/api", apiRouter);
 
