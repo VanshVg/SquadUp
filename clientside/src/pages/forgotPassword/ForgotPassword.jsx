@@ -17,18 +17,6 @@ const ForgotPassword = () => {
           <div className="email-input">
             <input type="email" name="email" placeholder="Enter your Email Id" required />
           </div>
-          {/* {otpError.type === "otp" ? (
-            <p
-              style={{
-                color: "red",
-                fontSize: "14px",
-                marginTop: "1px",
-                marginBottom: "5px",
-              }}
-            >
-              {otpError.message}
-            </p>
-          ) : null} */}
           <button type="submit">Continue</button>
         </form>
       </div>
