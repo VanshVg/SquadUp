@@ -14,6 +14,7 @@ const blackListModel = require("../models/blackListModel");
 let cookieAge = 30 * 24 * 60 * 60 * 1000;
 
 const registerValidation = async (req, res) => {
+  console.log("registerValidation api called");
   const { firstname, lastname, username, email, password } = req.body;
   if (!firstname || !lastname || !username || !email || !password) {
     return res.status(400).json({
@@ -54,6 +55,7 @@ const registerValidation = async (req, res) => {
 };
 
 const sendOtp = async (req, res) => {
+  console.log("sendOtp api called");
   const { firstname, lastname, username, email, verificationID } = req.body;
 
   try {
@@ -83,6 +85,7 @@ const sendOtp = async (req, res) => {
 };
 
 const register = async (req, res) => {
+  console.log("register api called");
   const { firstname, lastname, email, username, password, userOTP } = req.body;
   if (!firstname || !lastname || !email || !username || !userOTP) {
     return res.status(400).json({
@@ -152,6 +155,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("login api called");
   const { username, email, password } = req.body;
   if (!password || (!email && !username)) {
     return res.status(400).json({
@@ -223,6 +227,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+  console.log("logout api called");
   const { userToken } = req.cookies;
 
   try {
@@ -260,6 +265,7 @@ const logout = async (req, res) => {
 };
 
 const userProfile = async (req, res) => {
+  console.log("userProfile api called");
   const { firstname, lastname, username, email } = req.user.data;
   res.status(200).json({
     firstname: firstname,
@@ -270,6 +276,7 @@ const userProfile = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
+  console.log("updateProfile api called");
   const { username, email } = req.user.data;
   const { newUserName, newEmail } = req.body;
   if (!newUserName && !newEmail) {
@@ -351,6 +358,7 @@ const updateProfile = async (req, res) => {
 };
 
 const deleteAccount = async (req, res) => {
+  console.log("deleteAccount api called");
   const { username } = req.user.data;
 
   try {
@@ -375,6 +383,7 @@ const deleteAccount = async (req, res) => {
 };
 
 const forgotPassword = async (req, res) => {
+  console.log("forgotPassword api called");
   const { firstname, lastname, email, username } = req.user.data;
 
   try {
@@ -406,6 +415,7 @@ const forgotPassword = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
+  console.log("verifyEmail api called");
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({
@@ -435,6 +445,7 @@ const verifyEmail = async (req, res) => {
 };
 
 const verifyPassword = async (req, res) => {
+  console.log("verifyPassword api called");
   const { oldPassword } = req.body;
   const { username } = req.user.data;
   if (!oldPassword) {
@@ -467,6 +478,7 @@ const verifyPassword = async (req, res) => {
 };
 
 const resetPassword = async (req, res) => {
+  console.log("resetPassword api called");
   const { newPassword } = req.body;
   const { username } = req.user.data;
   if (!newPassword) {

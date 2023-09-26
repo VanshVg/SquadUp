@@ -6,6 +6,7 @@ const userModel = require("../models/userModel");
 const { checkAdmin } = require("../utils/authUtils");
 
 const createTeam = async (req, res) => {
+  console.log("createTeam api called");
   const { name, description } = req.body;
   const { username } = req.user.data;
   if (!name || !description) {
@@ -44,6 +45,7 @@ const createTeam = async (req, res) => {
 };
 
 const myTeams = async (req, res) => {
+  console.log("myTeams api called");
   const { username } = req.user.data;
   try {
     const user = await userModel.findOne({ username: username });
@@ -67,6 +69,7 @@ const myTeams = async (req, res) => {
 };
 
 const teamDetail = async (req, res) => {
+  console.log("teamDetail api called");
   const { teamCode } = req.params;
   try {
     let team = await teamModel.findOne({ teamCode: teamCode }).populate("members.user", "username");
@@ -99,6 +102,7 @@ const teamDetail = async (req, res) => {
 };
 
 const updateTeam = async (req, res) => {
+  console.log("updateTeam api called");
   const { name, description } = req.body;
   const { username } = req.user.data;
   const { teamCode } = req.params;
@@ -157,6 +161,7 @@ const updateTeam = async (req, res) => {
 };
 
 const deleteTeam = async (req, res) => {
+  console.log("deleteTeam api called");
   const { username } = req.user.data;
   const { teamCode } = req.params;
   try {
@@ -198,6 +203,7 @@ const deleteTeam = async (req, res) => {
 };
 
 const joinTeam = async (req, res) => {
+  console.log("joinTeam api called");
   const { teamCode } = req.body;
   const { username } = req.user.data;
   if (!teamCode) {
@@ -240,6 +246,7 @@ const joinTeam = async (req, res) => {
 };
 
 const leaveTeam = async (req, res) => {
+  console.log("leaveTeam api called");
   const { username } = req.user.data;
   const { teamCode } = req.params;
   try {
@@ -265,6 +272,7 @@ const leaveTeam = async (req, res) => {
 };
 
 const showAllMembers = async (req, res) => {
+  console.log("showAllMembers api called");
   const { teamCode } = req.params;
   try {
     const team = await teamModel
@@ -282,6 +290,7 @@ const showAllMembers = async (req, res) => {
 };
 
 const removeMember = async (req, res) => {
+  console.log("removeMember api called");
   const { username } = req.user.data;
   const { teamCode, userId } = req.params;
   try {
