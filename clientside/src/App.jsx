@@ -11,6 +11,7 @@ import JoinTeam from "./pages/joinTeam/JoinTeam";
 import Profile from "./pages/profile/Profile";
 import EmailVerification from "./pages/emailVerification/EmailVerification";
 import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
+import ForgotPasswordOtp from "./pages/forgotPassword/ForgotPasswordOtp";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/auth/verification/:id" element={<EmailVerification />}></Route>
             <Route path="/auth/forgotpassword" element={<ForgotPassword />}></Route>
+            <Route path="/auth/forgotpassword/otp" element={<ForgotPasswordOtp />}></Route>
           </Routes>
         </>
       </Router>

@@ -1,8 +1,11 @@
 import React from "react";
 import Helmet from "react-helmet";
 import "./ForgotPassword.css";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Helmet>
@@ -17,7 +20,9 @@ const ForgotPassword = () => {
           <div className="email-input">
             <input type="email" name="email" placeholder="Enter your Email Id" required />
           </div>
-          <button type="submit">Continue</button>
+          <button type="submit" onClick={() => navigate("/auth/forgotpassword/otp")}>
+            Continue
+          </button>
         </form>
       </div>
     </>
