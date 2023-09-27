@@ -99,45 +99,54 @@ const Register = () => {
           </h1>
           <div className="input-group">
             <div className="error-group">
-              <input
-                type="text"
-                name="firstname"
-                placeholder="First Name"
-                required
-                value={values.firstname}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-              {errors.firstname && touched.firstname ? (
-                <p
-                  style={{ color: "red", fontSize: "14px", marginTop: "1px", marginBottom: "5px" }}
-                >
-                  {errors.firstname}
-                </p>
-              ) : null}
+              <div className="firstname-input">
+                <input
+                  type="text"
+                  name="firstname"
+                  placeholder="First Name"
+                  required
+                  value={values.firstname}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+                {errors.firstname && touched.firstname ? (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      marginTop: "1px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {errors.firstname}
+                  </p>
+                ) : null}
+              </div>
             </div>
             <div className="error-group">
-              <input
-                type="text"
-                name="lastname"
-                placeholder="Last Name"
-                required
-                value={values.lastname}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-              {errors.lastname && touched.lastname ? (
-                <p
-                  style={{
-                    color: "red",
-                    fontSize: "14px",
-                    marginTop: "1px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  {errors.lastname}
-                </p>
-              ) : null}
+              <div className="lastname-input">
+                <input
+                  type="text"
+                  name="lastname"
+                  placeholder="Last Name"
+                  required
+                  value={values.lastname}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+                {errors.lastname && touched.lastname ? (
+                  <p
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                      marginTop: "1px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {errors.lastname}
+                  </p>
+                ) : null}
+              </div>
             </div>
           </div>
 

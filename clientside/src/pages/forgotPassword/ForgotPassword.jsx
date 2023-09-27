@@ -13,7 +13,7 @@ const ForgotPassword = () => {
           <h1 className="forgotpassword-heading" align="center">
             Team Up
           </h1>
-          <p>Enter your account's email id to recieve a link to reset your password.</p>
+          <p>Enter the email address associated with your Team Up account.</p>
           <div className="email-input">
             <input type="email" name="email" placeholder="Enter your Email Id" required />
           </div>

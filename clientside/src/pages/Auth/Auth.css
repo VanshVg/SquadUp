@@ -4,21 +4,18 @@
   align-items: center;
   min-height: 100vh;
   flex-direction: column;
-  margin: 0;
-  padding: 0;
   background-color: #afdcec;
   font-family: Arial, sans-serif;
 }
 
 .register-form {
-  width: 100%;
-  max-width: 400px;
   padding: 20px;
   background-color: #ebf4fa;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  max-width: 400px;
 }
 
 input {
@@ -27,7 +24,6 @@ input {
   border: 1px solid #000;
   border-radius: 4px;
   transition: 0.2s ease;
-  font-size: 13px;
   background-color: #e8f1ff;
   max-height: 15px;
 }
@@ -42,7 +38,10 @@ input:valid {
 
 .input-group {
   display: flex;
-  gap: 40px;
+}
+
+.lastname-input {
+  margin-left: 33px;
 }
 
 .input-group input {
@@ -85,7 +84,7 @@ button:hover {
 }
 
 .password-input input {
-  padding-right: 57.5%;
+  padding-right: 227px;
 }
 
 .password-icon {
