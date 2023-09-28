@@ -15,7 +15,8 @@ const ForgotPassword = () => {
     resetPasswordToken: resetPasswordToken,
   };
 
-  const handleContinue = () => {
+  const handleContinue = (e) => {
+    e.preventDefault();
     if (!data.email) {
       setEmailError({
         type: "email",
@@ -25,7 +26,6 @@ const ForgotPassword = () => {
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/setResetPasswordToken`, data)
         .then((resp) => {
-          console.log(resp);
           if (resp.status === 200) {
             navigate(`/auth/forgotpassword/otp/${resetPasswordToken}`);
           }
@@ -80,9 +80,7 @@ const ForgotPassword = () => {
               </p>
             ) : null}
           </div>
-          <button type="submit" onClick={handleContinue}>
-            Continue
-          </button>
+          <button type="submit">Continue</button>
         </form>
       </div>
     </>

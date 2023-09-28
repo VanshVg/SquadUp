@@ -30,7 +30,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/auth/verification/:id" element={<EmailVerification />}></Route>
             <Route path="/auth/forgotpassword" element={<ForgotPassword />}></Route>
-            <Route path="/auth/forgotpassword/otp" element={<ForgotPasswordOtp />}></Route>
+            <Route path="/auth/forgotpassword/otp/:id" element={<ForgotPasswordOtp />}></Route>
           </Routes>
         </>
       </Router>
