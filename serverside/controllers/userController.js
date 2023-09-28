@@ -382,33 +382,34 @@ const deleteAccount = async (req, res) => {
   }
 };
 
-const forgotPassword = async (req, res) => {
-  console.log("forgotPassword api called");
-  const { firstname, lastname, email, username } = req.user.data;
+const setResetPasswordToken = async (req, res) => {
+  const { resetPasswordToken, email } = req.body;
+  if (!resetPasswordToken || !email) {
+    return res.status(400).json({
+      type: "field",
+      message: "All fields are required",
+    });
+  }
 
   try {
-    const resetPasswordToken = randomstring.generate();
+    let user = await userModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({
+        type: "email",
+        message: "User doesn't exist",
+      });
+    }
     await userModel.updateOne(
       { email: email },
       { $set: { resetPasswordToken: resetPasswordToken } }
     );
-
-    try {
-      await forgotPasswordMail(firstname, lastname, email, username, resetPasswordToken);
-      res.status(200).json({
-        message: "Please check your email inbox",
-      });
-    } catch (error) {
-      return res.status(500).json({
-        type: "unknown",
-        message: "Failed to send password reset email",
-        error: error,
-      });
-    }
+    res.status(200).json({
+      message: "ResetPasswordToken has been set",
+    });
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while processing forgot password request",
+      message: "Error while processing setResetPasswordToken request",
       error: error,
     });
   }
@@ -512,7 +513,7 @@ module.exports = {
   userProfile,
   updateProfile,
   deleteAccount,
-  forgotPassword,
+  setResetPasswordToken,
   verifyEmail,
   verifyPassword,
   resetPassword,
