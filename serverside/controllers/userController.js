@@ -383,6 +383,7 @@ const deleteAccount = async (req, res) => {
 };
 
 const setResetPasswordToken = async (req, res) => {
+  console.log("setResetPasswordToken API called");
   const { resetPasswordToken, email } = req.body;
   if (!resetPasswordToken || !email) {
     return res.status(400).json({
@@ -395,7 +396,7 @@ const setResetPasswordToken = async (req, res) => {
     let user = await userModel.findOne({ email: email });
     if (!user) {
       return res.status(404).json({
-        type: "email",
+        type: "not_found",
         message: "User doesn't exist",
       });
     }
