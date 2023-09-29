@@ -481,6 +481,48 @@ const forgotPassword = async (req, res) => {
   }
 };
 
+const verifyForgotPasswordOtp = async (req, res) => {
+  console.log("verifyForgotPasswordOtp API called");
+  const { userOtp, id } = req.body;
+  if (!userOtp) {
+    return res.status(400).json({
+      type: "Field",
+      message: "All fields are required",
+    });
+  }
+
+  try {
+    let user = await userModel.findOne({ resetPasswordToken: id });
+    if (!user) {
+      return res.status(404).json({
+        type: "not_found",
+        message: "You cannot access this page",
+      });
+    }
+
+    if (user.otp != userOtp) {
+      return res.status(404).json({
+        type: "otp",
+        message: "Otp is incorrect",
+      });
+    }
+
+    await userModel.updateOne(
+      { resetPasswordToken: id },
+      { $unset: { resetPasswordToken: 1, otp: 1 } }
+    );
+    res.status(200).json({
+      message: "User is authenticated",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while processing verifyForgotPasswordOtp request",
+      error: error,
+    });
+  }
+};
+
 const verifyPassword = async (req, res) => {
   console.log("verifyPassword api called");
   const { oldPassword } = req.body;
@@ -552,6 +594,7 @@ module.exports = {
   setResetPasswordToken,
   verifyEmail,
   forgotPassword,
+  verifyForgotPasswordOtp,
   verifyPassword,
   resetPassword,
 };
