@@ -8,12 +8,10 @@ const ForgotPasswordOtp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUserValid, setIsUserValid] = useState();
   const id = useParams();
-  const data = {
-    id: id,
-  };
+
   useEffect(() => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/forgotPassword`, data)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/forgotPassword`, id)
       .then((resp) => {
         if (resp.status === 200) {
           setIsUserValid(true);
@@ -29,6 +27,7 @@ const ForgotPasswordOtp = () => {
         setIsLoading(false);
       });
   }, []);
+
   return (
     <div>
       <div className="forgotpassword-container">

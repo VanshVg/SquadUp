@@ -448,7 +448,7 @@ const verifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   console.log("forgotPassword API called");
-  const { id } = req.body.id;
+  const { id } = req.body;
   if (!id) {
     return res.status(400).json({
       type: "field",
