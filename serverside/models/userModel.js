@@ -37,6 +37,9 @@ const userSchema = mongoose.Schema({
   resetPasswordToken: {
     type: String,
   },
+  otp: {
+    type: Number,
+  },
   created_at: {
     type: Date,
     default: Date.now,

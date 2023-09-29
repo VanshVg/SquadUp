@@ -67,13 +67,12 @@ const forgotPasswordMail = async (firstname, lastname, email, username, resetPas
         "<p>If you didn't make the request, just ignore this message.</p>" +
         "<p>Your One Time Password (OTP):</p>" +
         `<strong>${otp}</strong>` +
-        "<p>Please do not share this OTP with anyone else for your own privacy</p>" +
+        "<p>Please do not share this OTP with anyone else for your own privacy.</p>" +
         "</p>" +
         "<p>Thank you,</p>" +
         "<p> Team Up Team</p>",
     };
     await transporter.sendMail(mailOptions);
-    await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
     return otp;
   } catch (error) {
     console.log(error);
@@ -108,7 +107,7 @@ const emailVerificationMail = async (firstname, lastname, email, username) => {
         "<p>Welcome to Team Up. We're glad to have you onboard.</p>" +
         "<p>Your One Time Password (OTP):</p>" +
         `<b>${otp}</b>` +
-        "<p>Please do not share this OTP with anyone else for your own privacy</p>" +
+        "<p>Please do not share this OTP with anyone else for your own privacy.</p>" +
         "</p>" +
         "<p>Thank you,</p>" +
         "<p> Team Up Team</p>",

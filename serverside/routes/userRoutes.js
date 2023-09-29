@@ -15,7 +15,7 @@ router.put("/updateProfile", isAuthenticated, userController.updateProfile);
 router.delete("/deleteAccount", isAuthenticated, userController.deleteAccount);
 router.post("/setResetPasswordToken", userController.setResetPasswordToken);
 router.post("/verifyEmail", isAuthenticated, userController.verifyEmail);
-router.get("/forgotPasswordVerification", userController.forgotPasswordVerification);
+router.post("/forgotPassword", userController.forgotPassword);
 router.post("/verifyPassword", isAuthenticated, userController.verifyPassword);
 router.put("/resetPassword", isAuthenticated, userController.resetPassword);
 

@@ -446,7 +446,8 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-const forgotPasswordVerification = async (req, res) => {
+const forgotPassword = async (req, res) => {
+  console.log("forgotPassword API called");
   const { id } = req.body;
   if (!id) {
     return res.status(400).json({
@@ -463,8 +464,13 @@ const forgotPasswordVerification = async (req, res) => {
         message: "You cannot access this page",
       });
     }
+
+    const { firstname, lastname, email, username } = user;
+    let otp = await forgotPasswordMail(firstname, lastname, email, username, id);
+    user.otp = otp;
+    await user.save();
     res.status(200).json({
-      message: "User is valid",
+      message: "Mail has been sent",
     });
   } catch (error) {
     res.status(500).json({
@@ -545,7 +551,7 @@ module.exports = {
   deleteAccount,
   setResetPasswordToken,
   verifyEmail,
-  forgotPasswordVerification,
+  forgotPassword,
   verifyPassword,
   resetPassword,
 };
