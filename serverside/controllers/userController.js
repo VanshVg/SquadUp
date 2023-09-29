@@ -483,8 +483,8 @@ const forgotPassword = async (req, res) => {
 
 const verifyForgotPasswordOtp = async (req, res) => {
   console.log("verifyForgotPasswordOtp API called");
-  const { userOtp, id } = req.body;
-  if (!userOtp) {
+  const { userOtp } = req.body;
+  if (!userOtp || !req.body.id.id) {
     return res.status(400).json({
       type: "Field",
       message: "All fields are required",
@@ -492,7 +492,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
   }
 
   try {
-    let user = await userModel.findOne({ resetPasswordToken: id });
+    let user = await userModel.findOne({ resetPasswordToken: req.body.id.id });
     if (!user) {
       return res.status(404).json({
         type: "not_found",
@@ -508,7 +508,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
     }
 
     await userModel.updateOne(
-      { resetPasswordToken: id },
+      { resetPasswordToken: req.body.id.id },
       { $unset: { resetPasswordToken: 1, otp: 1 } }
     );
     res.status(200).json({

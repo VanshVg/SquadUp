@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./ForgotPassword.css";
 import axios from "axios";
 import { ThreeDots } from "react-loader-spinner";
@@ -8,6 +8,8 @@ const ForgotPasswordOtp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUserValid, setIsUserValid] = useState();
   const id = useParams();
+  const navigate = useNavigate();
+  const [otpError, setOtpError] = useState({});
 
   useEffect(() => {
     axios
@@ -28,6 +30,35 @@ const ForgotPasswordOtp = () => {
       });
   }, []);
 
+  const data = {
+    userOtp: "",
+    id: id,
+  };
+
+  const handleChange = (e) => {
+    data.userOtp = e.target.value;
+  };
+
+  const handleOtp = (e) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:4000/api/users/verifyForgotPasswordOtp`, data)
+      .then((resp) => {
+        if (resp.status === 200) {
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 404) {
+          setOtpError({
+            type: "otp",
+            message: "Otp is incorrect",
+          });
+        }
+      });
+  };
+
   return (
     <div>
       <div className="forgotpassword-container">
@@ -45,7 +76,7 @@ const ForgotPasswordOtp = () => {
             />
           </>
         ) : isUserValid ? (
-          <form className="forgotpassword-form">
+          <form className="forgotpassword-form" onSubmit={handleOtp}>
             <h1 className="forgotpassword-heading" align="center">
               Team Up
             </h1>
@@ -54,8 +85,26 @@ const ForgotPasswordOtp = () => {
               enter an OTP.
             </p>
             <div className="otp-input">
-              <input type="text" name="userOTP" placeholder="Enter OTP" required />
+              <input
+                type="text"
+                name="userOTP"
+                placeholder="Enter OTP"
+                onChange={handleChange}
+                required
+              />
             </div>
+            {otpError ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {otpError.message}
+              </p>
+            ) : null}
             <button type="submit">Continue</button>
             <p className="otp-link">
               Didn't Recieve an OTP? <Link>Send Again</Link>
