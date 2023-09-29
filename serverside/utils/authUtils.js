@@ -40,6 +40,7 @@ const generateJwtToken = async (firstname, lastname, username, email) => {
 };
 
 const forgotPasswordMail = async (firstname, lastname, email, username, resetPasswordToken) => {
+  let otp = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
   try {
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
@@ -55,28 +56,25 @@ const forgotPasswordMail = async (firstname, lastname, email, username, resetPas
     const mailOptions = {
       from: process.env.TEAMUP_EMAIL,
       to: email,
-      subject: "Team Up Password Reset",
+      subject: "Team Up Reset Password Otp",
       html:
         "<p>Dear " +
         firstname +
         " " +
         lastname +
         ",</p>" +
-        "<p>We received a request to reset your password. If you did not make this request, please ignore this email.</p>" +
-        "<p>To reset your password, please click on the following link:</p>" +
-        '<p><a href="http://localhost:3000/auth/users/reset-password?token=' +
-        resetPasswordToken +
-        '">Reset Password</a></p>' +
-        "<p>If the link above doesn't work, copy and paste the following URL into your browser:</p>" +
-        "<p>http://localhost:3000/auth/users/reset-password?token=" +
-        resetPasswordToken +
+        "<p>We've received a request to reset your password.</p>" +
+        "<p>If you didn't make the request, just ignore this message.</p>" +
+        "<p>Your One Time Password (OTP):</p>" +
+        `<strong>${otp}</strong>` +
+        "<p>Please do not share this OTP with anyone else for your own privacy</p>" +
         "</p>" +
         "<p>Thank you,</p>" +
         "<p> Team Up Team</p>",
     };
-    let info = await transporter.sendMail(mailOptions);
-    console.log("Mail has been sent:", info.response);
+    await transporter.sendMail(mailOptions);
     await userModel.updateOne({ username: username }, { $unset: { resetPasswordToken: 1 } });
+    return otp;
   } catch (error) {
     console.log(error);
     throw error;

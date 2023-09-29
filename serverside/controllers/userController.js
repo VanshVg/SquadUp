@@ -446,6 +446,35 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+const forgotPasswordVerification = async (req, res) => {
+  const { id } = req.body;
+  if (!id) {
+    return res.status(400).json({
+      type: "field",
+      message: "All fields are required",
+    });
+  }
+
+  try {
+    let user = await userModel.findOne({ resetPasswordToken: id });
+    if (!user) {
+      return res.status(404).json({
+        type: "not_found",
+        message: "You cannot access this page",
+      });
+    }
+    res.status(200).json({
+      message: "User is valid",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while processing forgotPassword request",
+      error: error,
+    });
+  }
+};
+
 const verifyPassword = async (req, res) => {
   console.log("verifyPassword api called");
   const { oldPassword } = req.body;
@@ -516,6 +545,7 @@ module.exports = {
   deleteAccount,
   setResetPasswordToken,
   verifyEmail,
+  forgotPasswordVerification,
   verifyPassword,
   resetPassword,
 };
