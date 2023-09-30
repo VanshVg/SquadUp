@@ -448,7 +448,7 @@ const verifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   console.log("forgotPassword API called");
-  const { id } = req.body;
+  console.log(req.body);
   if (!id) {
     return res.status(400).json({
       type: "field",
@@ -483,8 +483,8 @@ const forgotPassword = async (req, res) => {
 
 const verifyForgotPasswordOtp = async (req, res) => {
   console.log("verifyForgotPasswordOtp API called");
-  const { userOtp } = req.body;
-  if (!userOtp || !req.body.id.id) {
+  const { userOtp, id } = req.body;
+  if (!userOtp || !id) {
     return res.status(400).json({
       type: "Field",
       message: "All fields are required",
@@ -492,7 +492,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
   }
 
   try {
-    let user = await userModel.findOne({ resetPasswordToken: req.body.id.id });
+    let user = await userModel.findOne({ resetPasswordToken: id });
     if (!user) {
       return res.status(404).json({
         type: "not_found",
@@ -507,7 +507,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
       });
     }
 
-    await userModel.updateOne({ resetPasswordToken: req.body.id.id }, { $unset: { otp: 1 } });
+    await userModel.updateOne({ resetPasswordToken: id }, { $unset: { otp: 1 } });
     res.status(200).json({
       message: "User is authenticated",
     });
@@ -572,7 +572,10 @@ const changePassword = async (req, res) => {
       });
     }
     const hash = await bcrypt.hash(newpassword, 10);
-    await userModel.updateOne({ resetPasswordToken: id }, { $set: { password: hash } });
+    await userModel.updateOne(
+      { resetPasswordToken: id },
+      { $set: { password: hash }, $unset: { resetPasswordToken: 1 } }
+    );
     res.status(200).json({
       message: "Password is successfully reset",
     });

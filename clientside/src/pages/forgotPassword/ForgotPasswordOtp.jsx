@@ -7,13 +7,18 @@ import { ThreeDots } from "react-loader-spinner";
 const ForgotPasswordOtp = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUserValid, setIsUserValid] = useState();
-  const id = useParams();
+  const id = useParams().id;
   const navigate = useNavigate();
   const [otpError, setOtpError] = useState({});
 
+  const data = {
+    userOtp: "",
+    id: id,
+  };
+
   useEffect(() => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/forgotPassword`, id)
+      .post(`http://localhost:4000/api/users/forgotPassword`, data)
       .then((resp) => {
         if (resp.status === 200) {
           setIsUserValid(true);
@@ -30,11 +35,6 @@ const ForgotPasswordOtp = () => {
       });
   }, []);
 
-  const data = {
-    userOtp: "",
-    id: id,
-  };
-
   const handleChange = (e) => {
     data.userOtp = e.target.value;
   };
@@ -42,10 +42,10 @@ const ForgotPasswordOtp = () => {
   const handleOtp = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/verifyForgotPasswordOtp`, data)
+      .post(`http://localhost:4000/api/users/verifyForgotPasswordOtp`, data)
       .then((resp) => {
         if (resp.status === 200) {
-          navigate(`/auth/changepassword/${id.id}`);
+          navigate(`/auth/changepassword/${id}`);
         }
       })
       .catch((error) => {
