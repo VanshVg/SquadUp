@@ -507,10 +507,7 @@ const verifyForgotPasswordOtp = async (req, res) => {
       });
     }
 
-    await userModel.updateOne(
-      { resetPasswordToken: req.body.id.id },
-      { $unset: { resetPasswordToken: 1, otp: 1 } }
-    );
+    await userModel.updateOne({ resetPasswordToken: req.body.id.id }, { $unset: { otp: 1 } });
     res.status(200).json({
       message: "User is authenticated",
     });
