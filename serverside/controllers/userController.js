@@ -553,6 +553,37 @@ const verifyPassword = async (req, res) => {
   }
 };
 
+const userValid = async (req, res) => {
+  console.log("userValid api called");
+  const { id } = req.body;
+  if (!id) {
+    return res.status(400).json({
+      type: "field",
+      message: "All fields are required",
+    });
+  }
+  try {
+    let user = await userModel.findOne({ resetPasswordToken: id });
+
+    if (!user) {
+      return res.status(404).json({
+        type: "not_found",
+        message: "You cannot access this page",
+      });
+    }
+
+    res.status(200).json({
+      message: "User is valid",
+    });
+  } catch (error) {
+    res.status(500).json({
+      type: "unknown",
+      message: "Error while processing userValid request",
+      error: error,
+    });
+  }
+};
+
 const changePassword = async (req, res) => {
   console.log("changePassword api called");
   const { newpassword, id } = req.body;
@@ -564,13 +595,6 @@ const changePassword = async (req, res) => {
   }
 
   try {
-    let user = await userModel.findOne({ resetPasswordToken: id });
-    if (!user) {
-      return res.status(404).json({
-        type: "not_found",
-        message: "You cannot access this page",
-      });
-    }
     const hash = await bcrypt.hash(newpassword, 10);
     await userModel.updateOne(
       { resetPasswordToken: id },
@@ -602,5 +626,6 @@ module.exports = {
   forgotPassword,
   verifyForgotPasswordOtp,
   verifyPassword,
+  userValid,
   changePassword,
 };

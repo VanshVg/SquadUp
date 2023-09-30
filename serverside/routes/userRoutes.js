@@ -18,6 +18,7 @@ router.post("/verifyEmail", isAuthenticated, userController.verifyEmail);
 router.post("/forgotPassword", userController.forgotPassword);
 router.post("/verifyForgotPasswordOtp", userController.verifyForgotPasswordOtp);
 router.post("/verifyPassword", isAuthenticated, userController.verifyPassword);
-router.put("/changePassword", isAuthenticated, userController.changePassword);
+router.put("/changePassword", userController.changePassword);
+router.get("/userValid", userController.userValid);
 
 module.exports = router;
