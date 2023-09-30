@@ -4,13 +4,59 @@ import "./ChangePassword.css";
 import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import changePasswordSchema from "../../schema/changePasswordSchema";
 
 const ChangePassword = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isUserValid, setIsUserValid] = useState(true);
-  const [changePasswordError, setChangePasswordError] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUserValid, setIsUserValid] = useState();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+
+  const id = useParams().id;
+  const navigate = useNavigate();
+
+  const data = {
+    newpassword: "",
+    confirmpassword: "",
+    id: id,
+  };
+
+  useEffect(() => {
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/userValid`, data)
+      .then((resp) => {
+        if (resp.status === 200) {
+          setIsUserValid(true);
+        }
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 404) {
+          setIsUserValid(false);
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  });
+
+  const { values, errors, handleBlur, handleChange, handleSubmit, touched } = useFormik({
+    initialValues: data,
+    validationSchema: changePasswordSchema,
+    onSubmit: (values, action) => {
+      axios
+        .put(`${process.env.REACT_APP_BACKEND_URL}/api/users/changePassword`, values)
+        .then((resp) => {
+          if (resp.status === 200) {
+            navigate("/auth/login");
+            action.resetForm();
+          }
+        });
+    },
+  });
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -39,7 +85,7 @@ const ChangePassword = () => {
             />
           </>
         ) : isUserValid ? (
-          <form className="changepassword-form">
+          <form className="changepassword-form" onSubmit={handleSubmit}>
             <h1 className="changepassword-heading" align="center">
               Team Up
             </h1>
@@ -50,12 +96,27 @@ const ChangePassword = () => {
                 name="newpassword"
                 placeholder="Enter your new Password"
                 required
+                value={values.newpassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
               <FontAwesomeIcon
                 icon={passwordVisible ? faEye : faEyeSlash}
                 onClick={togglePasswordVisibility}
                 className="password-icon"
               />
+              {errors.newpassword && touched.newpassword ? (
+                <p
+                  style={{
+                    color: "red",
+                    fontSize: "14px",
+                    marginTop: "1px",
+                    marginBottom: "5px",
+                  }}
+                >
+                  {errors.newpassword}
+                </p>
+              ) : null}
             </div>
             <div className="password-input">
               <input
@@ -63,6 +124,9 @@ const ChangePassword = () => {
                 name="confirmpassword"
                 placeholder="Confirm new Password"
                 required
+                value={values.confirmpassword}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
               <FontAwesomeIcon
                 icon={confirmPasswordVisible ? faEye : faEyeSlash}
@@ -70,7 +134,7 @@ const ChangePassword = () => {
                 className="password-icon"
               />
             </div>
-            {changePasswordError ? (
+            {errors.confirmpassword && touched.confirmpassword ? (
               <p
                 style={{
                   color: "red",
@@ -79,7 +143,7 @@ const ChangePassword = () => {
                   marginBottom: "5px",
                 }}
               >
-                {changePasswordError.message}
+                {errors.confirmpassword}
               </p>
             ) : null}
             <button type="submit">Continue</button>

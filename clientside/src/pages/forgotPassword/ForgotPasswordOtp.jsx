@@ -18,7 +18,7 @@ const ForgotPasswordOtp = () => {
 
   useEffect(() => {
     axios
-      .post(`http://localhost:4000/api/users/forgotPassword`, data)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/forgotPassword`, data)
       .then((resp) => {
         if (resp.status === 200) {
           setIsUserValid(true);
@@ -42,7 +42,7 @@ const ForgotPasswordOtp = () => {
   const handleOtp = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:4000/api/users/verifyForgotPasswordOtp`, data)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/verifyForgotPasswordOtp`, data)
       .then((resp) => {
         if (resp.status === 200) {
           navigate(`/auth/changepassword/${id}`);
