@@ -553,11 +553,10 @@ const verifyPassword = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {
-  console.log("resetPassword api called");
-  const { newPassword } = req.body;
-  const { username } = req.user.data;
-  if (!newPassword) {
+const changePassword = async (req, res) => {
+  console.log("changePassword api called");
+  const { newpassword, id } = req.body;
+  if (!newpassword || !id) {
     return res.status(400).json({
       type: "field",
       message: "All fields are required",
@@ -565,15 +564,22 @@ const resetPassword = async (req, res) => {
   }
 
   try {
-    const hash = await bcrypt.hash(newPassword, 10);
-    await userModel.updateOne({ username: username }, { $set: { password: hash } });
+    let user = await userModel.findOne({ resetPasswordToken: id });
+    if (!user) {
+      return res.status(404).json({
+        type: "not_found",
+        message: "You cannot access this page",
+      });
+    }
+    const hash = await bcrypt.hash(newpassword, 10);
+    await userModel.updateOne({ resetPasswordToken: id }, { $set: { password: hash } });
     res.status(200).json({
-      message: "Password has been changed successfully",
+      message: "Password is successfully reset",
     });
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while reseting a password",
+      message: "Error while processing changePassword request",
       error: error,
     });
   }
@@ -593,5 +599,5 @@ module.exports = {
   forgotPassword,
   verifyForgotPasswordOtp,
   verifyPassword,
-  resetPassword,
+  changePassword,
 };

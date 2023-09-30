@@ -45,7 +45,7 @@ const ForgotPasswordOtp = () => {
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/verifyForgotPasswordOtp`, data)
       .then((resp) => {
         if (resp.status === 200) {
-          navigate("/");
+          navigate(`/auth/changepassword/${id.id}`);
         }
       })
       .catch((error) => {
