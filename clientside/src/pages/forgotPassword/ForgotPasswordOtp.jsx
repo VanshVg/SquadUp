@@ -69,6 +69,20 @@ const ForgotPasswordOtp = () => {
       });
   };
 
+  const handleSendAgain = () => {
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/forgotPassword`, data)
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 500) {
+          setOtpError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
+        }
+      });
+  };
+
   return (
     <div>
       <div className="forgotpassword-container">
@@ -145,7 +159,7 @@ const ForgotPasswordOtp = () => {
               )}
             </button>
             <p className="otp-link">
-              Didn't Recieve an OTP? <Link>Send Again</Link>
+              Didn't Recieve an OTP? <Link onClick={handleSendAgain}>Send Again</Link>
             </p>
           </form>
         ) : (
