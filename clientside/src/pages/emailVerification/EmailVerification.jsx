@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
+import { ThreeDots } from "react-loader-spinner";
 
 const EmailVerification = () => {
   const location = useLocation();
@@ -14,6 +15,7 @@ const EmailVerification = () => {
   const navigate = useNavigate();
 
   const [otpError, setOtpError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const { firstname, lastname, username, email, password, verificationID } = location.state || {};
 
@@ -42,6 +44,7 @@ const EmailVerification = () => {
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: data,
     onSubmit: (values, action) => {
+      setIsLoading(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/register`, values)
         .then((resp) => {
@@ -73,6 +76,9 @@ const EmailVerification = () => {
               message: "Some unknown error occured! Please try again later.",
             });
           }
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     },
   });
@@ -142,7 +148,23 @@ const EmailVerification = () => {
               {otpError.message}
             </p>
           ) : null}
-          <button type="submit">Continue</button>
+          <button type="submit" className="loader-button">
+            {isLoading ? (
+              <div className="loader-container">
+                <ThreeDots
+                  type="ThreeDots"
+                  height={16}
+                  width={80}
+                  radius={9}
+                  color="white"
+                  ariaLabel="three-dots-loading"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              "Continue"
+            )}
+          </button>
           <p className="otp-link">
             Didn't Recieve an OTP? <Link onClick={handleSendAgain}>Send Again</Link>
           </p>

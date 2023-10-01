@@ -10,11 +10,13 @@ import { useDispatch } from "react-redux";
 import loginSchema from "../../schema/loginSchema";
 import { login, setIsLoggedIn, setUserToken } from "../../redux/actions/authActions";
 import "./Auth.css";
+import { ThreeDots } from "react-loader-spinner";
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [loginType, setLoginType] = useState("username");
   const [loginError, setLoginError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const data = {
     username: "",
@@ -30,6 +32,7 @@ const Login = () => {
       initialValues: data,
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
+        setIsLoading(true);
         axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, values, {
             withCredentials: true,
@@ -71,6 +74,9 @@ const Login = () => {
                 message: "Some unknown error occured! Please try again later.",
               });
             }
+          })
+          .finally(() => {
+            setIsLoading(false);
           });
       },
     }
@@ -245,7 +251,23 @@ const Login = () => {
           ) : null}
 
           {loginType === "username" || loginType === "email" ? (
-            <button type="submit">Login</button>
+            <button type="submit" className="loader-button">
+              {isLoading ? (
+                <div className="loader-container">
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={16}
+                    width={80}
+                    radius={9}
+                    color="white"
+                    ariaLabel="three-dots-loading"
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                "Login"
+              )}
+            </button>
           ) : null}
 
           {loginType === "username" ? (

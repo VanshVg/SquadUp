@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Helmet from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faTruckMedical } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from "formik";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import registerSchema from "../../schema/registerSchema";
 import "./Auth.css";
+import { ThreeDots } from "react-loader-spinner";
 
 const Register = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [registerError, setRegisterError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const data = {
     firstname: "",
@@ -30,6 +32,7 @@ const Register = () => {
     initialValues: data,
     validationSchema: registerSchema,
     onSubmit: (values, action) => {
+      setIsLoading(faTruckMedical);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/registerValidation`, values)
         .then((resp) => {
@@ -70,6 +73,9 @@ const Register = () => {
               message: "Some unknown error occured! Please try again later.",
             });
           }
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     },
   });
@@ -296,7 +302,23 @@ const Register = () => {
             </p>
           ) : null}
 
-          <button type="submit">Sign Up</button>
+          <button type="submit" className="loader-button">
+            {isLoading ? (
+              <div className="loader-container">
+                <ThreeDots
+                  type="ThreeDots"
+                  height={16}
+                  width={80}
+                  radius={9}
+                  color="white"
+                  ariaLabel="three-dots-loading"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              "Sign Up"
+            )}
+          </button>
         </form>
         <p className="login-link">
           Already have an account? <Link to="/auth/login">Login</Link>

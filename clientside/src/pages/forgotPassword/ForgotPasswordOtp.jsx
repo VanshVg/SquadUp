@@ -6,6 +6,7 @@ import { ThreeDots } from "react-loader-spinner";
 
 const ForgotPasswordOtp = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isUserValid, setIsUserValid] = useState();
   const id = useParams().id;
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const ForgotPasswordOtp = () => {
 
   const handleOtp = (e) => {
     e.preventDefault();
+    setIsButtonLoading(true);
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/verifyForgotPasswordOtp`, data)
       .then((resp) => {
@@ -61,6 +63,9 @@ const ForgotPasswordOtp = () => {
             message: "Otp is incorrect",
           });
         }
+      })
+      .finally(() => {
+        setIsButtonLoading(false);
       });
   };
 
@@ -122,7 +127,23 @@ const ForgotPasswordOtp = () => {
                 {otpError.message}
               </p>
             ) : null}
-            <button type="submit">Continue</button>
+            <button type="submit" className="loader-button">
+              {isButtonLoading ? (
+                <div className="loader-container">
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={16}
+                    width={80}
+                    radius={9}
+                    color="white"
+                    ariaLabel="three-dots-loading"
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                "Continue"
+              )}
+            </button>
             <p className="otp-link">
               Didn't Recieve an OTP? <Link>Send Again</Link>
             </p>

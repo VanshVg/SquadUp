@@ -4,10 +4,12 @@ import "./ForgotPassword.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
+import { ThreeDots } from "react-loader-spinner";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [emailError, setEmailError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   let resetPasswordToken = uuidv4();
   const data = {
@@ -23,6 +25,7 @@ const ForgotPassword = () => {
         message: "Please enter valid email id",
       });
     } else {
+      setIsLoading(true);
       axios
         .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/setResetPasswordToken`, data)
         .then((resp) => {
@@ -45,6 +48,9 @@ const ForgotPassword = () => {
               message: "Some unknown error occured! Please try again later.",
             });
           }
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -97,7 +103,23 @@ const ForgotPassword = () => {
               </p>
             ) : null}
           </div>
-          <button type="submit">Continue</button>
+          <button type="submit" className="loader-button">
+            {isLoading ? (
+              <div className="loader-container">
+                <ThreeDots
+                  type="ThreeDots"
+                  height={16}
+                  width={80}
+                  radius={9}
+                  color="white"
+                  ariaLabel="three-dots-loading"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              "Continue"
+            )}
+          </button>
         </form>
       </div>
     </>

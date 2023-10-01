@@ -121,3 +121,20 @@ button:hover {
 .forgotpassword-link a:hover {
   text-decoration: underline;
 }
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-button {
+  position: relative; /* Ensure relative positioning for absolute loader */
+}
+
+.loader-button .loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

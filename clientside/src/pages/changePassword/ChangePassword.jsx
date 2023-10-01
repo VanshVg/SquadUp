@@ -11,6 +11,7 @@ import changePasswordSchema from "../../schema/changePasswordSchema";
 
 const ChangePassword = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [isUserValid, setIsUserValid] = useState();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -53,6 +54,7 @@ const ChangePassword = () => {
     initialValues: data,
     validationSchema: changePasswordSchema,
     onSubmit: (values, action) => {
+      setIsButtonLoading(true);
       axios
         .put(`${process.env.REACT_APP_BACKEND_URL}/api/users/changePassword`, values)
         .then((resp) => {
@@ -69,6 +71,9 @@ const ChangePassword = () => {
               message: "Some unknown error occured! Please try again later.",
             });
           }
+        })
+        .finally(() => {
+          setIsButtonLoading(false);
         });
     },
   });
@@ -173,7 +178,23 @@ const ChangePassword = () => {
                 {changePasswordError.message}
               </p>
             ) : null}
-            <button type="submit">Continue</button>
+            <button type="submit" className="loader-button">
+              {isButtonLoading ? (
+                <div className="loader-container">
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={16}
+                    width={80}
+                    radius={9}
+                    color="white"
+                    ariaLabel="three-dots-loading"
+                    visible={true}
+                  />
+                </div>
+              ) : (
+                "Continue"
+              )}
+            </button>
           </form>
         ) : (
           <h1>You are not allowed to access this page</h1>
