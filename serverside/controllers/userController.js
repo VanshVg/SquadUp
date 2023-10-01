@@ -48,7 +48,7 @@ const registerValidation = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while registering",
+      message: "Error while processing registerValidation request",
       error: error,
     });
   }
@@ -79,7 +79,7 @@ const sendOtp = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while sending an OTP",
+      message: "Error while processing sendOtp request",
     });
   }
 };
@@ -148,7 +148,7 @@ const register = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while registering",
+      message: "Error while processing register request",
       error: error,
     });
   }
@@ -220,7 +220,7 @@ const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while logging",
+      message: "Error while processing login request",
       error: error,
     });
   }
@@ -258,7 +258,7 @@ const logout = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while logging Out",
+      message: "Error while processing logout request",
       error: error,
     });
   }
@@ -351,7 +351,7 @@ const updateProfile = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while updating the profile",
+      message: "Error while processing updateprofile request",
       error: error,
     });
   }
@@ -376,7 +376,7 @@ const deleteAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while deleting user",
+      message: "Error while processing deleteuser request",
       error: error,
     });
   }
@@ -440,7 +440,7 @@ const verifyEmail = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while verifying the email ",
+      message: "Error while processing verifyemail request ",
       error: error,
     });
   }
@@ -548,7 +548,7 @@ const verifyPassword = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       type: "unknown",
-      message: "Error while verifying the password",
+      message: "Error while processing verifypassword request",
       error: error,
     });
   }
