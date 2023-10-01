@@ -39,6 +39,11 @@ const ForgotPassword = () => {
                 message: "User not found",
               });
             }
+          } else if (status === 500) {
+            setEmailError({
+              type: "unknown",
+              message: "Some unknown error occured! Please try again later.",
+            });
           }
         });
     }
@@ -67,7 +72,19 @@ const ForgotPassword = () => {
               onChange={handleChange}
               required
             />
-            {emailError ? (
+            {emailError.type === "not_found" ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {emailError.message}
+              </p>
+            ) : null}
+            {emailError.type === "unknown" ? (
               <p
                 style={{
                   color: "red",

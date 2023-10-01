@@ -14,6 +14,7 @@ const ChangePassword = () => {
   const [isUserValid, setIsUserValid] = useState();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const [changePasswordError, setChangePasswordError] = useState({});
 
   const id = useParams().id;
   const navigate = useNavigate();
@@ -36,6 +37,11 @@ const ChangePassword = () => {
         const { status } = error.response;
         if (status === 404) {
           setIsUserValid(false);
+        } else if (status === 500) {
+          setChangePasswordError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
         }
       })
       .finally(() => {
@@ -53,6 +59,15 @@ const ChangePassword = () => {
           if (resp.status === 200) {
             navigate("/auth/login");
             action.resetForm();
+          }
+        })
+        .catch((error) => {
+          const { status } = error.response;
+          if (status === 500) {
+            setChangePasswordError({
+              type: "unknown",
+              message: "Some unknown error occured! Please try again later.",
+            });
           }
         });
     },
@@ -144,6 +159,18 @@ const ChangePassword = () => {
                 }}
               >
                 {errors.confirmpassword}
+              </p>
+            ) : null}
+            {changePasswordError.type === "unknown" ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {changePasswordError.message}
               </p>
             ) : null}
             <button type="submit">Continue</button>

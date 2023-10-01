@@ -28,6 +28,11 @@ const ForgotPasswordOtp = () => {
         const { status } = error.response;
         if (status === 404) {
           setIsUserValid(false);
+        } else if (status === 500) {
+          setOtpError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
         }
       })
       .finally(() => {
@@ -93,7 +98,19 @@ const ForgotPasswordOtp = () => {
                 required
               />
             </div>
-            {otpError ? (
+            {otpError.type === "otp" ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                }}
+              >
+                {otpError.message}
+              </p>
+            ) : null}
+            {otpError.type === "unknown" ? (
               <p
                 style={{
                   color: "red",

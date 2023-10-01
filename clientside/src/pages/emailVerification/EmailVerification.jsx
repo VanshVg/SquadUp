@@ -28,7 +28,15 @@ const EmailVerification = () => {
   };
 
   useEffect(() => {
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data);
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data).catch((error) => {
+      const { status } = error.response;
+      if (status === 500) {
+        setOtpError({
+          type: "unknown",
+          message: "Some unknown error occured! Please try again later.",
+        });
+      }
+    });
   }, []);
 
   const { values, handleBlur, handleChange, handleSubmit } = useFormik({
@@ -59,6 +67,11 @@ const EmailVerification = () => {
                 message: "Otp is incorrect",
               });
             }
+          } else if (status === 500) {
+            setOtpError({
+              type: "unknown",
+              message: "Some unknown error occured! Please try again later.",
+            });
           }
         });
     },
@@ -69,7 +82,15 @@ const EmailVerification = () => {
   };
 
   const handleSendAgain = () => {
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data);
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/users/sendOtp`, data).catch((error) => {
+      const { status } = error.response;
+      if (status === 500) {
+        setOtpError({
+          type: "unknown",
+          message: "Some unknown error occured! Please try again later.",
+        });
+      }
+    });
   };
 
   return (
@@ -98,6 +119,18 @@ const EmailVerification = () => {
             />
           </div>
           {otpError.type === "otp" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {otpError.message}
+            </p>
+          ) : null}
+          {otpError.type === "unknown" ? (
             <p
               style={{
                 color: "red",
