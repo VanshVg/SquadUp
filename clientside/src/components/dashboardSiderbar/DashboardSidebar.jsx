@@ -1,8 +1,7 @@
 import React from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
-import AddIcon from "@mui/icons-material/Add";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Tooltip from "@mui/material/Tooltip";
 import "./DashboardSidebar.css";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,12 +21,8 @@ const DashboardSidebar = () => {
     navigate("/dashboard/MyTeams");
   };
 
-  const handleCreateTeam = () => {
-    navigate("/dashboard/CreateTeam");
-  };
-
-  const handleJoinTeam = () => {
-    navigate("/dashboard/JoinTeam");
+  const handleExit = () => {
+    navigate("/");
   };
 
   return (
@@ -56,27 +51,11 @@ const DashboardSidebar = () => {
             </div>
             <div className="sidebar-item-text">My Teams</div>
           </div>
-          <div
-            className={`${
-              location.pathname === "/dashboard/CreateTeam" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleCreateTeam}
-          >
+          <div className="sidebar-item" onClick={handleExit}>
             <div className="sidebar-item-icon">
-              <AddIcon />
+              <ExitToAppIcon />
             </div>
-            <div className="sidebar-item-text">Create a team</div>
-          </div>
-          <div
-            className={`${
-              location.pathname === "/dashboard/JoinTeam" ? "sidebar-item-active" : "sidebar-item"
-            }`}
-            onClick={handleJoinTeam}
-          >
-            <div className="sidebar-item-icon">
-              <GroupAddIcon />
-            </div>
-            <div className="sidebar-item-text">Join a team</div>
+            <div className="sidebar-item-text">Exit Dashboard</div>
           </div>
         </div>
       ) : (
@@ -105,29 +84,10 @@ const DashboardSidebar = () => {
               </div>
             </div>
           </Tooltip>
-          <Tooltip title="Create a team">
-            <div
-              className={`${
-                location.pathname === "/dashboard/CreateTeam"
-                  ? "sidebar-item-active"
-                  : "sidebar-item"
-              }`}
-              onClick={handleCreateTeam}
-            >
+          <Tooltip title="Exit Dashboard">
+            <div className="sidebar-item" onClick={handleExit}>
               <div className="sidebar-item-icon">
-                <AddIcon />
-              </div>
-            </div>
-          </Tooltip>
-          <Tooltip title="Join a team">
-            <div
-              className={`${
-                location.pathname === "/dashboard/JoinTeam" ? "sidebar-item-active" : "sidebar-item"
-              }`}
-              onClick={handleJoinTeam}
-            >
-              <div className="sidebar-item-icon">
-                <GroupAddIcon />
+                <ExitToAppIcon />
               </div>
             </div>
           </Tooltip>
