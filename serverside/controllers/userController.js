@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const randomstring = require("randomstring");
 require("dotenv").config();
 
 const userModel = require("../models/userModel");
