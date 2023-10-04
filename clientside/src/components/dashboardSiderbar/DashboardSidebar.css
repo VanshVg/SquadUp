@@ -1,14 +1,14 @@
 .dashboard-sidebar {
   margin-top: 0px;
   justify-content: space-between;
-  width: 40px;
+  width: 80px;
   background-color: white;
   padding: 20px;
   height: 685px;
   border-right: 1px solid #28183b;
 }
 
-.sidebar-item {
+.sidebar-item-open {
   display: flex;
   margin-bottom: 50px;
   cursor: pointer;
@@ -17,7 +17,7 @@
   height: 40px;
 }
 
-.sidebar-item-active {
+.sidebar-item-active-open {
   display: flex;
   margin-bottom: 50px;
   cursor: pointer;
@@ -27,20 +27,92 @@
   background-color: #b6b6b4;
 }
 
-.sidebar-item-icon {
+.sidebar-item-icon-open {
+  margin-top: 8px;
+  margin-left: 30px;
+}
+
+.sidebar-item-open:hover {
+  background-color: #b6b6b4;
+}
+
+.sidebar-item-text-open {
+  margin-top: 8px;
+  margin-left: 10px;
+}
+
+.myteams-arrow-open {
+  margin-top: 8px;
+}
+
+.sidebar-myteams-icon-open {
   margin-top: 8px;
   margin-left: 8px;
 }
 
-.sidebar-item-active {
-  background-color: #b6b6b4;
-}
-
-.sidebar-item:hover {
-  background-color: #b6b6b4;
-}
-
-.sidebar-item-text {
+.sidebar-myteams-text-open {
   margin-top: 8px;
   margin-left: 10px;
+}
+
+.sidebar-item-close {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+  margin-left: 18px;
+  width: 47px;
+}
+
+.sidebar-item-active-close {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+  background-color: #b6b6b4;
+  width: 47px;
+  margin-left: 18px;
+}
+
+.sidebar-item-icon-close {
+  margin-top: 8px;
+  margin-left: 12px;
+}
+
+.sidebar-item-close:hover {
+  width: 47px;
+  background-color: #b6b6b4;
+}
+
+.sidebar-myteams-close {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+}
+
+.sidebar-myteams-active-close {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+  background-color: #b6b6b4;
+  width: 70px;
+}
+
+.myteams-arrow-close {
+  margin-top: 8px;
+}
+
+.sidebar-myteams-icon-close {
+  margin-top: 8px;
+  margin-left: 8px;
 }
