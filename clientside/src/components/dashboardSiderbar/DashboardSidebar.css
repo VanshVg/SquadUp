@@ -95,6 +95,7 @@
   transition: 0.4s ease;
   border-radius: 20px;
   height: 40px;
+  width: 70px;
 }
 
 .sidebar-myteams-active-close {
