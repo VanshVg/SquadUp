@@ -18,10 +18,6 @@ const DashboardSidebar = () => {
     navigate("/dashboard/home");
   };
 
-  const handleMyTeams = () => {
-    navigate("/dashboard/MyTeams");
-  };
-
   const handleExit = () => {
     navigate("/");
   };
@@ -50,7 +46,6 @@ const DashboardSidebar = () => {
                   ? "sidebar-item-active-open"
                   : "sidebar-item-open"
               }`}
-              onClick={handleMyTeams}
             >
               <div className="myteams-arrow-open">
                 <ArrowRightIcon />
@@ -92,7 +87,6 @@ const DashboardSidebar = () => {
                     ? "sidebar-myteams-active-close"
                     : "sidebar-myteams-close"
                 }`}
-                onClick={handleMyTeams}
               >
                 <div className="myteams-arrow-open">
                   <ArrowRightIcon />
