@@ -15,7 +15,16 @@ const Dashboard = () => {
         <div className="dashboard">
           <DashboardSidebar />
           <div className="dashboard-content">
-            <h1>This is Dashboard</h1>
+            <div className="dashboard-image">
+              <img src="/images/addTeam2.jpg" alt="Create Team"></img>
+            </div>
+            <p className="dashboard-text">
+              You are not part of any team currently so Join or Create a team
+            </p>
+            <div className="dashboard-buttons">
+              <button className="create-team-button">Create a Team</button>
+              <button className="join-team-button">Join a Team</button>
+            </div>
           </div>
         </div>
       </div>

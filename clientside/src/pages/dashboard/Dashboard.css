@@ -4,4 +4,52 @@
 
 .dashboard-content {
   margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-image img {
+  height: 300px;
+  padding-left: 550px;
+  margin-bottom: -70px;
+}
+
+.dashboard-text {
+  padding-top: 50px;
+  padding-left: 350px;
+  font-size: 25px;
+}
+
+.dashboard-buttons {
+  padding-left: 580px;
+}
+
+.create-team-button {
+  background-color: white;
+  color: #2b60de;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #2b60de;
+}
+
+.create-team-button:hover {
+  background-color: #2b60de;
+  color: white;
+  border-radius: 10px;
+}
+
+.join-team-button {
+  background-color: #2b60de;
+  color: white;
+  font-size: 15px;
+  border-radius: 10px;
+  margin-left: 10px;
+  border: 1px solid #2b60de;
+}
+
+.join-team-button:hover {
+  background-color: white;
+  color: #2b60de;
+  border-radius: 10px;
+  border: 1px solid #2b60de;
 }
