@@ -17,6 +17,19 @@
   height: 40px;
 }
 
+.sidebar-myteams-open {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+}
+
+.sidebar-myteams-open:hover {
+  background-color: #b6b6b4;
+}
+
 .sidebar-item-active-open {
   display: flex;
   margin-bottom: 50px;
@@ -42,6 +55,7 @@
 }
 
 .myteams-arrow-open {
+  transition: 0.3s ease;
   margin-top: 8px;
 }
 
@@ -110,6 +124,7 @@
 }
 
 .myteams-arrow-close {
+  transition: 0.3s ease;
   margin-top: 8px;
 }
 
@@ -121,4 +136,10 @@
 .sidebar-myteams-close:hover {
   width: 70px;
   background-color: #b6b6b4;
+}
+
+.sidebar-myteams-close:hover .myteams-arrow-close,
+.sidebar-myteams-open:hover .myteams-arrow-open {
+  margin-bottom: 5px;
+  transform: rotate(90deg);
 }

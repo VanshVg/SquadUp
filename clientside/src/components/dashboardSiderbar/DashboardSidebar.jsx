@@ -39,23 +39,23 @@ const DashboardSidebar = () => {
             </div>
             <div className="sidebar-item-text-open">Home</div>
           </div>
-          <div classname="sidebar-myteams-open">
-            <div
-              className={`${
-                location.pathname === "/dashboard/MyTeams"
-                  ? "sidebar-item-active-open"
-                  : "sidebar-item-open"
-              }`}
-            >
-              <div className="myteams-arrow-open">
-                <ArrowRightIcon />
-              </div>
-              <div className="sidebar-myteams-icon-open">
-                <GroupsIcon />
-              </div>
-              <div className="sidebar-myteams-text-open">My Teams</div>
+
+          <div
+            className={`${
+              location.pathname === "/dashboard/MyTeams"
+                ? "sidebar-item-active-open"
+                : "sidebar-myteams-open"
+            }`}
+          >
+            <div className="myteams-arrow-open">
+              <ArrowRightIcon />
             </div>
+            <div className="sidebar-myteams-icon-open">
+              <GroupsIcon />
+            </div>
+            <div className="sidebar-myteams-text-open">My Teams</div>
           </div>
+
           <div className="sidebar-item-open" onClick={handleExit}>
             <div className="sidebar-item-icon-open">
               <ExitToAppIcon />
@@ -88,7 +88,7 @@ const DashboardSidebar = () => {
                     : "sidebar-myteams-close"
                 }`}
               >
-                <div className="myteams-arrow-open">
+                <div className="myteams-arrow-close">
                   <ArrowRightIcon />
                 </div>
                 <div className="sidebar-myteams-icon-close">
