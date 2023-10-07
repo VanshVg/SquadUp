@@ -26,8 +26,8 @@ const App = () => {
             <Route path="/aboutus" element={<Aboutus />}></Route>
             <Route path="/dashboard/home" element={<Dashboard />}></Route>
             <Route path="/dashboard/MyTeams" element={<MyTeams />}></Route>
-            <Route path="/dashboard/CreateTeam" element={<CreateTeam />}></Route>
-            <Route path="/dashboard/joinTeam" element={<JoinTeam />}></Route>
+            <Route path="/CreateTeam" element={<CreateTeam />}></Route>
+            <Route path="/JoinTeam" element={<JoinTeam />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/auth/verification/:id" element={<EmailVerification />}></Route>
             <Route path="/auth/forgotpassword" element={<ForgotPassword />}></Route>

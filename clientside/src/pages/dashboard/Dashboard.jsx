@@ -3,8 +3,19 @@ import Helmet from "react-helmet";
 import DashboardNavbar from "../../components/dashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "../../components/dashboardSiderbar/DashboardSidebar";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleCreateTeam = () => {
+    navigate("/CreateTeam");
+  };
+
+  const handleJoinTeam = () => {
+    navigate("/JoinTeam");
+  };
+
   return (
     <>
       <Helmet>
@@ -22,8 +33,12 @@ const Dashboard = () => {
               You are not part of any team currently so Join or Create a team
             </p>
             <div className="dashboard-buttons">
-              <button className="create-team-button">Create a Team</button>
-              <button className="join-team-button">Join a Team</button>
+              <button className="create-team-button" onClick={handleCreateTeam}>
+                Create a Team
+              </button>
+              <button className="join-team-button" onClick={handleJoinTeam}>
+                Join a Team
+              </button>
             </div>
           </div>
         </div>
