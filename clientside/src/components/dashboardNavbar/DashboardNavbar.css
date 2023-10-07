@@ -16,14 +16,14 @@
   font-size: 18px;
 }
 
-.team-up-logo {
+.dashboard-team-up-logo {
   font-size: 36px;
   font-weight: bold;
   color: #2b60de;
   margin-left: 150px;
 }
 
-.team-up-logo:hover {
+.dashboard-team-up-logo:hover {
   cursor: pointer;
 }
 

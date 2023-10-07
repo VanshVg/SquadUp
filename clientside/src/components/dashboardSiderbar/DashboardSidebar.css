@@ -27,7 +27,7 @@
 }
 
 .sidebar-myteams-open:hover {
-  background-color: #b6b6b4;
+  background-color: #dadbdd;
 }
 
 .sidebar-item-active-open {
@@ -38,6 +38,16 @@
   border-radius: 20px;
   height: 40px;
   background-color: #b6b6b4;
+}
+
+.sidebar-myteams-active-open {
+  display: flex;
+  margin-bottom: 50px;
+  cursor: pointer;
+  transition: 0.4s ease;
+  border-radius: 20px;
+  height: 40px;
+  background-color: #dadbdd;
 }
 
 .sidebar-item-icon-open {
@@ -119,7 +129,7 @@
   transition: 0.4s ease;
   border-radius: 20px;
   height: 40px;
-  background-color: #b6b6b4;
+  background-color: #dadbdd;
   width: 70px;
 }
 
@@ -135,11 +145,10 @@
 
 .sidebar-myteams-close:hover {
   width: 70px;
-  background-color: #b6b6b4;
+  background-color: #dadbdd;
 }
 
-.sidebar-myteams-close:hover .myteams-arrow-close,
-.sidebar-myteams-open:hover .myteams-arrow-open {
-  margin-bottom: 5px;
+.myteams-arrow-active {
   transform: rotate(90deg);
+  padding-right: 20px;
 }

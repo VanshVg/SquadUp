@@ -27,7 +27,7 @@ const DashboardNavbar = () => {
           </div>
         </div>
         <div className="dashboard-navbar-middle">
-          <div className="team-up-logo" onClick={handleHome}>
+          <div className="dashboard-team-up-logo" onClick={handleHome}>
             Team Up
           </div>
         </div>

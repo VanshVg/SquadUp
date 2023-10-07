@@ -1,18 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Tooltip from "@mui/material/Tooltip";
 import "./DashboardSidebar.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setIsMyTeamsOpen,
+  setIsSideBarOpen,
+  toggleMyTeams,
+} from "../../redux/actions/sidebarActions";
 
 const DashboardSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const isMyTeamsOpen = useSelector((state) => state.sidebar.isMyTeamsOpen);
   const isSidebarOpen = useSelector((state) => state.sidebar.isSidebarOpen);
+
+  useEffect(() => {
+    if (!isSidebarOpen) {
+      dispatch(setIsMyTeamsOpen());
+    }
+  }, [isSidebarOpen]);
 
   const handleHome = () => {
     navigate("/dashboard/home");
@@ -20,6 +34,11 @@ const DashboardSidebar = () => {
 
   const handleExit = () => {
     navigate("/");
+  };
+
+  const handleMyTeams = () => {
+    dispatch(toggleMyTeams());
+    dispatch(setIsSideBarOpen());
   };
 
   return (
@@ -41,14 +60,11 @@ const DashboardSidebar = () => {
           </div>
 
           <div
-            className={`${
-              location.pathname === "/dashboard/MyTeams"
-                ? "sidebar-item-active-open"
-                : "sidebar-myteams-open"
-            }`}
+            className={isMyTeamsOpen ? "sidebar-myteams-active-open" : "sidebar-myteams-open"}
+            onClick={handleMyTeams}
           >
             <div className="myteams-arrow-open">
-              <ArrowRightIcon />
+              {!isMyTeamsOpen ? <ArrowRightIcon /> : <ArrowDropDownIcon />}
             </div>
             <div className="sidebar-myteams-icon-open">
               <GroupsIcon />
@@ -82,14 +98,11 @@ const DashboardSidebar = () => {
           <Tooltip title="My Teams">
             <div className="sidebar-myteams-close">
               <div
-                className={`${
-                  location.pathname === "/dashboard/MyTeams"
-                    ? "sidebar-myteams-active-close"
-                    : "sidebar-myteams-close"
-                }`}
+                className={isMyTeamsOpen ? "sidebar-myteams-active-close" : "sidebar-myteams-close"}
+                onClick={handleMyTeams}
               >
                 <div className="myteams-arrow-close">
-                  <ArrowRightIcon />
+                  {!isMyTeamsOpen ? <ArrowRightIcon /> : <ArrowDropDownIcon />}
                 </div>
                 <div className="sidebar-myteams-icon-close">
                   <GroupsIcon />
