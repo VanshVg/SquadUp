@@ -25,7 +25,6 @@ const App = () => {
             <Route path="/auth/register" element={<Register />}></Route>
             <Route path="/aboutus" element={<Aboutus />}></Route>
             <Route path="/dashboard/home" element={<Dashboard />}></Route>
-            <Route path="/dashboard/MyTeams" element={<MyTeams />}></Route>
             <Route path="/CreateTeam" element={<CreateTeam />}></Route>
             <Route path="/JoinTeam" element={<JoinTeam />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
