@@ -33,6 +33,7 @@ const Login = () => {
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
         setIsLoading(true);
+        console.log(process.env.REACT_APP_BACKEND_URL);
         axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, values, {
             withCredentials: true,
@@ -43,8 +44,8 @@ const Login = () => {
               dispatch(login(true, resp.data.userToken));
               dispatch(setIsLoggedIn(true));
               dispatch(setUserToken(resp.data.userToken));
-              Cookies.set("isLoggedIn", true, { expires: 31 });
-              Cookies.set("userToken", resp.data.userToken, { expires: 31 });
+              Cookies.set("isLoggedIn", true, { expires: 31, secure: false });
+              Cookies.set("userToken", resp.data.userToken, { expires: 31, secure: false });
             }
 
             if (resp.status === 200) {

@@ -196,7 +196,9 @@ const login = async (req, res) => {
             httpOnly: true,
             maxAge: cookieAge,
             sameSite: "none",
-            secure: true,
+            secure: false,
+            domain: process.env.FRONTEND_URL,
+            path: "/",
           })
           .json({
             isLoggedIn: true,

@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Helmet from "react-helmet";
 import DashboardNavbar from "../../components/dashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "../../components/dashboardSiderbar/DashboardSidebar";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  let userToken = Cookies.get("userToken");
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:4000/api/teams/myTeams`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((resp) => {
+        console.log(resp.data);
+      });
+  });
 
   const handleCreateTeam = () => {
     navigate("/CreateTeam");

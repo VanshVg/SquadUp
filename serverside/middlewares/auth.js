@@ -4,7 +4,7 @@ require("dotenv").config();
 const blackListModel = require("../models/blackListModel");
 
 let isAuthenticated = async (req, res, next) => {
-  const { userToken } = req.cookies;
+  let userToken = req.headers.authorization.split(" ")[1];
 
   if (!userToken) {
     return res.status(403).send({

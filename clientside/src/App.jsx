@@ -5,7 +5,6 @@ import Login from "./pages/auth/Login";
 import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Aboutus from "./pages/aboutus/Aboutus";
-import MyTeams from "./pages/myTeams/MyTeams";
 import CreateTeam from "./pages/createTeam/CreateTeam";
 import JoinTeam from "./pages/joinTeam/JoinTeam";
 import Profile from "./pages/profile/Profile";
