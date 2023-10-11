@@ -12,6 +12,8 @@ const Dashboard = () => {
 
   let userToken = Cookies.get("userToken");
 
+  let data = {};
+
   useEffect(() => {
     axios
       .get(`http://localhost:4000/api/teams/myTeams`, {
@@ -20,7 +22,7 @@ const Dashboard = () => {
         },
       })
       .then((resp) => {
-        console.log(resp.data);
+        data = resp.data.teams;
       });
   });
 
@@ -42,20 +44,26 @@ const Dashboard = () => {
         <div className="dashboard">
           <DashboardSidebar />
           <div className="dashboard-content">
-            <div className="dashboard-image">
-              <img src="/images/addTeam2.jpg" alt="Create Team"></img>
-            </div>
-            <p className="dashboard-text">
-              You are not part of any team currently so Join or Create a team
-            </p>
-            <div className="dashboard-buttons">
-              <button className="create-team-button" onClick={handleCreateTeam}>
-                Create a Team
-              </button>
-              <button className="join-team-button" onClick={handleJoinTeam}>
-                Join a Team
-              </button>
-            </div>
+            {data.length > 0 ? (
+              <>
+                <div className="dashboard-image">
+                  <img src="/images/addTeam2.jpg" alt="Create Team"></img>
+                </div>
+                <p className="dashboard-text">
+                  You are not part of any team currently so Join or Create a team
+                </p>
+                <div className="dashboard-buttons">
+                  <button className="create-team-button" onClick={handleCreateTeam}>
+                    Create a Team
+                  </button>
+                  <button className="join-team-button" onClick={handleJoinTeam}>
+                    Join a Team
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>You are Part of a team</>
+            )}
           </div>
         </div>
       </div>
