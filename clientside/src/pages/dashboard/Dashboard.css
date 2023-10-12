@@ -53,3 +53,43 @@
   border-radius: 10px;
   border: 1px solid #2b60de;
 }
+
+.card {
+  border: 1px solid black;
+  margin: 10px;
+  width: 300px;
+  background-color: white;
+  height: 250px;
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.upper-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  height: 80px;
+  background-color: #98afc7;
+  border-bottom: 1px solid black;
+}
+
+.lower-row {
+  padding: -10px;
+  margin-top: 10px;
+  height: 50px;
+}
+
+h2 {
+  margin: 0;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+p {
+  margin: 0;
+  margin-left: 10px;
+}

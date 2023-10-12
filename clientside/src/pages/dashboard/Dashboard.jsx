@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import DashboardNavbar from "../../components/dashboardNavbar/DashboardNavbar";
 import DashboardSidebar from "../../components/dashboardSiderbar/DashboardSidebar";
@@ -8,11 +8,12 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const Dashboard = () => {
+  const [data, setData] = useState([{}]);
+  console.log(data);
+
   const navigate = useNavigate();
 
   let userToken = Cookies.get("userToken");
-
-  let data = {};
 
   useEffect(() => {
     axios
@@ -22,9 +23,10 @@ const Dashboard = () => {
         },
       })
       .then((resp) => {
-        data = resp.data.teams;
+        setData(resp.data.teams);
+        console.log(data.length);
       });
-  });
+  }, []);
 
   const handleCreateTeam = () => {
     navigate("/CreateTeam");
@@ -46,6 +48,20 @@ const Dashboard = () => {
           <div className="dashboard-content">
             {data.length > 0 ? (
               <>
+                {data.map((item, index) => (
+                  <div className="card" key={index}>
+                    <div className="upper-row">
+                      <h2>{item.name}</h2>
+                      <p className="admin-name">{item.admin}</p>
+                    </div>
+                    <div className="lower-row">
+                      <p>{item.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
                 <div className="dashboard-image">
                   <img src="/images/addTeam2.jpg" alt="Create Team"></img>
                 </div>
@@ -61,8 +77,6 @@ const Dashboard = () => {
                   </button>
                 </div>
               </>
-            ) : (
-              <>You are Part of a team</>
             )}
           </div>
         </div>
