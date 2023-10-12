@@ -14,6 +14,10 @@ const teamSchema = mongoose.Schema({
     unique: true,
     required: true,
   },
+  admin: {
+    type: String,
+    required: true,
+  },
   members: [
     {
       user: {

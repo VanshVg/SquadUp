@@ -4,15 +4,16 @@ require("dotenv").config();
 const blackListModel = require("../models/blackListModel");
 
 let isAuthenticated = async (req, res, next) => {
-  let userToken = req.headers.authorization.split(" ")[1];
-
-  if (!userToken) {
-    return res.status(403).send({
-      message: "Login Required",
-    });
-  }
-
+  let userToken;
   try {
+    userToken = req.headers.authorization.split(" ")[1];
+
+    if (!userToken) {
+      return res.status(403).send({
+        message: "Login Required",
+      });
+    }
+
     let userTokenBlackList = await blackListModel.findOne({ type: "userToken" });
     if (userTokenBlackList) {
       if (userTokenBlackList.blackList.includes(userToken)) {

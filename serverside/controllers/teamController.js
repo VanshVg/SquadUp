@@ -8,7 +8,7 @@ const { checkAdmin } = require("../utils/authUtils");
 const createTeam = async (req, res) => {
   console.log("createTeam api called");
   const { name, description } = req.body;
-  const { username } = req.user.data;
+  const { username, firstname, lastname } = req.user.data;
   if (!name || !description) {
     return res.status(400).json({
       message: "All fields are required",
@@ -22,10 +22,12 @@ const createTeam = async (req, res) => {
 
   try {
     const user = await userModel.findOne({ username: username });
+    let adminName = firstname + " " + lastname;
     let team = new teamModel({
       name: name,
       description: description,
       teamCode: teamCode,
+      admin: adminName,
       members: [{ user: user._id, role: "admin" }],
     });
     const savedTeam = await team.save();
