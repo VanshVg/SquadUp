@@ -47,7 +47,7 @@ const Dashboard = () => {
           <DashboardSidebar />
           <div className="dashboard-content">
             {data.length > 0 ? (
-              <>
+              <div className="cards-container">
                 {data.map((item, index) => (
                   <div className="card" key={index}>
                     <div className="upper-row">
@@ -59,7 +59,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                 ))}
-              </>
+              </div>
             ) : (
               <>
                 <div className="dashboard-image">
