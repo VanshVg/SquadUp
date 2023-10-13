@@ -229,6 +229,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   console.log("logout api called");
+  console.log(req.headers.authorization);
   const { userToken } = req.cookies;
 
   try {

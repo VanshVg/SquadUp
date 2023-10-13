@@ -57,7 +57,7 @@
 .card {
   border: 1px solid black;
   margin: 10px;
-  width: 400px;
+  width: 370px;
   background-color: white;
   height: 250px;
   transition: box-shadow 0.2s ease;

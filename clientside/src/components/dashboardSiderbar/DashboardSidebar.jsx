@@ -44,7 +44,7 @@ const DashboardSidebar = () => {
   return (
     <div>
       {isSidebarOpen ? (
-        <div className="dashboard-sidebar" style={{ width: "180px" }}>
+        <div className="dashboard-sidebar" style={{ width: "280px" }}>
           <div
             className={`${
               location.pathname === "/dashboard/home"

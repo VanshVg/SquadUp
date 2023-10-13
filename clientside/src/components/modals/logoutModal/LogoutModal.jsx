@@ -10,9 +10,20 @@ const Logoutmodal = (props) => {
   const { isOpen, onRequestClose } = props;
   const dispatch = useDispatch();
 
+  let userToken = Cookies.get("userToken");
+
   const handleLogout = () => {
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/logout`, {}, { withCredentials: true })
+      .post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/logout`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+          withCredentials: true,
+        }
+      )
       .then(() => {
         dispatch(setIsLoggedIn(false));
         dispatch(setUserToken(null));

@@ -9,13 +9,14 @@
 
 .modal-text {
   font-size: 20px;
-  padding-top: 40px;
-  margin-left: 15%;
+  padding-top: 50px;
+  margin-left: 12%;
   color: white;
 }
 
 .modal-buttons {
   margin-left: 33%;
+  margin-top: 20px;
 }
 
 .modal-yes-button {

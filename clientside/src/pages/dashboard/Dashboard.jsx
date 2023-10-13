@@ -9,7 +9,6 @@ import Cookies from "js-cookie";
 
 const Dashboard = () => {
   const [data, setData] = useState([{}]);
-  console.log(data);
 
   const navigate = useNavigate();
 
@@ -24,7 +23,6 @@ const Dashboard = () => {
       })
       .then((resp) => {
         setData(resp.data.teams);
-        console.log(data.length);
       });
   }, []);
 
