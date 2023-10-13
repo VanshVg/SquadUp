@@ -32,8 +32,17 @@
   text-align: right;
 }
 
+.profile {
+  display: flex;
+}
+
+.profile:hover {
+  cursor: pointer;
+}
+
 .profile-icon {
   margin-right: 5px;
+  margin-top: 3px;
 }
 
 .profile-text {
@@ -41,11 +50,25 @@
   font-size: 20px;
 }
 
-.dashboard-navbar-right:hover {
+.profile-icon:hover {
+  cursor: pointer;
+}
+
+.profile-text:hover {
   cursor: pointer;
 }
 
 .sidebar-icon {
   cursor: pointer;
   margin-left: 10px;
+}
+
+.add-icon {
+  margin-right: 20px;
+  margin-top: 3px;
+  transition: 0.3s ease;
+}
+
+.add-icon:hover {
+  cursor: pointer;
 }
