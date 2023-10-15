@@ -6,9 +6,11 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { ThreeDots } from "react-loader-spinner";
 
 const Dashboard = () => {
   const [data, setData] = useState([{}]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -23,6 +25,9 @@ const Dashboard = () => {
       })
       .then((resp) => {
         setData(resp.data.teams);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -43,40 +48,54 @@ const Dashboard = () => {
         <DashboardNavbar />
         <div className="dashboard">
           <DashboardSidebar />
-          <div className="dashboard-content">
-            {data.length > 0 ? (
-              <div className="cards-container">
-                {data.map((item, index) => (
-                  <div className="card" key={index}>
-                    <div className="upper-row">
-                      <h2>{item.name}</h2>
-                      <p className="admin-name">{item.admin}</p>
+          {!isLoading ? (
+            <div className="dashboard-content">
+              {data.length > 0 ? (
+                <div className="cards-container">
+                  {data.map((item, index) => (
+                    <div className="card" key={index}>
+                      <div className="upper-row">
+                        <h2>{item.name}</h2>
+                        <p className="admin-name">{item.admin}</p>
+                      </div>
+                      <div className="lower-row">
+                        <p>{item.description}</p>
+                      </div>
                     </div>
-                    <div className="lower-row">
-                      <p>{item.description}</p>
-                    </div>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <div className="dashboard-image">
+                    <img src="/images/addTeam2.jpg" alt="Create Team"></img>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <>
-                <div className="dashboard-image">
-                  <img src="/images/addTeam2.jpg" alt="Create Team"></img>
-                </div>
-                <p className="dashboard-text">
-                  You are not part of any team currently so Join or Create a team
-                </p>
-                <div className="dashboard-buttons">
-                  <button className="create-team-button" onClick={handleCreateTeam}>
-                    Create a Team
-                  </button>
-                  <button className="join-team-button" onClick={handleJoinTeam}>
-                    Join a Team
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                  <p className="dashboard-text">
+                    You are not part of any team currently so Join or Create a team
+                  </p>
+                  <div className="dashboard-buttons">
+                    <button className="create-team-button" onClick={handleCreateTeam}>
+                      Create a Team
+                    </button>
+                    <button className="join-team-button" onClick={handleJoinTeam}>
+                      Join a Team
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="dashboard-loader-container">
+              <ThreeDots
+                type="ThreeDots"
+                height={16}
+                width={80}
+                radius={9}
+                color="#2b60de"
+                ariaLabel="three-dots-loading"
+                visible={true}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

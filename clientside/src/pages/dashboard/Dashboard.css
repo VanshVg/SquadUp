@@ -101,3 +101,8 @@ p {
   margin: 0;
   margin-left: 10px;
 }
+
+.dashboard-loader-container {
+  margin-left: 43%;
+  margin-top: 20%;
+}
