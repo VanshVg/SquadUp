@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ThreeDots } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { setMyTeamsData } from "../../redux/actions/myTeamsActions";
 
 const Dashboard = () => {
-  const [data, setData] = useState([{}]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const myTeamsData = useSelector((state) => state.myTeams.myTeamsData);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let userToken = Cookies.get("userToken");
 
@@ -24,12 +28,12 @@ const Dashboard = () => {
         },
       })
       .then((resp) => {
-        setData(resp.data.teams);
+        dispatch(setMyTeamsData(resp.data.teams));
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [dispatch]);
 
   const handleCreateTeam = () => {
     navigate("/CreateTeam");
@@ -50,9 +54,9 @@ const Dashboard = () => {
           <DashboardSidebar />
           {!isLoading ? (
             <div className="dashboard-content">
-              {data.length > 0 ? (
+              {myTeamsData.length > 0 ? (
                 <div className="cards-container">
-                  {data.map((item, index) => (
+                  {myTeamsData.map((item, index) => (
                     <div className="card" key={index}>
                       <div className="upper-row">
                         <h2>{item.name}</h2>
