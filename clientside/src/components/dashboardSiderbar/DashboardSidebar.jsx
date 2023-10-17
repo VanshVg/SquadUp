@@ -21,6 +21,7 @@ const DashboardSidebar = () => {
 
   const isMyTeamsOpen = useSelector((state) => state.sidebar.isMyTeamsOpen);
   const isSidebarOpen = useSelector((state) => state.sidebar.isSidebarOpen);
+  const myTeamsData = useSelector((state) => state.myTeams.myTeamsData);
 
   useEffect(() => {
     if (!isSidebarOpen) {
