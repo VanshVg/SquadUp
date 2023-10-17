@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -13,6 +13,7 @@ import {
   setIsSideBarOpen,
   toggleMyTeams,
 } from "../../redux/actions/sidebarActions";
+import Avatar from "@mui/material/Avatar";
 
 const DashboardSidebar = () => {
   const location = useLocation();
@@ -22,6 +23,8 @@ const DashboardSidebar = () => {
   const isMyTeamsOpen = useSelector((state) => state.sidebar.isMyTeamsOpen);
   const isSidebarOpen = useSelector((state) => state.sidebar.isSidebarOpen);
   const myTeamsData = useSelector((state) => state.myTeams.myTeamsData);
+
+  const [avatarColors, setAvatarColors] = useState({});
 
   useEffect(() => {
     if (!isSidebarOpen) {
@@ -40,6 +43,23 @@ const DashboardSidebar = () => {
   const handleMyTeams = () => {
     dispatch(toggleMyTeams());
     dispatch(setIsSideBarOpen());
+  };
+
+  useEffect(() => {
+    const colors = {};
+    myTeamsData.forEach((item) => {
+      colors[item.name] = getRandomColor();
+    });
+    setAvatarColors(colors);
+  }, [myTeamsData]);
+
+  const getRandomColor = () => {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   };
 
   return (
@@ -72,6 +92,25 @@ const DashboardSidebar = () => {
             </div>
             <div className="sidebar-myteams-text-open">My Teams</div>
           </div>
+          {isMyTeamsOpen ? (
+            <>
+              {myTeamsData.map((item, index) => (
+                <div className="teams-item">
+                  <Avatar
+                    sx={{
+                      bgcolor: avatarColors[item.name],
+                      height: "30px",
+                      width: "30px",
+                    }}
+                    className="teams-item-avatar"
+                  >
+                    {item.name[0]}
+                  </Avatar>
+                  <p className="teams-item-text">{item.name}</p>
+                </div>
+              ))}
+            </>
+          ) : null}
 
           <div className="sidebar-item-open" onClick={handleExit}>
             <div className="sidebar-item-icon-open">

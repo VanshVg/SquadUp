@@ -152,3 +152,19 @@
   transform: rotate(90deg);
   padding-right: 20px;
 }
+
+.teams-item {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  margin-top: -50px;
+  margin-left: 28px;
+}
+
+.teams-item-avatar {
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+
+.teams-item-text {
+  margin-bottom: 20px;
+}
