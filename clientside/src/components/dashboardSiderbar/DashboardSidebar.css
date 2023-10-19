@@ -167,4 +167,14 @@
 
 .teams-item-text {
   margin-bottom: 20px;
+  border-radius: 20px;
+  width: 200px;
+  padding-left: 10px;
+  height: 30px;
+  padding-top: 5px;
+}
+
+.teams-item-text:hover {
+  cursor: pointer;
+  background-color: #b6b6b4;
 }
