@@ -106,7 +106,9 @@ const DashboardSidebar = () => {
                   >
                     {item.name[0]}
                   </Avatar>
-                  <p className="teams-item-text">{item.name}</p>
+                  <p className="teams-item-text">
+                    {item.name.length > 20 ? item.name.slice(0, 20) + "..." : item.name}
+                  </p>
                 </div>
               ))}
             </>
