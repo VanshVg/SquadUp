@@ -72,3 +72,23 @@
 .add-icon:hover {
   cursor: pointer;
 }
+
+.dropdown {
+  width: 150px;
+  height: 110px;
+}
+
+.dropdown-text {
+  color: #28183b;
+  border-radius: 20px;
+  transition: 0.3s ease;
+  height: 35px;
+  padding-bottom: 8px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.dropdown-text:hover {
+  cursor: pointer;
+  background-color: #b6b6b4;
+}
