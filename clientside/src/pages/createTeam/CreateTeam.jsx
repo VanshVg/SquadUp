@@ -1,12 +1,15 @@
-import { React } from "react";
+import { React, useState } from "react";
 import "./CreateTeam.css";
 import Helmet from "react-helmet";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 const CreateTeam = () => {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const teamData = {
     name: "",
@@ -16,6 +19,7 @@ const CreateTeam = () => {
   let userToken = Cookies.get("userToken");
 
   const handleCreateTeam = (e) => {
+    setIsLoading(true);
     e.preventDefault();
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/api/teams/create`, teamData, {
@@ -25,6 +29,9 @@ const CreateTeam = () => {
       })
       .then((resp) => {
         navigate("/dashboard/home");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -64,7 +71,21 @@ const CreateTeam = () => {
             />
           </div>
           <button type="submit" className="loader-button">
-            Create Team
+            {isLoading ? (
+              <div className="loader-container">
+                <ThreeDots
+                  type="ThreeDots"
+                  height={16}
+                  width={80}
+                  radius={9}
+                  color="white"
+                  ariaLabel="three-dots-loading"
+                  visible={true}
+                />
+              </div>
+            ) : (
+              "Create Team"
+            )}
           </button>
         </form>
       </div>
