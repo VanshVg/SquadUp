@@ -4,6 +4,7 @@ require("dotenv").config();
 const blackListModel = require("../models/blackListModel");
 
 let isAuthenticated = async (req, res, next) => {
+  console.log("Auth middleware is called");
   let userToken;
   try {
     userToken = req.headers.authorization.split(" ")[1];

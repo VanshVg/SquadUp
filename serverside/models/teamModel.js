@@ -7,7 +7,6 @@ const teamSchema = mongoose.Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   teamCode: {
     type: String,

@@ -9,7 +9,7 @@ const createTeam = async (req, res) => {
   console.log("createTeam api called");
   const { name, description } = req.body;
   const { username, firstname, lastname } = req.user.data;
-  if (!name || !description) {
+  if (!name) {
     return res.status(400).json({
       message: "All fields are required",
     });
