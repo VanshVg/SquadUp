@@ -62,6 +62,10 @@ const DashboardSidebar = () => {
     return color;
   };
 
+  const handleTeam = (id) => {
+    navigate(`/team/${id}`);
+  };
+
   return (
     <div>
       {isSidebarOpen ? (
@@ -106,7 +110,7 @@ const DashboardSidebar = () => {
                   >
                     {item.name[0]}
                   </Avatar>
-                  <p className="teams-item-text">
+                  <p className="teams-item-text" onClick={() => handleTeam(item._id)}>
                     {item.name.length > 20 ? item.name.slice(0, 20) + "..." : item.name}
                   </p>
                 </div>
