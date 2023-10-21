@@ -62,6 +62,11 @@ const ForgotPasswordOtp = () => {
             type: "otp",
             message: "Otp is incorrect",
           });
+        } else if (status === 500) {
+          setOtpError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
         }
       })
       .finally(() => {

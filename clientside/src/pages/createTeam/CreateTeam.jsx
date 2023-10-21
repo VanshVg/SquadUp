@@ -10,6 +10,7 @@ const CreateTeam = () => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [createTeamError, setCreateTeamError] = useState({});
 
   const teamData = {
     name: "",
@@ -29,6 +30,15 @@ const CreateTeam = () => {
       })
       .then((resp) => {
         navigate("/dashboard/home");
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 500) {
+          setCreateTeamError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -69,6 +79,19 @@ const CreateTeam = () => {
               required
               onChange={handleDescriptionChange}
             />
+            {createTeamError ? (
+              <p
+                style={{
+                  color: "red",
+                  fontSize: "14px",
+                  marginTop: "1px",
+                  marginBottom: "5px",
+                  marginLeft: "1px",
+                }}
+              >
+                {createTeamError.message}
+              </p>
+            ) : null}
           </div>
           <button type="submit" className="loader-button">
             {isLoading ? (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -9,6 +9,8 @@ import "./LogoutModal.css";
 const Logoutmodal = (props) => {
   const { isOpen, onRequestClose } = props;
   const dispatch = useDispatch();
+
+  const [logoutError, setLogoutError] = useState({});
 
   let userToken = Cookies.get("userToken");
 
@@ -30,6 +32,15 @@ const Logoutmodal = (props) => {
         Cookies.remove("userToken");
         Cookies.remove("isLoggedIn");
         onRequestClose();
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 500) {
+          setLogoutError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
+        }
       });
   };
 
@@ -51,6 +62,18 @@ const Logoutmodal = (props) => {
           <button className="modal-no-button" onClick={onRequestClose}>
             No
           </button>
+          {logoutError ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {logoutError.message}
+            </p>
+          ) : null}
         </div>
       </Modal>
     </div>

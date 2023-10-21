@@ -44,6 +44,11 @@ const JoinTeam = () => {
             type: "conflict",
             message: "You are already part of this team",
           });
+        } else if (status === 500) {
+          setJoinTeamError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
         }
       })
       .finally(() => {
