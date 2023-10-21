@@ -43,6 +43,11 @@ const Dashboard = () => {
     navigate("/JoinTeam");
   };
 
+  const handleTeam = (id) => {
+    console.log(myTeamsData);
+    navigate(`/team/${id}`);
+  };
+
   return (
     <>
       <Helmet>
@@ -57,7 +62,7 @@ const Dashboard = () => {
               {myTeamsData.length > 0 ? (
                 <div className="cards-container">
                   {myTeamsData.map((item, index) => (
-                    <div className="card" key={index}>
+                    <div className="card" key={index} onClick={() => handleTeam(item._id)}>
                       <div className="upper-row">
                         <h2>{item.name}</h2>
                         <p className="admin-name">{item.admin}</p>
