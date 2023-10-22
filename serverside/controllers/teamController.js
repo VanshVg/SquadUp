@@ -72,9 +72,9 @@ const myTeams = async (req, res) => {
 
 const teamDetail = async (req, res) => {
   console.log("teamDetail api called");
-  const { teamCode } = req.params;
+  const { teamId } = req.params;
   try {
-    let team = await teamModel.findOne({ teamCode: teamCode }).populate("members.user", "username");
+    let team = await teamModel.findOne({ _id: teamId }).populate("members.user", "username");
 
     if (!team) {
       return res.status(404).json({
