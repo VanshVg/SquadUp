@@ -44,7 +44,6 @@ const Dashboard = () => {
   };
 
   const handleTeam = (id) => {
-    console.log(myTeamsData);
     navigate(`/team/${id}`);
   };
 

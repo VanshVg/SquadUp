@@ -33,7 +33,6 @@ const Login = () => {
       validationSchema: () => loginSchema(loginType),
       onSubmit: (values, action) => {
         setIsLoading(true);
-        console.log(process.env.REACT_APP_BACKEND_URL);
         axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/api/users/login`, values, {
             withCredentials: true,
