@@ -11,6 +11,7 @@ const createTeam = async (req, res) => {
   const { username, firstname, lastname } = req.user.data;
   if (!name) {
     return res.status(400).json({
+      type: "field",
       message: "All fields are required",
     });
   }
@@ -40,6 +41,7 @@ const createTeam = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while creating a team",
       error: error,
     });
@@ -56,6 +58,7 @@ const myTeams = async (req, res) => {
     });
     if (teams.length === 0) {
       return res.status(404).json({
+        type: "not_found",
         message: "User isn't part of any team",
       });
     }
@@ -64,6 +67,7 @@ const myTeams = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while showing all teams",
       error: error,
     });
@@ -78,6 +82,7 @@ const teamDetail = async (req, res) => {
 
     if (!team) {
       return res.status(404).json({
+        type: "not_found",
         message: "Team doesn't exist",
       });
     }
@@ -97,6 +102,7 @@ const teamDetail = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while getting team details",
       error: error,
     });
@@ -113,11 +119,13 @@ const updateTeam = async (req, res) => {
 
     if (!isAdmin) {
       return res.status(401).json({
+        type: "unauthorized",
         message: "You are not authorised to make changes",
       });
     }
     if (!name && !description) {
       return res.status(400).json({
+        type: "field",
         message: "Atleast one field is required",
       });
     }
@@ -126,6 +134,7 @@ const updateTeam = async (req, res) => {
 
     if (!team) {
       return res.status(404).json({
+        type: "not_found",
         message: "Team doesn't exist",
       });
     }
@@ -135,6 +144,7 @@ const updateTeam = async (req, res) => {
     if (name) {
       if (name === team.name) {
         return res.status(400).json({
+          type: "bad_request",
           message: "Choose different team name from current team name",
         });
       }
@@ -143,6 +153,7 @@ const updateTeam = async (req, res) => {
     if (description) {
       if (description === team.description) {
         return res.status(400).json({
+          type: "bad_request",
           message: "Choose different team description from current team description",
         });
       }
@@ -156,6 +167,7 @@ const updateTeam = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while updating team",
       error: error,
     });
@@ -171,12 +183,14 @@ const deleteTeam = async (req, res) => {
 
     if (!isAdmin) {
       return res.status(401).json({
+        type: "unauthorized",
         message: "You're not authorised to delete a team",
       });
     }
     const team = await teamModel.findOne({ teamCode: teamCode });
     if (!team) {
       return res.status(404).json({
+        type: "not_found",
         message: "Team doesn't exist",
       });
     }
@@ -198,6 +212,7 @@ const deleteTeam = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while deleting team",
       error: error,
     });
@@ -210,6 +225,7 @@ const joinTeam = async (req, res) => {
   const { username } = req.user.data;
   if (!teamCode) {
     return res.status(400).json({
+      type: "field",
       message: "All fields are required",
     });
   }
@@ -218,12 +234,14 @@ const joinTeam = async (req, res) => {
     let team = await teamModel.findOne({ teamCode: teamCode });
     if (!team) {
       return res.status(404).json({
+        type: "not_found",
         message: "Team doesn't exist",
       });
     }
     for (const teamItem of user.teams) {
       if (teamItem.team.toString() === team._id.toString()) {
         return res.status(409).json({
+          type: "conflict",
           message: "You are already part of this team",
         });
       }
@@ -241,6 +259,7 @@ const joinTeam = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while joining a team",
       error: error,
     });
@@ -267,6 +286,7 @@ const leaveTeam = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while leaving a team",
       error: error,
     });
@@ -285,6 +305,7 @@ const showAllMembers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while showing all members",
       error: error,
     });
@@ -299,6 +320,7 @@ const removeMember = async (req, res) => {
     let isAdmin = await checkAdmin(username, teamCode);
     if (!isAdmin) {
       return res.status(401).json({
+        type: "unauthorized",
         message: "You're not authorised to remove a member from a team",
       });
     }
@@ -318,6 +340,7 @@ const removeMember = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
+      type: "unknown",
       message: "Error while removing the user",
       error: error,
     });
