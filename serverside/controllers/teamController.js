@@ -56,12 +56,6 @@ const myTeams = async (req, res) => {
     const teams = await teamModel.find({
       _id: { $in: user.teams.map((team) => team.team) },
     });
-    if (teams.length === 0) {
-      return res.status(404).json({
-        type: "not_found",
-        message: "User isn't part of any team",
-      });
-    }
     res.status(200).json({
       teams,
     });

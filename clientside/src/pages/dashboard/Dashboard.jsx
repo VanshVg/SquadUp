@@ -12,6 +12,7 @@ import { setMyTeamsData } from "../../redux/actions/myTeamsActions";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [dashboardError, setDashboardError] = useState({});
 
   const myTeamsData = useSelector((state) => state.myTeams.myTeamsData);
 
@@ -29,6 +30,15 @@ const Dashboard = () => {
       })
       .then((resp) => {
         dispatch(setMyTeamsData(resp.data.teams));
+      })
+      .catch((error) => {
+        const { status } = error.response;
+        if (status === 500) {
+          setDashboardError({
+            type: "unknown",
+            message: "Some unknown error occured! Please try again later.",
+          });
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -56,6 +66,18 @@ const Dashboard = () => {
         <DashboardNavbar />
         <div className="dashboard">
           <DashboardSidebar />
+          {dashboardError.type === "unknown" ? (
+            <p
+              style={{
+                color: "red",
+                fontSize: "14px",
+                marginTop: "1px",
+                marginBottom: "5px",
+              }}
+            >
+              {dashboardError.message}
+            </p>
+          ) : null}
           {!isLoading ? (
             <div className="dashboard-content">
               {myTeamsData.length > 0 ? (
