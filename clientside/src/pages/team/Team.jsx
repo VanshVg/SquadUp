@@ -33,6 +33,14 @@ const Team = () => {
         <DashboardNavbar />
         <div className="team">
           <DashboardSidebar />
+          <div className="team-content">
+            <div className="team-banner">
+              <img src="/images/teamBackground1.jpg" alt="Team"></img>
+              <div className="banner-name">
+                <h1 className="team-name">Testing 1</h1>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

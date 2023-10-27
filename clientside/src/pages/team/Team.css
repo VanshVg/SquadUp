@@ -1,3 +1,23 @@
 .team {
   display: flex;
 }
+
+.team-content {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-banner {
+  margin-left: 300px;
+  margin-top: 20px;
+}
+
+.team-banner img {
+  border-radius: 10px;
+}
+
+h1 {
+  margin-bottom: 100px;
+  padding-top: -20px;
+}
