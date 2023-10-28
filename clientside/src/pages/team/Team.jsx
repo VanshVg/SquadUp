@@ -60,6 +60,10 @@ const Team = () => {
                 <div className="banner-name">
                   <h1 className="team-name">{teamData.name}</h1>
                 </div>
+                <div className="team-code-container">
+                  <p className="team-code-title">Team Code</p>
+                  <h6 className="team-code">{teamData.teamCode}</h6>
+                </div>
               </div>
             </div>
           )}

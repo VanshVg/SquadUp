@@ -101,6 +101,7 @@ const teamDetail = async (req, res) => {
       members: membersWithUsername,
       tasks: team.tasks,
       bannerUrl: team.bannerUrl,
+      teamCode: team.teamCode,
     });
   } catch (error) {
     res.status(500).json({
