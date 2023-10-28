@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Helmet from "react-helmet";
 import "./Team.css";
 import DashboardNavbar from "../../components/dashboardNavbar/DashboardNavbar";
@@ -6,13 +6,18 @@ import DashboardSidebar from "../../components/dashboardSiderbar/DashboardSideba
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 const Team = () => {
   let userToken = Cookies.get("userToken");
 
+  const [teamData, setTeamData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
   const teamId = useParams().id;
 
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/api/teams/team/${teamId}`, {
         headers: {
@@ -20,9 +25,12 @@ const Team = () => {
         },
       })
       .then((resp) => {
-        console.log(resp);
+        setTeamData(resp.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  });
+  }, [teamId, userToken]);
 
   return (
     <>
@@ -33,14 +41,28 @@ const Team = () => {
         <DashboardNavbar />
         <div className="team">
           <DashboardSidebar />
-          <div className="team-content">
-            <div className="team-banner">
-              <img src="/images/teamBackground1.jpg" alt="Team"></img>
-              <div className="banner-name">
-                <h1 className="team-name">Testing 1</h1>
+          {isLoading ? (
+            <div className="dashboard-loader-container">
+              <ThreeDots
+                type="ThreeDots"
+                height={16}
+                width={80}
+                radius={9}
+                color="#2b60de"
+                ariaLabel="three-dots-loading"
+                visible={true}
+              />
+            </div>
+          ) : (
+            <div className="team-content">
+              <div className="team-banner">
+                <img src={teamData.bannerUrl} alt="Team"></img>
+                <div className="banner-name">
+                  <h1 className="team-name">{teamData.name}</h1>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

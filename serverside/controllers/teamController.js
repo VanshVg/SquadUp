@@ -79,6 +79,7 @@ const teamDetail = async (req, res) => {
   const { teamId } = req.params;
   try {
     let team = await teamModel.findOne({ _id: teamId }).populate("members.user", "username");
+    console.log(team);
 
     if (!team) {
       return res.status(404).json({
@@ -99,6 +100,7 @@ const teamDetail = async (req, res) => {
       description: team.description,
       members: membersWithUsername,
       tasks: team.tasks,
+      bannerUrl: team.bannerUrl,
     });
   } catch (error) {
     res.status(500).json({
