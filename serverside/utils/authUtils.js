@@ -4,14 +4,16 @@ require("dotenv").config();
 
 const userModel = require("../models/userModel");
 
-const checkAdmin = async (username, teamCode) => {
+const checkAdmin = async (username, teamId) => {
+  console.log(username);
+  console.log(teamId);
   try {
-    const admin = await userModel
-      .findOne({ username: username })
-      .populate("teams.team", "teamCode");
-    for (const team of admin.teams) {
-      if (team.team.teamCode === teamCode && team.role === "admin") {
-        return true;
+    const admin = await userModel.findOne({ username: username }).populate("teams.team");
+    if (admin) {
+      for (const team of admin.teams) {
+        if (team.team._id.toString() === teamId && team.role === "admin") {
+          return true;
+        }
       }
     }
   } catch (error) {

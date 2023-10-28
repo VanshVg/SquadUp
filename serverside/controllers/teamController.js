@@ -4,6 +4,7 @@ const teamModel = require("../models/teamModel");
 const userModel = require("../models/userModel");
 
 const { checkAdmin } = require("../utils/authUtils");
+const { getRandomColor, getRandomNumber } = require("../utils/teamUtils");
 
 const createTeam = async (req, res) => {
   console.log("createTeam api called");
@@ -21,6 +22,9 @@ const createTeam = async (req, res) => {
     charset: "alphanumeric",
   });
 
+  let iconColor = getRandomColor();
+  let bannerNumber = getRandomNumber(3);
+
   try {
     const user = await userModel.findOne({ username: username });
     let adminName = firstname + " " + lastname;
@@ -30,6 +34,8 @@ const createTeam = async (req, res) => {
       teamCode: teamCode,
       admin: adminName,
       members: [{ user: user._id, role: "admin" }],
+      iconColor: iconColor,
+      bannerUrl: `/images/teamBackground${bannerNumber}.jpg`,
     });
     const savedTeam = await team.save();
     await userModel.updateOne(
@@ -171,9 +177,10 @@ const updateTeam = async (req, res) => {
 const deleteTeam = async (req, res) => {
   console.log("deleteTeam api called");
   const { username } = req.user.data;
-  const { teamCode } = req.params;
+  const { teamId } = req.params;
+  console.log(req.params);
   try {
-    let isAdmin = await checkAdmin(username, teamCode);
+    let isAdmin = await checkAdmin(username, teamId);
 
     if (!isAdmin) {
       return res.status(401).json({
@@ -181,7 +188,7 @@ const deleteTeam = async (req, res) => {
         message: "You're not authorised to delete a team",
       });
     }
-    const team = await teamModel.findOne({ teamCode: teamCode });
+    const team = await teamModel.findOne({ _id: teamId });
     if (!team) {
       return res.status(404).json({
         type: "not_found",
@@ -199,7 +206,7 @@ const deleteTeam = async (req, res) => {
       }
     }
 
-    await teamModel.deleteOne({ teamCode: teamCode });
+    await teamModel.deleteOne({ _id: teamId });
 
     return res.status(200).json({
       message: "Team deleted successfully",

@@ -36,6 +36,14 @@ const teamSchema = mongoose.Schema({
       ref: "tasks",
     },
   ],
+  bannerUrl: {
+    type: String,
+    required: true,
+  },
+  iconColor: {
+    type: String,
+    required: true,
+  },
   created_at: {
     type: Date,
     default: Date.now,
