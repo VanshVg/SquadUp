@@ -3,12 +3,19 @@ import "./Profile.css";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ThreeDots } from "react-loader-spinner";
+import VerifyPasswordModal from "../../components/modals/verifyPasswordModal/VerifyPassword";
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({});
 
+  const [isVerifyPasswordOpen, setIsVerifyPasswordOpen] = useState(false);
+
   let userToken = Cookies.get("userToken");
+
+  const handleChangePassword = () => {
+    setIsVerifyPasswordOpen(true);
+  };
 
   useEffect(() => {
     axios
@@ -60,9 +67,16 @@ const Profile = () => {
             <input type="text" placeholder={userData.Email} disabled></input>
             <div className="profile-buttons">
               <button className="update-profile-button">Update Profile</button>
-              <button className="change-password-button">Change Password</button>
+              <button className="change-password-button" onClick={handleChangePassword}>
+                Change Password
+              </button>
             </div>
           </div>
+          <VerifyPasswordModal
+            isOpen={isVerifyPasswordOpen}
+            onRequestClose={() => setIsVerifyPasswordOpen(false)}
+            email={userData.Email}
+          />
         </>
       )}
     </div>
