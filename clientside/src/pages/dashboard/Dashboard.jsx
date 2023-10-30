@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/teams/myTeams`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/teams/myTeams`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

@@ -1,0 +1,64 @@
+.profile-page {
+  display: flex;
+  align-items: center;
+}
+
+.profile-image {
+  flex: 0 0 auto;
+  margin-right: 20px;
+}
+
+.profile-content {
+  margin-top: -100px;
+  margin-left: 200px;
+  flex: 1;
+}
+
+.profile-text {
+  margin-left: -1px;
+}
+
+.profile-text:hover {
+  cursor: default;
+}
+
+.profile-content input {
+  width: 300px;
+  border-color: #2b60de;
+}
+
+.profile-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.update-profile-button {
+  background-color: white;
+  color: #2b60de;
+  border: 1px solid #2b60de;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 30px;
+}
+
+.change-password-button {
+  background-color: #2b60de;
+  color: white;
+  border: 1px solid #2b60de;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.update-profile-button:hover {
+  background-color: #2b60de;
+  color: white;
+}
+
+.change-password-button:hover {
+  background-color: white;
+  color: #2b60de;
+}
