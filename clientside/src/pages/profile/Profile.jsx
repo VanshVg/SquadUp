@@ -4,6 +4,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { ThreeDots } from "react-loader-spinner";
 import VerifyPasswordModal from "../../components/modals/verifyPasswordModal/VerifyPassword";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,10 +12,16 @@ const Profile = () => {
 
   const [isVerifyPasswordOpen, setIsVerifyPasswordOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   let userToken = Cookies.get("userToken");
 
   const handleChangePassword = () => {
     setIsVerifyPasswordOpen(true);
+  };
+
+  const handleUpdateProfile = () => {
+    navigate("/updateprofile");
   };
 
   useEffect(() => {
@@ -66,7 +73,9 @@ const Profile = () => {
             <p className="userprofile-text">Email Address</p>
             <input type="text" placeholder={userData.Email} disabled></input>
             <div className="userprofile-buttons">
-              <button className="update-userprofile-button">Update Profile</button>
+              <button className="update-userprofile-button" onClick={handleUpdateProfile}>
+                Update Profile
+              </button>
               <button className="change-password-button" onClick={handleChangePassword}>
                 Change Password
               </button>

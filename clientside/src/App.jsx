@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/forgotPassword/ForgotPassword";
 import ForgotPasswordOtp from "./pages/forgotPassword/ForgotPasswordOtp";
 import ChangePassword from "./pages/changePassword/ChangePassword";
 import Team from "./pages/team/Team";
+import UpdateProfile from "./pages/updateProfile/UpdateProfile";
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/auth/forgotpassword/otp/:id" element={<ForgotPasswordOtp />}></Route>
             <Route path="/auth/changepassword/:id" element={<ChangePassword />}></Route>
             <Route path="/team/:id" element={<Team />}></Route>
+            <Route path="/updateprofile" element={<UpdateProfile />}></Route>
           </Routes>
         </>
       </Router>

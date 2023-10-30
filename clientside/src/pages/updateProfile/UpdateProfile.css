@@ -1,0 +1,61 @@
+.updateprofile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #afdcec;
+  font-family: Arial, sans-serif;
+}
+
+.updateprofile-form {
+  padding: 20px;
+  background-color: #ebf4fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+}
+
+.updateprofile input {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  transition: 0.2s ease;
+  background-color: #e8f1ff;
+  max-height: 15px;
+}
+
+.updateprofile input::placeholder {
+  color: #686a6c;
+}
+
+.updateprofile input:valid {
+  border-color: #2b60de;
+}
+
+.input-group {
+  display: flex;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+.username-input {
+  position: relative;
+}
+
+.username-input input {
+  padding-right: 227px;
+}
+
+.updateprofile-email-input {
+  position: relative;
+}
+
+.updateprofile-email-input input {
+  padding-right: 227px;
+}
