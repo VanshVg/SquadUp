@@ -34,7 +34,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="profile-page">
+    <div className="userprofile-page">
       {isLoading ? (
         <>
           <div className="dashboard-loader-container">
@@ -51,7 +51,7 @@ const Profile = () => {
         </>
       ) : (
         <>
-          <div className="profile-image">
+          <div className="userprofile-image">
             <img
               src="/images/profilePage.jpg"
               width="800px"
@@ -59,14 +59,14 @@ const Profile = () => {
               alt="Profile Page"
             ></img>
           </div>
-          <div className="profile-content">
+          <div className="userprofile-content">
             <h1>Profile Page</h1>
-            <p className="profile-text">Username</p>
+            <p className="userprofile-text">Username</p>
             <input type="text" placeholder={userData.Username} disabled></input>
-            <p className="profile-text">Email Address</p>
+            <p className="userprofile-text">Email Address</p>
             <input type="text" placeholder={userData.Email} disabled></input>
-            <div className="profile-buttons">
-              <button className="update-profile-button">Update Profile</button>
+            <div className="userprofile-buttons">
+              <button className="update-userprofile-button">Update Profile</button>
               <button className="change-password-button" onClick={handleChangePassword}>
                 Change Password
               </button>
