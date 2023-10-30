@@ -60,9 +60,14 @@ const Team = () => {
                 <div className="banner-name">
                   <h1 className="team-name">{teamData.name}</h1>
                 </div>
-                <div className="team-code-container">
-                  <p className="team-code-title">Team Code</p>
-                  <h6 className="team-code">{teamData.teamCode}</h6>
+                <div className="team-content-container">
+                  <div className="team-code-container">
+                    <p className="team-code-title">Team Code</p>
+                    <h6 className="team-code">{teamData.teamCode}</h6>
+                  </div>
+                  <div className="team-chat">
+                    <h3>Your Team content will go here...</h3>
+                  </div>
                 </div>
               </div>
             </div>
