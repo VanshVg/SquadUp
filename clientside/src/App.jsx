@@ -34,7 +34,7 @@ const App = () => {
             <Route path="/auth/forgotpassword/otp/:id" element={<ForgotPasswordOtp />}></Route>
             <Route path="/auth/changepassword/:id" element={<ChangePassword />}></Route>
             <Route path="/team/:id" element={<Team />}></Route>
-            <Route path="/updateprofile" element={<UpdateProfile />}></Route>
+            <Route path="/updateUsername" element={<UpdateProfile />}></Route>
           </Routes>
         </>
       </Router>
