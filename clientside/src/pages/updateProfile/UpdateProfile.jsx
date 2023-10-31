@@ -62,7 +62,7 @@ const UpdateProfile = () => {
         }
       })
       .catch((error) => {
-        const { status, data } = error.response;
+        const { status } = error.response;
         if (status === 409) {
           setUpdateProfileError({
             type: "username",
