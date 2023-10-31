@@ -129,6 +129,7 @@ const ForgotPasswordOtp = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {otpError.message}
@@ -141,6 +142,7 @@ const ForgotPasswordOtp = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {otpError.message}

@@ -85,6 +85,7 @@ const ForgotPassword = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {emailError.message}
@@ -97,6 +98,7 @@ const ForgotPassword = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {emailError.message}

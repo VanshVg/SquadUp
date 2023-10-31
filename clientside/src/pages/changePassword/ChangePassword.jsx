@@ -59,7 +59,7 @@ const ChangePassword = () => {
         .put(`${process.env.REACT_APP_BACKEND_URL}/api/users/changePassword`, values)
         .then((resp) => {
           if (resp.status === 200) {
-            navigate("/auth/login");
+            navigate("/");
             action.resetForm();
           }
         })
@@ -132,6 +132,7 @@ const ChangePassword = () => {
                     fontSize: "14px",
                     marginTop: "1px",
                     marginBottom: "5px",
+                    marginLeft: "1px",
                   }}
                 >
                   {errors.newpassword}
@@ -161,6 +162,7 @@ const ChangePassword = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {errors.confirmpassword}
@@ -173,6 +175,7 @@ const ChangePassword = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {changePasswordError.message}

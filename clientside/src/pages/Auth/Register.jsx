@@ -122,6 +122,7 @@ const Register = () => {
                       fontSize: "14px",
                       marginTop: "1px",
                       marginBottom: "5px",
+                      marginLeft: "1px",
                     }}
                   >
                     {errors.firstname}
@@ -147,6 +148,7 @@ const Register = () => {
                       fontSize: "14px",
                       marginTop: "1px",
                       marginBottom: "5px",
+                      marginLeft: "1px",
                     }}
                   >
                     {errors.lastname}
@@ -173,6 +175,7 @@ const Register = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {errors.username}
@@ -186,6 +189,7 @@ const Register = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {registerError.message}
@@ -209,6 +213,7 @@ const Register = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {errors.email}
@@ -222,6 +227,7 @@ const Register = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {registerError.message}
@@ -246,6 +252,7 @@ const Register = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {errors.password}
@@ -276,6 +283,7 @@ const Register = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {errors.confirmpassword}
@@ -296,6 +304,7 @@ const Register = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {registerError.message}

@@ -277,11 +277,13 @@ const userProfile = async (req, res) => {
   });
 };
 
-const updateProfile = async (req, res) => {
+const updateUsername = async (req, res) => {
   console.log("updateProfile api called");
-  const { username, email } = req.user.data;
-  const { newUserName, newEmail } = req.body;
-  if (!newUserName && !newEmail) {
+  const { username } = req.user.data;
+  const { newUserName } = req.body;
+  console.log(req.body);
+
+  if (!newUserName) {
     return res.status(400).json({
       type: "field",
       message: "Atleast one field is required",
@@ -289,14 +291,14 @@ const updateProfile = async (req, res) => {
   }
 
   try {
+    if (newUserName === username) {
+      return res.status(400).json({
+        type: "username",
+        message: "Please choose different username from current username",
+      });
+    }
     if (newUserName) {
-      if (newUserName.toLowerCase() === username.toLowerCase()) {
-        return res.status(400).send({
-          type: "username",
-          message: "Please choose different username from your current username",
-        });
-      }
-
+      console.log("Inside Username");
       let userData = await userModel.findOne({ username: newUserName });
 
       if (userData) {
@@ -305,33 +307,9 @@ const updateProfile = async (req, res) => {
           message: "Username has already been taken",
         });
       }
-    }
-    if (newEmail) {
-      if (newEmail === email) {
-        return res.status(400).send({
-          type: "email",
-          message: "Please choose different email from your current email",
-        });
-      }
 
-      let userData = await userModel.findOne({ email: newEmail });
-
-      if (userData) {
-        return res.status(409).json({
-          type: "email",
-          message: "User with this email already exists",
-        });
-      }
-    }
-
-    if (newUserName) {
       await userModel.updateOne({ username: username }, { $set: { username: newUserName } });
       var newUserData = await userModel.findOne({ username: newUserName });
-    }
-
-    if (newEmail) {
-      await userModel.updateOne({ email: email }, { $set: { email: newEmail } });
-      newUserData = await userModel.findOne({ email: newEmail });
     }
 
     const token = await generateJwtToken(
@@ -340,14 +318,20 @@ const updateProfile = async (req, res) => {
       newUserData.username,
       newUserData.email
     );
-    res
+
+    return res
       .status(200)
       .cookie("userToken", token, {
         httpOnly: true,
-        secure: true,
         maxAge: cookieAge,
+        sameSite: "none",
+        secure: false,
+        domain: process.env.FRONTEND_URL,
+        path: "/",
       })
       .json({
+        isLoggedIn: true,
+        userToken: token,
         message: "User data updated successfully",
       });
   } catch (error) {
@@ -622,7 +606,7 @@ module.exports = {
   login,
   logout,
   userProfile,
-  updateProfile,
+  updateUsername,
   deleteAccount,
   setResetPasswordToken,
   verifyEmail,

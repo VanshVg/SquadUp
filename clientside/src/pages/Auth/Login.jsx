@@ -158,6 +158,7 @@ const Login = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {errors.username}
@@ -171,6 +172,7 @@ const Login = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {errors.email}
@@ -184,6 +186,7 @@ const Login = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {loginError.message}
@@ -208,6 +211,7 @@ const Login = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {errors.password}
@@ -221,6 +225,7 @@ const Login = () => {
                   fontSize: "14px",
                   marginTop: "1px",
                   marginBottom: "5px",
+                  marginLeft: "1px",
                 }}
               >
                 {loginError.message}
@@ -244,6 +249,7 @@ const Login = () => {
                 fontSize: "14px",
                 marginTop: "1px",
                 marginBottom: "5px",
+                marginLeft: "1px",
               }}
             >
               {loginError.message}

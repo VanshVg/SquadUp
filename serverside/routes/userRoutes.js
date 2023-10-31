@@ -11,7 +11,7 @@ router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.get("/profile", isAuthenticated, userController.userProfile);
 router.post("/logout", isAuthenticated, userController.logout);
-router.put("/updateProfile", isAuthenticated, userController.updateProfile);
+router.put("/updateUsername", isAuthenticated, userController.updateUsername);
 router.delete("/deleteAccount", isAuthenticated, userController.deleteAccount);
 router.post("/setResetPasswordToken", userController.setResetPasswordToken);
 router.post("/verifyEmail", isAuthenticated, userController.verifyEmail);

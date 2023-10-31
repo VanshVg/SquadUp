@@ -74,7 +74,7 @@ const Profile = () => {
             <input type="text" placeholder={userData.Email} disabled></input>
             <div className="userprofile-buttons">
               <button className="update-userprofile-button" onClick={handleUpdateProfile}>
-                Update Profile
+                Update Username
               </button>
               <button className="change-password-button" onClick={handleChangePassword}>
                 Change Password
