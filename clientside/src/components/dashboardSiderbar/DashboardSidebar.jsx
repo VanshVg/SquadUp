@@ -50,7 +50,14 @@ const DashboardSidebar = () => {
   return (
     <div>
       {isSidebarOpen ? (
-        <div className="dashboard-sidebar" style={{ width: "280px" }}>
+        <div
+          className="dashboard-sidebar"
+          style={
+            myTeamsData.length > 6
+              ? { height: "100%", width: "280px" }
+              : { height: "676px", width: "280px" }
+          }
+        >
           <div
             className={`${
               location.pathname === "/dashboard/home"
@@ -107,7 +114,10 @@ const DashboardSidebar = () => {
           </div>
         </div>
       ) : (
-        <div className="dashboard-sidebar">
+        <div
+          className="dashboard-sidebar"
+          style={myTeamsData.length > 6 ? { height: "100%" } : { height: "676px" }}
+        >
           <Tooltip title="Dashboard Home">
             <div
               className={`${
