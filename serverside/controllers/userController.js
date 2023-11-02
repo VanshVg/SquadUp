@@ -229,7 +229,6 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
   console.log("logout api called");
-  console.log(req.headers.authorization);
   const { userToken } = req.cookies;
 
   try {
@@ -281,7 +280,6 @@ const updateUsername = async (req, res) => {
   console.log("updateProfile api called");
   const { username } = req.user.data;
   const { newUserName } = req.body;
-  console.log(req.body);
 
   if (!newUserName) {
     return res.status(400).json({
@@ -434,7 +432,6 @@ const verifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   console.log("forgotPassword API called");
-  console.log(req.body);
   const { id } = req.body;
   if (!id) {
     return res.status(400).json({

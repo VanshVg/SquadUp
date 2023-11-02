@@ -33,7 +33,6 @@ const Profile = () => {
       })
       .then((resp) => {
         setUserData(resp.data);
-        console.log(userData);
       })
       .finally(() => {
         setIsLoading(false);

@@ -5,8 +5,6 @@ require("dotenv").config();
 const userModel = require("../models/userModel");
 
 const checkAdmin = async (username, teamId) => {
-  console.log(username);
-  console.log(teamId);
   try {
     const admin = await userModel.findOne({ username: username }).populate("teams.team");
     if (admin) {

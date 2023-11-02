@@ -79,7 +79,6 @@ const teamDetail = async (req, res) => {
   const { teamId } = req.params;
   try {
     let team = await teamModel.findOne({ _id: teamId }).populate("members.user", "username");
-    console.log(team);
 
     if (!team) {
       return res.status(404).json({
@@ -181,7 +180,6 @@ const deleteTeam = async (req, res) => {
   console.log("deleteTeam api called");
   const { username } = req.user.data;
   const { teamId } = req.params;
-  console.log(req.params);
   try {
     let isAdmin = await checkAdmin(username, teamId);
 
