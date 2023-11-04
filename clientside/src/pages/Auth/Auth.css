@@ -129,7 +129,7 @@ button:hover {
 }
 
 .loader-button {
-  position: relative; /* Ensure relative positioning for absolute loader */
+  position: relative;
 }
 
 .loader-button .loader {
