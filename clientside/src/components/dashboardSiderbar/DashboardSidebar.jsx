@@ -6,7 +6,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Tooltip from "@mui/material/Tooltip";
 import "./DashboardSidebar.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setIsMyTeamsOpen,
@@ -19,6 +19,7 @@ const DashboardSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const id = useParams().id;
 
   const isMyTeamsOpen = useSelector((state) => state.sidebar.isMyTeamsOpen);
   const isSidebarOpen = useSelector((state) => state.sidebar.isSidebarOpen);
@@ -98,7 +99,10 @@ const DashboardSidebar = () => {
                   >
                     {item.name[0]}
                   </Avatar>
-                  <p className="teams-item-text" onClick={() => handleTeam(item._id)}>
+                  <p
+                    className={id === item._id ? "teams-item-text-active" : "teams-item-text"}
+                    onClick={() => handleTeam(item._id)}
+                  >
                     {item.name.length > 20 ? item.name.slice(0, 20) + "..." : item.name}
                   </p>
                 </div>

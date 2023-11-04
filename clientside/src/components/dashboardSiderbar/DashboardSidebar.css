@@ -154,7 +154,7 @@
 
 .teams-item {
   display: flex;
-  align-items: center; /* Align items vertically in the center */
+  align-items: center;
   margin-top: -50px;
   margin-left: 28px;
 }
@@ -172,6 +172,17 @@
   height: 30px;
   padding-top: 5px;
   transition: 0.3s ease;
+}
+
+.teams-item-text-active {
+  margin-bottom: 20px;
+  border-radius: 20px;
+  width: 200px;
+  padding-left: 10px;
+  height: 30px;
+  padding-top: 5px;
+  transition: 0.3s ease;
+  background-color: #b6b6b4;
 }
 
 .teams-item-text:hover {
