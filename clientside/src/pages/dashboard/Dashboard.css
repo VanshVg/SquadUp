@@ -61,9 +61,9 @@
   background-color: white;
   height: 250px;
   transition: box-shadow 0.2s ease;
-  display: inline-block; /* Display cards inline */
-  vertical-align: top; /* Align cards at the top of the row */
-  box-sizing: border-box; /* Include padding and border in the width */
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
 }
 
 .card:hover {
