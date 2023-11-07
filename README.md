@@ -17,16 +17,19 @@ The Team Up project aims to streamline collaboration and task management within 
 ## Features
 
 - **User Authentication:**
+
   - Register new users
   - Log in with existing credentials
   - Log out users
 
 - **User Profile Management:**
+
   - View and update user profiles
   - Delete user accounts
   - Initiate and verify password resets
 
 - **Team Management:**
+
   - Create new teams
   - Get a list of teams a user is part of
   - Get detailed information about a team
@@ -42,15 +45,20 @@ The Team Up project aims to streamline collaboration and task management within 
 
 ### User Section
 
-- `POST /api/users/register`: Register a new user.
-- `POST /api/users/login`: Log in with existing user credentials.
-- `POST /api/users/logout`: Log out the current user.
-- `GET /api/users/profile`: Get the user's profile information.
-- `PUT /api/users/updateProfile`: Update user profile details.
-- `DELETE /api/users/deleteAccount`: Delete user account.
-- `POST /api/users/forgotPassword`: Initiate password reset process.
-- `POST /api/users/verifyPassword`: Verify password reset token.
-- `POST /api/users/resetPassword`: Reset user password.
+- `POST /api/users/registerValidation`: Checks validation for registration.
+- `POST /api/users/sendOtp`: Sends otp for email verification.
+- `POST /api/users/register`: Registers a new user.
+- `POST /api/users/login`: Logsin a new user.
+- `GET /api/users/profile`: Shows user's profile.
+- `POST /api/users/logout`: Logsout a user.
+- `PUT /api/users/updateUsername`: Updates username.
+- `DELETE /api/users/setResetPasswordToken`: Sets token for reset password.
+- `POST /api/users/verifyEmail`: Verifies an email.
+- `POST /api/users/forgotPassword`: Sends forgot password email.
+- `POST /api/users/verifyForgotPasswordOtp`: Verifies forgot password otp.
+- `POST /api/users/verifyPassword`: Verifies a user password.
+- `PUT /api/users/changePassword`: Changes a password.
+- `POST /api/users/userValid`: Checks user validity.
 
 ### Teams Section
 
