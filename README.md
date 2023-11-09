@@ -76,7 +76,7 @@ The Team Up project aims to streamline collaboration and task management within 
 
 1. Clone the repository: `git clone https://github.com/VanshVg/TeamUp.git`
 2. Install dependencies: `npm install`
-3. Set up environment variables (if required).
+3. Set up environment variables.
 4. Start the server: `npm start`
 5. Access the APIs at `http://localhost:4000/api`
 
